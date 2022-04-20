@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Html
+@model RouteManagerMVC.Models.ReportRouteViewModel
+
+
+<form asp-action="ExportToDocx">
+    <div class="container">
+        <div class="clearfix">&nbsp;</div>
+        <div class="row">
+
+            <div id="DivDynamic">
+                @(new HtmlString(Model.TableHTML.ToString()))
+            </div>
+
+        </div>
+    </div>
+
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Nome das colunas</h3>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+            <div class="form-group">
+                <label class="control-label">Ordem de Serviço</label>
+                <select asp-for="NameOS" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameOS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Base</label>
+                <select asp-for="NameBase" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameBase" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Serviço</label>
+                <select asp-for="NameService" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameService" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Cidade</label>
+                <select asp-for="NameCity" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameCity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Rua</label>
+                <select asp-for="NameStreet" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameStreet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Número</label>
+                <select asp-for="NameNumber" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Complemento</label>
+                <select asp-for="NameComplement" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameComplement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Bairro</label>
+                <select asp-for="NameDistrict" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameDistrict" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">CEP</label>
+                <select asp-for="NameCEP" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
+                <span asp-validation-for="NameCEP" class="text-danger"></span>
+            </div>
+
+
+
+            <div style="display: none;">@Html.EditorFor(model => model.Columns)</div>
+            <div style="display: none;">@Html.EditorFor(model => model.Table)</div>
+
+            <div class="form-group">
+                <input type="submit" value="Importar rotas e exportar relátorio" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+</form>

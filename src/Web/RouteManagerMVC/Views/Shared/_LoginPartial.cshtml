@@ -1,0 +1,25 @@
+﻿@using RouteManager.Domain.Identity.Extensions
+@inject IAspNetUser AppUser
+
+<ul class="navbar-nav">
+    @if (AppUser.IsAuthenticated())
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá </a>
+        </li>
+
+        <li class="nav-item">
+            <a asp-controller="Auth" asp-action="Logout" class="nav-link btn btn-link text-dark">Logout</a>
+
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Registrar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>

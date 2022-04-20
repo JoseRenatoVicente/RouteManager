@@ -1,15 +1,15 @@
-﻿using GeradorRotas.Domain.Entities;
+﻿using RouteManager.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GeradorRotas.Application.Services.Interfaces
+namespace RouteManager.Application.Services.Interfaces
 {
     public interface ICidadeService
     {
-        Task AddCidadeAsync(Cidade cidade);
-        Task<Cidade> GetCidadeByIdAsync(string id);
-        Task<IEnumerable<Cidade>> GetCidadesAsync();
+        Task AddCidadeAsync(City cidade);
+        Task<City> GetCidadeByIdAsync(string id);
+        Task<IEnumerable<City>> GetCidadesAsync();
         Task RemoveCidadeAsync(string id);
-        Task UpdateCidadeAsync(Cidade cidade);
+        Task UpdateCidadeAsync(City cidade);
     }
 }

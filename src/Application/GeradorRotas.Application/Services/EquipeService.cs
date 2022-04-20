@@ -1,11 +1,11 @@
-﻿using GeradorRotas.Application.Services.Interfaces;
-using GeradorRotas.Domain.Entities;
-using GeradorRotas.Infrastructure.Repository.Interfaces;
+﻿using RouteManager.Application.Services.Interfaces;
+using RouteManager.Domain.Entities;
+using RouteManager.Infrastructure.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GeradorRotas.Application.Services
+namespace RouteManager.Application.Services
 {
     public class EquipeService : IEquipeService
     {
@@ -35,7 +35,7 @@ namespace GeradorRotas.Application.Services
 
         public async Task RemoveEquipeAsync(string id)
         {
-            await _equipeRepository.DeleteAsync(id);
+            await _equipeRepository.DeleteAsync(await GetEquipeByIdAsync(id));
         }
     }
 }

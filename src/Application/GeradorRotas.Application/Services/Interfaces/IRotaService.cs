@@ -1,11 +1,11 @@
-﻿using GeradorRotas.Application.ViewModels;
-using GeradorRotas.Domain.Entities;
+﻿using RouteManager.Application.ViewModels;
+using RouteManager.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace GeradorRotas.Application.Services.Interfaces
+namespace RouteManager.Application.Services.Interfaces
 {
     public interface IRotaService
     {

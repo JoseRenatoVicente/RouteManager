@@ -1,0 +1,26 @@
+﻿@model UserRegister
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+
+<section id="form">
+    <!--form-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-1">
+                <div class="signup-form">
+                    <!--sign up form-->
+                    <h2>New User Signup!</h2>
+                    <form asp-action="Register" asp-controller="Auth">
+                        <input type="text" placeholder="Nome" asp-for="@Model.Name" />
+                        <input type="text" placeholder="Nome de usuário" asp-for="@Model.UserName"/>
+                        <input type="email" placeholder="Email" asp-for="@Model.Email"/>
+                        <input type="password" placeholder="Senha" asp-for="@Model.Password"/>
+                        <button type="submit" class="btn btn-default">Registrar</button>
+                    </form>
+                </div><!--/sign up form-->
+            </div>
+        </div>
+    </div>
+</section><!--/form-->

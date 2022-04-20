@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Application\GeradorRotas.Application\GeradorRotas.Application.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\RouteManager.Domain\RouteManager.Domain.csproj" />
   </ItemGroup>
 
 </Project>

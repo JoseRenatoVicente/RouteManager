@@ -1,10 +1,10 @@
-﻿using GeradorRotas.Application.Services.Interfaces;
-using GeradorRotas.Domain.Entities;
-using GeradorRotas.Infrastructure.Repository.Interfaces;
+﻿using RouteManager.Application.Services.Interfaces;
+using RouteManager.Domain.Entities;
+using RouteManager.Infrastructure.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GeradorRotas.Application.Services
+namespace RouteManager.Application.Services
 {
     public class PessoaService : IPessoaService
     {
@@ -33,7 +33,7 @@ namespace GeradorRotas.Application.Services
 
         public async Task RemovePessoaAsync(string id)
         {
-            await _pessoaRepository.DeleteAsync(id);
+            await _pessoaRepository.DeleteAsync(await GetPessoaByIdAsync(id));
         }
     }
 }

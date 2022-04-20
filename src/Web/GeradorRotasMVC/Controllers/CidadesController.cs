@@ -1,5 +1,5 @@
-﻿using GeradorRotas.Application.Services.Interfaces;
-using GeradorRotas.Domain.Entities;
+﻿using RouteManager.Application.Services.Interfaces;
+using RouteManager.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -51,7 +51,7 @@ namespace GeradorRotasMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nome,Estado,Id")] Cidade cidade)
+        public async Task<IActionResult> Create([Bind("Nome,Estado,Id")] City cidade)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace GeradorRotasMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Nome,Estado,Id")] Cidade cidade)
+        public async Task<IActionResult> Edit(string id, [Bind("Nome,Estado,Id")] City cidade)
         {
             if (id != cidade.Id)
             {

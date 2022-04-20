@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GeradorRotas.Domain.Entities.Equipe>
+﻿@model IEnumerable<RouteManager.Domain.Entities.Equipe>
 
 @{
     ViewData["Title"] = "Index";
@@ -18,9 +18,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Cidade)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ativo)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -32,10 +29,7 @@
                     @Html.DisplayFor(modelItem => item.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Cidade.Nome)
-                </td>
-                <td>
-                    @(item.Ativo==true ? "Sim":"Não")
+                    @Html.DisplayFor(modelItem => item.Cidade.Name)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |

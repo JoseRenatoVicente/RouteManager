@@ -1,7 +1,7 @@
-﻿using GeradorRotas.Application.Services.Interfaces;
-using GeradorRotas.Application.ViewModels;
-using GeradorRotas.Domain.Entities;
-using GeradorRotas.Infrastructure.Repository.Interfaces;
+﻿using RouteManager.Application.Services.Interfaces;
+using RouteManager.Application.ViewModels;
+using RouteManager.Domain.Entities;
+using RouteManager.Infrastructure.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.OpenXmlFormats.Wordprocessing;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeradorRotas.Application.Services
+namespace RouteManager.Application.Services
 {
     public class RotaService : IRotaService
     {
@@ -45,24 +45,36 @@ namespace GeradorRotas.Application.Services
 
         public async Task RemoveRotaAsync(string id)
         {
-            await _rotaRepository.DeleteAsync(id);
+            await _rotaRepository.DeleteAsync(await GetRotaByIdAsync(id));
         }
 
         public async Task<byte[]> ExportToDocx(ReportRotaViewModel reportRota)
         {
             List<string> columns = reportRota.Columns.ToList();
             int numberRows = reportRota.Table[0].Count;
-            IEnumerable<Equipe> equipes = await _equipeRepository.Buscar(c => c.Ativo == true);
+            IEnumerable<Equipe> equipes = await _equipeRepository.GetAllAsync();
             StringBuilder stringBuilder = new StringBuilder();
-
-            List<List<string>> B = reportRota.Table.AsEnumerable()
-                .Select(x => x.OrderBy(y => (string)y).ToList()).OrderBy(z => z[columns.IndexOf(reportRota.NameCEP)]).ToList();
-
-            reportRota.Table.OrderBy(c => long.Parse(c[columns.IndexOf(reportRota.NameCEP)]));
-
 
             for (int row = 0; row < numberRows; row++)
             {
+                var rota = new Rota
+                {
+                    OS = reportRota.Table[columns.IndexOf(reportRota.NameOS)][row],
+                    Base = reportRota.Table[columns.IndexOf(reportRota.NameBase)][row],
+                    Servico = reportRota.Table[columns.IndexOf(reportRota.NameServico)][row],
+                    Cidade = new City { Name = reportRota.Table[columns.IndexOf(reportRota.NameCidade)][row] },
+                    Endereco = new Endereco
+                    {
+                        Rua = reportRota.Table[columns.IndexOf(reportRota.NameRua)][row],
+                        Numero = reportRota.Table[columns.IndexOf(reportRota.NameNumero)][row],
+                        Bairro = reportRota.Table[columns.IndexOf(reportRota.NameBairro)][row],
+                        CEP = reportRota.Table[columns.IndexOf(reportRota.NameCEP)][row],
+                        Complemento = reportRota.Table[columns.IndexOf(reportRota.NameBairro)][row]
+                    },
+                };
+
+                await _rotaRepository.AddAsync(rota);
+
                 if (reportRota.Table[columns.IndexOf(reportRota.NameOS)][row] != null) stringBuilder.AppendLine($"{reportRota.NameOS}: {reportRota.Table[columns.IndexOf(reportRota.NameOS)][row]}\n");
                 stringBuilder.AppendLine($"{reportRota.NameServico}: {reportRota.Table[columns.IndexOf(reportRota.NameServico)][row]}\n");
                 stringBuilder.AppendLine($"{reportRota.NameRua}: {reportRota.Table[columns.IndexOf(reportRota.NameRua)][row]}\n");
@@ -91,31 +103,31 @@ namespace GeradorRotas.Application.Services
             runTitle2.FontSize = 12;
             runTitle2.SetText(stringBuilder.ToString());
 
-           /* 
-            //header
-            tableContent.GetRow(0).GetCell(0).SetParagraph(SetCellText(doc, tableContent, reportRota.NameOS));
-            tableContent.GetRow(0).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.NameBase));
-            tableContent.GetRow(0).GetCell(2).SetParagraph(SetCellText(doc, tableContent, reportRota.NameServico));
-            tableContent.GetRow(0).GetCell(3).SetParagraph(SetCellText(doc, tableContent, reportRota.NameRua));
-            tableContent.GetRow(0).GetCell(4).SetParagraph(SetCellText(doc, tableContent, reportRota.NameNumero));
-            tableContent.GetRow(0).GetCell(5).SetParagraph(SetCellText(doc, tableContent, reportRota.NameBairro));
-            tableContent.GetRow(0).GetCell(6).SetParagraph(SetCellText(doc, tableContent, reportRota.NameCidade));
-            tableContent.GetRow(0).GetCell(7).SetParagraph(SetCellText(doc, tableContent, reportRota.NameComplemento));
-            tableContent.GetRow(0).GetCell(8).SetParagraph(SetCellText(doc, tableContent, reportRota.NameCEP));
-            tableContent.GetRow(0).GetCell(9).SetParagraph(SetCellText(doc, tableContent, "Equipe"));
+            /* 
+             //header
+             tableContent.GetRow(0).GetCell(0).SetParagraph(SetCellText(doc, tableContent, reportRota.NameOS));
+             tableContent.GetRow(0).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.NameBase));
+             tableContent.GetRow(0).GetCell(2).SetParagraph(SetCellText(doc, tableContent, reportRota.NameServico));
+             tableContent.GetRow(0).GetCell(3).SetParagraph(SetCellText(doc, tableContent, reportRota.NameRua));
+             tableContent.GetRow(0).GetCell(4).SetParagraph(SetCellText(doc, tableContent, reportRota.NameNumero));
+             tableContent.GetRow(0).GetCell(5).SetParagraph(SetCellText(doc, tableContent, reportRota.NameBairro));
+             tableContent.GetRow(0).GetCell(6).SetParagraph(SetCellText(doc, tableContent, reportRota.NameCidade));
+             tableContent.GetRow(0).GetCell(7).SetParagraph(SetCellText(doc, tableContent, reportRota.NameComplemento));
+             tableContent.GetRow(0).GetCell(8).SetParagraph(SetCellText(doc, tableContent, reportRota.NameCEP));
+             tableContent.GetRow(0).GetCell(9).SetParagraph(SetCellText(doc, tableContent, "Equipe"));
 
-            for (int row = 0; row < numberRows; row++)
-            {
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameOS)][row]));
-                tableContent.GetRow(row + 1).GetCell(0).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameBase)][row]));
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameServico)][row]));
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameRua)][row]));
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameNumero)][row]));
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameBairro)][row]));
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameCidade)][row]));
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameComplemento)][row]));
-                tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, equipes.FirstOrDefault().Nome));
-            }*/
+             for (int row = 0; row < numberRows; row++)
+             {
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameOS)][row]));
+                 tableContent.GetRow(row + 1).GetCell(0).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameBase)][row]));
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameServico)][row]));
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameRua)][row]));
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameNumero)][row]));
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameBairro)][row]));
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameCidade)][row]));
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, reportRota.Table[columns.IndexOf(reportRota.NameComplemento)][row]));
+                 tableContent.GetRow(row + 1).GetCell(1).SetParagraph(SetCellText(doc, tableContent, equipes.FirstOrDefault().Nome));
+             }*/
 
 
             doc.Write(ms);
@@ -162,7 +174,6 @@ namespace GeradorRotas.Application.Services
 
             reportRota.Columns = sheet.GetRow(0).Cells.Select(c => c.StringCellValue);
 
-
             for (int j = 0; j < reportRota.Columns.Count(); j++)
             {
                 reportRota.TableHTML.Append("<th>" + reportRota.Columns.ElementAt(j) + "</th>");
@@ -181,7 +192,7 @@ namespace GeradorRotas.Application.Services
                     reportRota.Table.Add(new List<string>());
                     if (row.GetCell(column) == null)
                     {
-                        if (i == 3)  reportRota.TableHTML.Append("<td></td>");
+                        if (i == 3) reportRota.TableHTML.Append("<td></td>");
                         reportRota.Table[column].Add(null);
                     }
                     else
@@ -189,10 +200,6 @@ namespace GeradorRotas.Application.Services
                         if (i == 3) reportRota.TableHTML.Append("<td>" + row.GetCell(column).ToString() + "</td>");
                         reportRota.Table[column].Add(row.GetCell(column).ToString());
                     }
-
-                    
-
-
                 }
                 reportRota.TableHTML.AppendLine("</tr>");
             }

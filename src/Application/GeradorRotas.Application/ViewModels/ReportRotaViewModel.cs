@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace GeradorRotas.Application.ViewModels
+namespace RouteManager.Application.ViewModels
 {
     public class ReportRotaViewModel
     {

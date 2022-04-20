@@ -1,4 +1,4 @@
-﻿using GeradorRotas.Domain.Entities;
+﻿using RouteManager.Domain.Entities;
 using GeradorRotasMVC.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

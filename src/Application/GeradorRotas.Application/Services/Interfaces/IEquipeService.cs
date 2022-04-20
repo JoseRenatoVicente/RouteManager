@@ -1,8 +1,8 @@
-﻿using GeradorRotas.Domain.Entities;
+﻿using RouteManager.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GeradorRotas.Application.Services.Interfaces
+namespace RouteManager.Application.Services.Interfaces
 {
     public interface IEquipeService
     {
