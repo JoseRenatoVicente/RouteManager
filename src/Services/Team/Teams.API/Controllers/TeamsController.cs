@@ -37,6 +37,19 @@ namespace Teams.API.Controllers
             return team;
         }
 
+        [HttpGet("City/{nameCity}")]
+        public async Task<ActionResult<IEnumerable<Team>>> GetTeamByNameCity(string nameCity)
+        {
+            var team = await _teamsService.GetTeamByNameCityAsync(nameCity);
+
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(team);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTeam(string id, Team team)
         {

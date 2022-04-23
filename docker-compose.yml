@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: src/Services/Identity/Identity.API/Dockerfile
+
+  logging.api:
+    image: ${DOCKER_REGISTRY-}loggingapi
+    build:
+      context: .
+      dockerfile: src/Services/Logging/Logging.API/Dockerfile
+

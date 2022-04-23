@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
+using Routes.API.DTO;
 using Routes.API.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,7 +26,7 @@ namespace Routes.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Route>> GetRoute(string id)
+        public async Task<ActionResult<ExcelFile>> GetRoute(string id)
         {
             var route = await _routeService.GetRouteByIdAsync(id);
 
@@ -51,6 +53,18 @@ namespace Routes.API.Controllers
         public async Task<ActionResult<Route>> PostRoute(Route route)
         {
             return await CustomResponseAsync(await _routeService.AddRouteAsync(route));
+        }
+
+        [HttpPost("ExcelFile")]
+        public async Task<ActionResult<ExcelFile>> UploadExcelFileAsync(IFormFile file)
+        {
+            return await CustomResponseAsync(await _routeService.UploadExcelFileAsync(file));
+        }
+
+        [HttpPost("report")]
+        public async Task<ActionResult<byte[]>> PostRoute(ReportRouteRequest reportRoute)
+        {
+            return await CustomResponseAsync(await _routeService.ReportRoutesToDocx(reportRoute));
         }
 
         [HttpDelete("{id}")]

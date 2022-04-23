@@ -9,13 +9,13 @@ namespace Routes.API.Services
     public interface IRouteService
     {
         Task<Route> AddRouteAsync(Route route);
-        Task<Route> GetRouteByIdAsync(string id);
-        Task<IEnumerable<Route>> GetRoutesAsync();
+        Task<ExcelFile> GetRouteByIdAsync(string id);
+        Task<IEnumerable<ExcelFile>> GetRoutesAsync();
         Task<List<List<string>>> GetTableExcel(IFormFile file);
-        Task<RouteExcel> HeaderExcel(IFormFile file);
-        Task RemoveRouteAsync(Route route);
-        Task RemoveRouteAsync(string id);
-        Task<byte[]> ReportRoutesToDocx(IFormFile file, ReportRouteRequest reportRota);
+        Task RemoveRouteAsync(ExcelFile route);
+        Task<bool> RemoveRouteAsync(string id);
+        Task<ExcelFile> UploadExcelFileAsync(IFormFile file);
+        Task<byte[]> ReportRoutesToDocx(ReportRouteRequest reportRoute);
         Task<Route> UpdateRouteAsync(Route route);
     }
 }

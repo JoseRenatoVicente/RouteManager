@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 
-namespace Identity.API.Configuration
+namespace Identity.API.Configurations
 {
     public static class SwaggerConfig
     {
@@ -60,8 +60,8 @@ namespace Identity.API.Configuration
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.API v1");
-        });
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.API v1");
+            });
         }
     }
 }

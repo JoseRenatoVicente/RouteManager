@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities;
 using RouteManagerMVC.Controllers.Base;
+using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace RouteManagerMVC.Controllers
@@ -16,21 +18,20 @@ namespace RouteManagerMVC.Controllers
             _routeService = routeService;
         }
 
-        [HttpGet]
-        public IActionResult BatchRouteUpload()
-        {
-            return View();
-        }
-
-        public async Task<ActionResult> BatchRouteUpload(IFormFile file)
+        public async Task<IActionResult> BatchRouteUpload(IFormFile file)
         {
             return View(await _routeService.RouteUpload(file));
         }
 
- /*       public async Task<ActionResult> ExportToDocx(ReportRouteViewModel reportRota)
+        public async Task<IActionResult> Import(string id)
         {
-            return File(await _routeService.ExportToDocx(reportRota), "application/octet-stream", "Rotas" + DateTime.Now.ToString("dd_MM_yyyy") + ".docx");
-        }*/
+            return View(await _routeService.GetRouteByIdAsync(id));
+        }
+
+        public async Task<IActionResult> ExportToDocx(ReportRouteViewModel reportRoute)
+        {
+            return File(await _routeService.ExportToDocx(reportRoute.UploadRequest), "application/octet-stream", "Routes" + DateTime.Now.ToString("dd_MM_yyyy") + ".docx");
+        }
 
 
         public async Task<IActionResult> Index()

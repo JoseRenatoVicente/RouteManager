@@ -1,6 +1,6 @@
-﻿using RouteManager.Domain.Entities;
-using RouteManager.Domain.Services;
+﻿using RouteManager.Domain.Services;
 using RouteManagerMVC.Controllers.Base;
+using RouteManagerMVC.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,11 +8,11 @@ namespace RouteManagerMVC.Services
 {
     public interface ITeamService
     {
-        Task<ResponseResult> AddTeamAsync(Team team);
-        Task<Team> GetTeamByIdAsync(string id);
-        Task<IEnumerable<Team>> GetTeamsAsync();
+        Task<ResponseResult> AddTeamAsync(TeamRequest team);
+        Task<TeamRequest> GetTeamByIdAsync(string id);
+        Task<IEnumerable<TeamRequest>> GetTeamsAsync();
         Task RemoveTeamAsync(string id);
-        Task<ResponseResult> UpdateTeamAsync(Team team);
+        Task<ResponseResult> UpdateTeamAsync(TeamRequest team);
     }
 
     public class TeamService : ITeamService
@@ -24,22 +24,22 @@ namespace RouteManagerMVC.Services
             _gatewayService = gatewayService;
         }
 
-        public async Task<IEnumerable<Team>> GetTeamsAsync()
+        public async Task<IEnumerable<TeamRequest>> GetTeamsAsync()
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<Team>>("Teams/api/Teams");
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<TeamRequest>>("Teams/api/Teams");
         }
 
-        public async Task<Team> GetTeamByIdAsync(string id)
+        public async Task<TeamRequest> GetTeamByIdAsync(string id)
         {
-            return await _gatewayService.GetFromJsonAsync<Team>("Teams/api/Teams/" + id);
+            return await _gatewayService.GetFromJsonAsync<TeamRequest>("Teams/api/Teams/" + id);
         }
 
-        public async Task<ResponseResult> AddTeamAsync(Team team)
+        public async Task<ResponseResult> AddTeamAsync(TeamRequest team)
         {
             return await _gatewayService.PostAsync<ResponseResult>("Teams/api/Teams/", team);
         }
 
-        public async Task<ResponseResult> UpdateTeamAsync(Team team)
+        public async Task<ResponseResult> UpdateTeamAsync(TeamRequest team)
         {
             return await _gatewayService.PutAsync<ResponseResult>("Teams/api/Teams/" + team.Id, team);
         }

@@ -4,10 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using RouteManager.Domain.Identity.Extensions;
+using RouteManager.Domain.Services;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
 
-namespace Identity.API.Configuration
+namespace Identity.API.Configurations
 {
     public static class DependencyInjectionConfig
     {
@@ -20,6 +21,7 @@ namespace Identity.API.Configuration
             .GetDatabase(Configuration["ConnectionStrings:DatabaseName"]));
 
             //services
+            services.AddHttpClient<GatewayService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IRoleService, RoleService>();
             services.AddSingleton<AuthenticationService>();

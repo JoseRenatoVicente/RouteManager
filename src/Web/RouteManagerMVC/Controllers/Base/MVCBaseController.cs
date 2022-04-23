@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace RouteManagerMVC.Controllers.Base
 {
+    //[SecurityHeaders]
     [Authorize]
     public class MVCBaseController : Controller
     {

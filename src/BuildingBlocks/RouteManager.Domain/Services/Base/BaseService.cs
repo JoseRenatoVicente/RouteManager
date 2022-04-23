@@ -27,7 +27,7 @@ namespace RouteManager.Domain.Services.Base
             _notifier.Handle(message);
         }
 
-        protected bool ExecuteValidation<TValidation, TEntity>(TValidation validation, TEntity entity) where TValidation : AbstractValidator<TEntity> where TEntity : EntityBase
+        protected bool ExecuteValidation<TValidation, TEntity>(TValidation validation, TEntity entity) where TValidation : AbstractValidator<TEntity> 
         {
             var validator = validation.Validate(entity);
 

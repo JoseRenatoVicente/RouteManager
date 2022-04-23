@@ -19,6 +19,19 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
+          "Port": 44367
+        }
+      ],
+      "UpstreamPathTemplate": "/Logging/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "SwaggerKey": "Logging"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
           "Port": 44304
         }
       ],
@@ -61,6 +74,16 @@
           "Name": "Identity API",
           "Version": "v1",
           "Url": "https://localhost:44333/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Logging",
+      "Config": [
+        {
+          "Name": "Logging API",
+          "Version": "v1",
+          "Url": "https://localhost:44367/swagger/v1/swagger.json"
         }
       ]
     },

@@ -57,14 +57,13 @@ namespace Teams.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(string id)
         {
-            var city = await GetCity(id);
+            var city = await _citysService.GetCityByIdAsync(id);
             if (city == null)
             {
                 return NotFound();
             }
-            await _citysService.RemoveCityAsync(id);
+            return await CustomResponseAsync(await _citysService.RemoveCityAsync(city));
 
-            return NoContent();
         }
     }
 }

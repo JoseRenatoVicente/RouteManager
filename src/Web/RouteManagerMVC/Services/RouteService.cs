@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using RouteManager.Domain.Entities;
 using RouteManager.Domain.Services;
 using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RouteManagerMVC.Services
@@ -16,19 +14,24 @@ namespace RouteManagerMVC.Services
     public interface IRouteService
     {
         Task<ReportRouteViewModel> RouteUpload(IFormFile file);
+        Task<byte[]> ExportToDocx(RouteUploadRequest reportRoute);
         Task<ResponseResult> AddRouteAsync(Route route);
-        Task<Route> GetRouteByIdAsync(string id);
-        Task<IEnumerable<Route>> GetRoutesAsync();
+        Task<ReportRouteViewModel> GetRouteByIdAsync(string id);
+        Task<IEnumerable<ExcelFileViewModel>> GetRoutesAsync();
         Task RemoveRouteAsync(string id);
         Task<ResponseResult> UpdateRouteAsync(Route route);
     }
 
     public class RouteService : IRouteService
     {
+        private readonly ICityService _cityService;
+        private readonly ITeamService _teamService;
         private readonly GatewayService _gatewayService;
 
-        public RouteService(GatewayService gatewayService)
+        public RouteService(ICityService cityService, ITeamService teamService, GatewayService gatewayService)
         {
+            _cityService = cityService;
+            _teamService = teamService;
             _gatewayService = gatewayService;
         }
 
@@ -37,72 +40,48 @@ namespace RouteManagerMVC.Services
         {
             ReportRouteViewModel reportRoute = new ReportRouteViewModel();
 
-            string sFileExtension = Path.GetExtension(file.FileName).ToLower();
-            ISheet sheet;
+            reportRoute.Cities = await _cityService.GetCitysAsync();
+            reportRoute.Teams = await _teamService.GetTeamsAsync();
 
-            if (sFileExtension == ".xls")
-            {
-                HSSFWorkbook hssfwb = new HSSFWorkbook(file.OpenReadStream()); //This will read the Excel 97-2000 formats  
-                sheet = hssfwb.GetSheetAt(0);
-            }
-            else
-            {
-                XSSFWorkbook hssfwb = new XSSFWorkbook(file.OpenReadStream()); //This will read 2007 Excel format  
-                sheet = hssfwb.GetSheetAt(0);
-            }
+            MultipartFormDataContent multiForm = new MultipartFormDataContent();
 
-            reportRoute.TableHTML.Append("<table class='table table-bordered'><tr>");
+            var stream = new MemoryStream();
+            file.CopyTo(stream);
 
-            reportRoute.Columns = sheet.GetRow(0).Cells.Select(c => c.StringCellValue);
+            var bytes = new ByteArrayContent(stream.ToArray());
+            multiForm.Add(bytes, "file", file.FileName);
 
-
-            for (int j = 0; j < reportRoute.Columns.Count(); j++)
-            {
-                reportRoute.TableHTML.Append("<th>" + reportRoute.Columns.ElementAt(j) + "</th>");
-            }
-
-            reportRoute.Table = new List<List<string>>();
-
-            reportRoute.TableHTML.Append("</tr>");
-            reportRoute.TableHTML.AppendLine("<tr>");
-            for (int i = 0; i <= sheet.LastRowNum; i++)
-            {
-                IRow row = sheet.GetRow(i);
-                reportRoute.Table.Add(new List<string>());
-
-                if (row == null) continue;
-                for (int column = row.FirstCellNum; column < reportRoute.Columns.Count(); column++)
-                {
-                    if (row.GetCell(column) == null)
-                    {
-                        if (i == 3) reportRoute.TableHTML.Append("<td></td>");
-                        reportRoute.Table[i].Add("");
-                    }
-                    else
-                    {
-                        if (i == 3) reportRoute.TableHTML.Append("<td>" + row.GetCell(column).ToString() + "</td>");
-                        reportRoute.Table[i].Add(row.GetCell(column).ToString());
-                    }
-
-
-
-
-                }
-                reportRoute.TableHTML.AppendLine("</tr>");
-            }
-            reportRoute.TableHTML.Append("</table>");
+            var excelFile = await _gatewayService.PostAsync<ExcelFileViewModel>("Routes/api/Routes/ExcelFile", multiForm);
+            reportRoute.ExcelFile = excelFile;
 
             return reportRoute;
+
         }
 
-        public async Task<IEnumerable<Route>> GetRoutesAsync()
+        public async Task<byte[]> ExportToDocx(RouteUploadRequest reportRoute)
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<Route>>("Routes/api/Routes");
+            var response = await _gatewayService.PostAsync("Routes/api/Routes/report", reportRoute);
+
+            return Convert.FromBase64String((await response.Content.ReadAsStringAsync()).Trim('"'));
         }
 
-        public async Task<Route> GetRouteByIdAsync(string id)
+        public async Task<IEnumerable<ExcelFileViewModel>> GetRoutesAsync()
         {
-            return await _gatewayService.GetFromJsonAsync<Route>("Routes/api/Routes/" + id);
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<ExcelFileViewModel>>("Routes/api/Routes");
+        }
+
+        public async Task<ReportRouteViewModel> GetRouteByIdAsync(string id)
+        {
+            ReportRouteViewModel reportRoute = new ReportRouteViewModel();
+
+            reportRoute.Cities = await _cityService.GetCitysAsync();
+            reportRoute.Teams = await _teamService.GetTeamsAsync();
+
+            var excelFile = await _gatewayService.GetFromJsonAsync<ExcelFileViewModel>("Routes/api/Routes/" + id);
+            reportRoute.ExcelFile = excelFile;
+            reportRoute.UploadRequest.ExcelFileId = excelFile.Id;
+
+            return reportRoute;
         }
 
         public async Task<ResponseResult> AddRouteAsync(Route route)

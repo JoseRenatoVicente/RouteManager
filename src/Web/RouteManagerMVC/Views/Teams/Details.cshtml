@@ -1,4 +1,4 @@
-﻿@model RouteManager.Domain.Entities.Team
+﻿@model RouteManagerMVC.Models.TeamRequest
 
 @{
     ViewData["Title"] = "Details";
@@ -10,15 +10,22 @@
     <h4>Equipe</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            Pessoas
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.People)
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
-    <a asp-action="Index">Voltar à lista</a>
+    <a asp-action="Index">Voltar á lista</a>
 </div>

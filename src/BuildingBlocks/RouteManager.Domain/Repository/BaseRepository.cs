@@ -9,7 +9,6 @@ namespace RouteManager.Domain.Repository
 {
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : EntityBase
     {
-
         public IMongoCollection<TEntity> DbSet;
 
         public BaseRepository(IMongoDatabase database)
@@ -37,10 +36,10 @@ namespace RouteManager.Domain.Repository
             return entity;
         }
 
-        public async Task RemoveAsync(TEntity entityRemove) =>
-            await DbSet.DeleteOneAsync(entity => entity.Id == entityRemove.Id);
+        public async Task<bool> RemoveAsync(TEntity entityRemove) =>
+            (await DbSet.DeleteOneAsync(entity => entity.Id == entityRemove.Id)).DeletedCount != 0;
 
-        public async Task RemoveAsync(string id) =>
-            await DbSet.DeleteOneAsync(entity => entity.Id == id);
+        public async Task<bool> RemoveAsync(string id) =>
+           (await DbSet.DeleteOneAsync(entity => entity.Id == id)).DeletedCount != 0;
     }
 }

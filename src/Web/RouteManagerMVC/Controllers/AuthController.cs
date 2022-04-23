@@ -48,7 +48,7 @@ namespace RouteManagerMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await _authService.Logout();
+            await _authService.LogoutAsync();
             return RedirectToAction("Login");
         }
 

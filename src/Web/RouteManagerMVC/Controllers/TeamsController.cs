@@ -3,6 +3,7 @@ using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace RouteManagerMVC.Controllers
 {
@@ -52,9 +53,10 @@ namespace RouteManagerMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Team")] TeamViewModel teamViewModel)
+        public async Task<IActionResult> Create([Bind("Team, PeopleIds")] TeamViewModel teamViewModel)
         {
-            await _teamService.AddTeamAsync(teamViewModel.Team);
+            teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
+               await _teamService.AddTeamAsync(teamViewModel.Team);
 
             return RedirectToAction(nameof(Index));
         }
@@ -66,8 +68,11 @@ namespace RouteManagerMVC.Controllers
                 return NotFound();
             }
 
-            var cities = await _cityService.GetCitysAsync();
-            var viewModel = new TeamViewModel { Cities = cities };
+            var viewModel = new TeamViewModel
+            {
+                Cities = await _cityService.GetCitysAsync(),
+                People = await _personService.GetPersonsAsync()
+            };
 
             viewModel.Team = await _teamService.GetTeamByIdAsync(id);
 
@@ -81,12 +86,13 @@ namespace RouteManagerMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(string id, TeamViewModel teamViewModel)
         {
-                teamViewModel.Team.Id = id;
+            teamViewModel.Team.Id = id;
+            teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
 
-                await _teamService.UpdateTeamAsync(teamViewModel.Team);
+            await _teamService.UpdateTeamAsync(teamViewModel.Team);
 
-                return RedirectToAction(nameof(Index));
- 
+            return RedirectToAction(nameof(Index));
+
         }
 
         public async Task<IActionResult> Delete(string id)

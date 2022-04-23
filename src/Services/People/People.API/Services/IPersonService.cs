@@ -10,8 +10,8 @@ namespace People.API.Services
         Task<Person> GetPersonByIdAsync(string id);
         Task<IEnumerable<Person>> GetPersonsByIdsAsync(string ids);
         Task<IEnumerable<Person>> GetPersonsAsync();
-        Task RemovePersonAsync(Person person);
-        Task RemovePersonAsync(string id);
+        Task<bool> RemovePersonAsync(Person person);
+        Task<bool> RemovePersonAsync(string id);
         Task<Person> UpdatePersonAsync(Person person);
     }
 }

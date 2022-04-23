@@ -9,31 +9,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{FA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "People", "People", "{2D533256-2A47-42C4-B24E-AEB42D6E168F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "People.API", "src\Services\People\People.API\People.API.csproj", "{AACC3B44-32F7-49B0-ACB4-67B33ABC324A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "People.API", "src\Services\People\People.API\People.API.csproj", "{AACC3B44-32F7-49B0-ACB4-67B33ABC324A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Team", "Team", "{BD0ECF63-3448-4549-802A-B332FD972897}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teams.API", "src\Services\Team\Teams.API\Teams.API.csproj", "{43146833-7A21-4CA0-9F3F-63E07135BD2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teams.API", "src\Services\Team\Teams.API\Teams.API.csproj", "{43146833-7A21-4CA0-9F3F-63E07135BD2C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{167BDC1E-989C-4828-A30C-2323416F2ED4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "src\Services\Identity\Identity.API\Identity.API.csproj", "{592BE37C-6E84-45BB-8610-4E7A2A76F87F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "src\Services\Identity\Identity.API\Identity.API.csproj", "{592BE37C-6E84-45BB-8610-4E7A2A76F87F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Route", "Route", "{03FE59F1-F413-421C-915A-54E0465F4A8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routes.API", "src\Services\Route\Routes.API\Routes.API.csproj", "{8F21961C-9CCA-41AD-B972-C53E6151C5F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Routes.API", "src\Services\Route\Routes.API\Routes.API.csproj", "{8F21961C-9CCA-41AD-B972-C53E6151C5F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{74D810D8-9851-4A44-88F6-2C63F963055F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{CE9CDE66-7712-465D-B3CD-95551E3278D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway.Ocelot", "src\ApiGateway\ApiGateway.Ocelot\ApiGateway.Ocelot.csproj", "{FF726F01-EC35-4280-84BE-5A265C9D3098}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway.Ocelot", "src\ApiGateway\ApiGateway.Ocelot\ApiGateway.Ocelot.csproj", "{FF726F01-EC35-4280-84BE-5A265C9D3098}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteManager.Domain", "src\BuildingBlocks\RouteManager.Domain\RouteManager.Domain.csproj", "{8FD12219-46C1-4ECE-B499-5E0C9D7EEF83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteManager.WebAPI.Core", "src\BuildingBlocks\RouteManager.WebAPI.Core\RouteManager.WebAPI.Core.csproj", "{FA36C8FA-1E5C-4CF8-A005-E9824FE36078}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteManager.WebAPI.Core", "src\BuildingBlocks\RouteManager.WebAPI.Core\RouteManager.WebAPI.Core.csproj", "{FA36C8FA-1E5C-4CF8-A005-E9824FE36078}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteManagerMVC", "src\Web\RouteManagerMVC\RouteManagerMVC.csproj", "{458937F5-B0B7-482F-88DE-1B578CA16095}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteManagerMVC", "src\Web\RouteManagerMVC\RouteManagerMVC.csproj", "{458937F5-B0B7-482F-88DE-1B578CA16095}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{4DD9161E-7DA5-4613-B047-0A2910BB1AAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging.API", "src\Services\Logging\Logging.API\Logging.API.csproj", "{CBFF420A-DC48-4C15-8FB3-66DAA1780300}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +79,14 @@ Global
 		{458937F5-B0B7-482F-88DE-1B578CA16095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{458937F5-B0B7-482F-88DE-1B578CA16095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{458937F5-B0B7-482F-88DE-1B578CA16095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBFF420A-DC48-4C15-8FB3-66DAA1780300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBFF420A-DC48-4C15-8FB3-66DAA1780300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBFF420A-DC48-4C15-8FB3-66DAA1780300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBFF420A-DC48-4C15-8FB3-66DAA1780300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +104,8 @@ Global
 		{8FD12219-46C1-4ECE-B499-5E0C9D7EEF83} = {74D810D8-9851-4A44-88F6-2C63F963055F}
 		{FA36C8FA-1E5C-4CF8-A005-E9824FE36078} = {74D810D8-9851-4A44-88F6-2C63F963055F}
 		{458937F5-B0B7-482F-88DE-1B578CA16095} = {3C5D8ADA-63CD-4BBA-935D-54F6B00D9071}
+		{4DD9161E-7DA5-4613-B047-0A2910BB1AAD} = {FAAC36DA-95B8-493C-B0D3-B00B3C920227}
+		{CBFF420A-DC48-4C15-8FB3-66DAA1780300} = {4DD9161E-7DA5-4613-B047-0A2910BB1AAD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1E1A752-F80F-40C5-B11A-EC0F85CC6A6C}

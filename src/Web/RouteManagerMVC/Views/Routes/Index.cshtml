@@ -1,60 +1,69 @@
-﻿@model IEnumerable<RouteManager.Domain.Entities.Route>
+﻿@model IEnumerable<RouteManagerMVC.Models.ExcelFileViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="h3 mb-2 text-gray-800">Rotas</h1>
 
-<div class="container">
-    <form method="post" enctype="multipart/form-data" asp-controller="Routes" asp-action="BatchRouteUpload">
-        <div class="row">
-            <div class="col-md-4">
-                <input type="file" name="file" value="Escolher Arquivo" multiple />
+<hr class="sidebar-divider">
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <form method="post" enctype="multipart/form-data" asp-controller="Routes" asp-action="BatchRouteUpload">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="file" name="file" value="Escolher Arquivo" multiple />
+                </div>
+                <div class="col-md-3">
+                    <input type="submit" value="Enviar Arquivo" class="btn btn-primary" />
+                </div>
             </div>
-            <div class="col-md-3">
-                <input type="submit" value="Enviar Arquivo" class="btn btn-primary" />
-            </div>
-    </form>
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.FileName)</th>
+                        <th rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.UploadDate)</th>
+                        <th rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.Columns)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.FileName)</th>
+                        <th rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.UploadDate)</th>
+                        <th rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.Columns)</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="odd">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FileName)
+                            </td>
+                            <td>
+                                @item.UploadDate.ToString("dd/MM/yyyy hh:mm")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Columns)
+                            </td>
+                            <td>
+                                <a asp-action="Import" asp-route-id="@item.Id">Importar</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Remover</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-<p>
-    <a asp-action="Create">Criar novo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OS)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Base)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Service)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OS)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Base)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Service)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Remover</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>

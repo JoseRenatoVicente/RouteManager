@@ -28,6 +28,12 @@ namespace Teams.API.Services
         public async Task<Team> GetTeamByIdAsync(string id) =>
             await _teamRepository.FindAsync(c => c.Id == id);
 
+        public async Task<IEnumerable<Team>> GetTeamByNameCityAsync(string nameCity) =>
+            await _teamRepository.FindAllAsync(c => c.City.Name == nameCity);
+
+        public async Task<IEnumerable<Team>> GetTeamByCityIdAsync(string id) =>
+    await _teamRepository.FindAllAsync(c => c.City.Id == id);
+
         public async Task<Team> AddTeamAsync(Team team)
         {
             string peopleIds = "";

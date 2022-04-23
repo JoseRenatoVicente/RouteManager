@@ -1,5 +1,7 @@
 ﻿using People.API.Repository;
 using RouteManager.Domain.Entities;
+using RouteManager.Domain.Entities.Enums;
+using RouteManager.Domain.Services;
 using RouteManager.Domain.Services.Base;
 using RouteManager.Domain.Validations;
 using RouteManager.WebAPI.Core.Notifications;
@@ -11,11 +13,13 @@ namespace People.API.Services
 {
     public class PersonService : BaseService, IPersonService
     {
+        private readonly GatewayService _gatewayService;
         private readonly IPersonRepository _personRepository;
 
-        public PersonService(IPersonRepository personRepository, INotifier notifier) : base(notifier)
+        public PersonService(IPersonRepository personRepository, GatewayService gatewayService, INotifier notifier) : base(notifier)
         {
             _personRepository = personRepository;
+            _gatewayService = gatewayService;
         }
 
         public async Task<IEnumerable<Person>> GetPersonsAsync() =>
@@ -34,22 +38,46 @@ namespace People.API.Services
 
         public async Task<Person> AddPersonAsync(Person person)
         {
-            if (!ExecuteValidation(new PersonValidation(), person)) return person;
+            await _gatewayService.PostLogAsync(null, person, Operation.Create);
 
-            return await _personRepository.AddAsync(person);
+            return !ExecuteValidation(new PersonValidation(), person) ? person : await _personRepository.AddAsync(person);
         }
 
         public async Task<Person> UpdatePersonAsync(Person person)
         {
-            if (!ExecuteValidation(new PersonValidation(), person)) return person;
+            var personBefore = await GetPersonByIdAsync(person.Id);
 
-            return await _personRepository.UpdateAsync(person);
+            if (personBefore == null)
+            {
+                Notification("Not found");
+                return person;
+            }
+
+            await _gatewayService.PostLogAsync(personBefore, person, Operation.Update);
+
+            return !ExecuteValidation(new PersonValidation(), person) ? person : await _personRepository.UpdateAsync(person);
         }
 
-        public async Task RemovePersonAsync(Person person) =>
-            await _personRepository.RemoveAsync(person);
+        public async Task<bool> RemovePersonAsync(Person person)
+        {
+            await _gatewayService.PostLogAsync(null, person, Operation.Delete);
 
-        public async Task RemovePersonAsync(string id) =>
-            await _personRepository.RemoveAsync(id);
+            return await _personRepository.RemoveAsync(person);
+        }
+
+        public async Task<bool> RemovePersonAsync(string id)
+        {
+            var person = await GetPersonByIdAsync(id);
+
+            if (person == null)
+            {
+                Notification("Not found");
+                return false;
+            }
+
+            await _gatewayService.PostLogAsync(null, person, Operation.Delete);
+
+            return await _personRepository.RemoveAsync(id);
+        }
     }
 }

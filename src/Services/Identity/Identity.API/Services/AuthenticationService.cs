@@ -2,7 +2,9 @@
 using Identity.API.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RouteManager.Domain.Entities.Enums;
 using RouteManager.Domain.Entities.Identity;
+using RouteManager.Domain.Services;
 using RouteManager.Domain.Services.Base;
 using RouteManager.WebAPI.Core.Identity;
 using RouteManager.WebAPI.Core.Notifications;
@@ -16,15 +18,17 @@ namespace Identity.API.Services
 {
     public class AuthenticationService : BaseService
     {
+        private readonly GatewayService _gatewayService;
         private readonly IRoleService _roleService;
         private readonly IUserService _userService;
         private readonly AppSettings _appSettings;
 
-        public AuthenticationService(IOptions<AppSettings> appSettings, IUserService userService, IRoleService roleService, INotifier notifier) : base(notifier)
+        public AuthenticationService(IOptions<AppSettings> appSettings, IUserService userService, IRoleService roleService, GatewayService gatewayService, INotifier notifier) : base(notifier)
         {
             _appSettings = appSettings.Value;
             _userService = userService;
             _roleService = roleService;
+            _gatewayService = gatewayService;
         }
 
 
@@ -54,6 +58,8 @@ namespace Identity.API.Services
 
             var userReponse = await _userService.AddUserAsync(user);
             if (userReponse == null) return null;
+
+            await _gatewayService.PostLogAsync(user, null, user, Operation.Create);
 
             return await GenerateJwt(user.UserName);
         }

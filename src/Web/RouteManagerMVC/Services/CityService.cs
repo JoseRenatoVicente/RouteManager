@@ -1,6 +1,7 @@
 ﻿using RouteManager.Domain.Entities;
 using RouteManager.Domain.Services;
 using RouteManagerMVC.Controllers.Base;
+using RouteManagerMVC.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,11 +9,11 @@ namespace RouteManagerMVC.Services
 {
     public interface ICityService
     {
-        Task<ResponseResult> AddCityAsync(City city);
-        Task<City> GetCityByIdAsync(string id);
-        Task<IEnumerable<City>> GetCitysAsync();
+        Task<ResponseResult> AddCityAsync(CityViewModel city);
+        Task<CityViewModel> GetCityByIdAsync(string id);
+        Task<IEnumerable<CityViewModel>> GetCitysAsync();
         Task RemoveCityAsync(string id);
-        Task<ResponseResult> UpdateCityAsync(City city);
+        Task<ResponseResult> UpdateCityAsync(CityViewModel city);
     }
 
     public class CityService : ICityService
@@ -24,22 +25,22 @@ namespace RouteManagerMVC.Services
             _gatewayService = gatewayService;
         }
 
-        public async Task<IEnumerable<City>> GetCitysAsync()
+        public async Task<IEnumerable<CityViewModel>> GetCitysAsync()
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<City>>("Teams/api/Cities/");
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<CityViewModel>>("Teams/api/Cities/");
         }
 
-        public async Task<City> GetCityByIdAsync(string id)
+        public async Task<CityViewModel> GetCityByIdAsync(string id)
         {
-            return await _gatewayService.GetFromJsonAsync<City>("Teams/api/Cities/" + id);
+            return await _gatewayService.GetFromJsonAsync<CityViewModel>("Teams/api/Cities/" + id);
         }
 
-        public async Task<ResponseResult> AddCityAsync(City city)
+        public async Task<ResponseResult> AddCityAsync(CityViewModel city)
         {
             return await _gatewayService.PostAsync<ResponseResult>("Teams/api/Cities/", city);
         }
 
-        public async Task<ResponseResult> UpdateCityAsync(City city)
+        public async Task<ResponseResult> UpdateCityAsync(CityViewModel city)
         {
             return await _gatewayService.PutAsync<ResponseResult>("Teams/api/Cities/" + city.Id, city);
         }

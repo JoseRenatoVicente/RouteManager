@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities;
 using RouteManagerMVC.Controllers.Base;
+using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GeradorRotasMVC.Controllers
+namespace RouteManagerMVC.Controllers
 {
     public class PeopleController : MVCBaseController
     {
@@ -45,7 +46,7 @@ namespace GeradorRotasMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name")] Person person)
+        public async Task<IActionResult> Create([Bind("Name")] PersonViewModel person)
         {
             if (ModelState.IsValid)
             {
@@ -76,7 +77,7 @@ namespace GeradorRotasMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Id")] Person person)
+        public async Task<IActionResult> Edit(string id, [Bind("Name,Id")] PersonViewModel person)
         {
             if (id != person.Id)
             {

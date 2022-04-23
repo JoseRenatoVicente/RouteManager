@@ -9,8 +9,8 @@ namespace Teams.API.Services
         Task<City> AddCityAsync(City city);
         Task<City> GetCityByIdAsync(string id);
         Task<IEnumerable<City>> GetCitysAsync();
-        Task RemoveCityAsync(City city);
-        Task RemoveCityAsync(string id);
+        Task<bool> RemoveCityAsync(City city);
+        Task<bool> RemoveCityAsync(string id);
         Task<City> UpdateCityAsync(City city);
     }
 }

@@ -9,6 +9,7 @@ namespace RouteManager.Domain.Entities.Identity
         public string Password { get; set; }
         public string PasswordSalt { get; set; }
         public string Email { get; set; }
+        public bool Active { get; set; } = true;
         public Role Role { get; set; }
     }
 }

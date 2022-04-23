@@ -6,45 +6,65 @@
 
 <h1>Criar</h1>
 
-<h4>Equipe</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Team.Name" class="control-label"></label>
-                <input asp-for="Team.Name" class="form-control" />
-                <span asp-validation-for="Team.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Team.City" class="control-label"></label>
-                <select asp-for="Team.City.Id" asp-items="@(new SelectList(Model.Cities,"Id","Name","State"))" class="form-control"></select>
-                <span asp-validation-for="Team.City.Id" class="text-danger"></span>
+    <div class="col">
+        <div class="card shadow mb-3">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Equipe</p>
             </div>
             <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
 
-                <div class="row">
-                    <div class="col">
-                        <label name="Pessoas" class="control-label"></label>
-                        <select id="dropDownList-example" name="" asp-for="PeopleIds"
-                                asp-items="@(new SelectList(Model.People,"Id","Name"))" multiple class="form-control"></select>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label asp-for="Team.Name" class="control-label"></label>
+                                <input asp-for="Team.Name" class="form-control" />
+                                <span asp-validation-for="Team.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col">
+                            <div class="mb-3">
+                                <label asp-for="Team.City" class="control-label"></label>
+                                <select asp-for="Team.City.Id" asp-items="@(new SelectList(Model.Cities,"Id",""))" class="form-control"></select>
+                                <span asp-validation-for="Team.City.Id" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
                     </div>
-                </div>
 
-            </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label class="control-label">Pessoas</label>
+                            <select asp-for="PeopleIds" asp-items="@(new SelectList(Model.People,"Id","Name"))" class="form-control"></select>
+                            <span asp-validation-for="PeopleIds" class="text-danger"></span>
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Salvar</button>&nbsp; &nbsp; &nbsp;
+
+                        <a asp-action="Index" class="btn btn-secondary btn-icon-split">
+                            <span class="icon text-gray-600">
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                            <span class="text">Voltar á lista</span>
+                        </a>
+
+                    </div>
+
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
-
-<div>
-    <a asp-action="Index">Voltar à lista</a>
-</div>
 
 @section Scripts {
     @{

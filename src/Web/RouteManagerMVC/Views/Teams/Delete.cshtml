@@ -1,4 +1,4 @@
-﻿@model RouteManager.Domain.Entities.Team
+﻿@model RouteManagerMVC.Models.TeamRequest
 
 @{
     ViewData["Title"] = "Delete";
@@ -22,6 +22,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Voltar à lista</a>
+        <a asp-action="Index">Voltar á lista</a>
     </form>
 </div>

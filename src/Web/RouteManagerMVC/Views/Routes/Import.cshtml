@@ -1,0 +1,102 @@
+﻿@using Microsoft.AspNetCore.Html
+@model RouteManagerMVC.Models.ReportRouteViewModel
+
+@{
+    ViewData["Title"] = "Import";
+}
+
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ExportToDocx">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+                <label class="control-label">Escolha o tipo serviço</label>
+                <select asp-for="UploadRequest.TypeService" asp-items="@(new SelectList(Model.TypeSevices))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.TypeService" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Escolha a Cidade</label>
+                <select asp-for="UploadRequest.City.Id" asp-items="@(new SelectList(Model.Cities,"Id","Name","State"))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.City.Id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Escolha as equipes</label>
+                <select asp-for="UploadRequest.NameTeams" asp-items="@(new SelectList(Model.Teams,"Name","Name"))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameTeams" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Adicione alguma coluna ao relatório</label>
+                <select asp-for="UploadRequest.ReportColumns" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.ReportColumns" class="text-danger"></span>
+            </div>
+
+            <h3>Nome das colunas</h3>
+
+
+
+            <div class="form-group">
+                <label class="control-label">Ordem de Serviço</label>
+                <select asp-for="UploadRequest.NameOS" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameOS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Base</label>
+                <select asp-for="UploadRequest.NameBase" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameBase" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Serviço</label>
+                <select asp-for="UploadRequest.NameService" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameService" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Cidade</label>
+                <select asp-for="UploadRequest.NameCity" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameCity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Rua</label>
+                <select asp-for="UploadRequest.NameStreet" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameStreet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Número</label>
+                <select asp-for="UploadRequest.NameNumber" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Complemento</label>
+                <select asp-for="UploadRequest.NameComplement" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameComplement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Bairro</label>
+                <select asp-for="UploadRequest.NameDistrict" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameDistrict" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">CEP</label>
+                <select asp-for="UploadRequest.NameCEP" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                <span asp-validation-for="UploadRequest.NameCEP" class="text-danger"></span>
+            </div>
+
+             @Html.HiddenFor(m => m.UploadRequest.ExcelFileId, new { ExcelFileId = Model.ExcelFile.Id})
+
+            <div class="form-group">
+                <input type="submit" value="Importar rotas e exportar relátorio" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

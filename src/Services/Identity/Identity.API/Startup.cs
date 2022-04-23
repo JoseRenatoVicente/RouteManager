@@ -1,4 +1,3 @@
-using Identity.API.Configuration;
 using Identity.API.Configurations;
 using Identity.API.Services;
 using Microsoft.AspNetCore.Builder;

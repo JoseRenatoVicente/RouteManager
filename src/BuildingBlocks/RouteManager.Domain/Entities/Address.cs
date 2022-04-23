@@ -3,6 +3,12 @@
 
     public class Address
     {
+
+        public override string ToString()
+        {
+            return $"{Street}, {Number} - {City.Name}, {CEP}";
+        }
+
         public string Street { get; set; }
         public string Number { get; set; }
         public string Complement { get; set; }

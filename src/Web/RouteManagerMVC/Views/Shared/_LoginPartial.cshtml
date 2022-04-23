@@ -1,25 +1,49 @@
 ﻿@using RouteManager.Domain.Identity.Extensions
-@inject IAspNetUser AppUser
 
-<ul class="navbar-nav">
-    @if (AppUser.IsAuthenticated())
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Olá </a>
-        </li>
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                   
+                    <div class="sidebar-brand-text mx-3"><span>Rotas</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Routes" asp-action="Index"><i class="fas fa-user"></i><span>Rotas</span></a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Teams" asp-action="Index"><i class="fas fa-table"></i><span>Equipes</span></a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="People" asp-action="Index"><i class="far fa-user-circle"></i><span>Pessoas</span></a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Cities" asp-action="Index"><i class="fas fa-user-circle"></i><span>Cidades</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
 
-        <li class="nav-item">
-            <a asp-controller="Auth" asp-action="Logout" class="nav-link btn btn-link text-dark">Logout</a>
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Registrar</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Login</a>
-        </li>
-    }
-</ul>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-lg-inline text-gray-600 small">Douglas McGee</span>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Perfil
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Sair
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>

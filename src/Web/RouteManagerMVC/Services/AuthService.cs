@@ -15,7 +15,7 @@ namespace RouteManagerMVC.Services
     public interface IAuthService
     {
         Task<UserResponseLogin> LoginAsync(UserLogin userLogin);
-        Task Logout();
+        Task LogoutAsync();
         Task<UserResponseLogin> RegisterAsync(UserRegister userForRegisterDto);
         Task SaveTokenAsync(UserResponseLogin responseLogin);
     }
@@ -105,7 +105,7 @@ namespace RouteManagerMVC.Services
         }
 
 
-        public async Task Logout()
+        public async Task LogoutAsync()
         {
             await _authenticationService.SignOutAsync(
                 _aspNetUser.GetHttpContext(),

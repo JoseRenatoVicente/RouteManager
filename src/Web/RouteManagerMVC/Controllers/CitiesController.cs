@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RouteManager.Domain.Entities;
 using RouteManagerMVC.Controllers.Base;
+using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,7 +43,7 @@ namespace RouteManagerMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,State,Id")] City city)
+        public async Task<IActionResult> Create([Bind("Name,State,Id")] CityViewModel city)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace RouteManagerMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,State,Id")] City city)
+        public async Task<IActionResult> Edit(string id, [Bind("Name,State,Id")] CityViewModel city)
         {
             if (id != city.Id)
             {

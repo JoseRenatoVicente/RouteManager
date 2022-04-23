@@ -1,4 +1,5 @@
 ﻿using RouteManager.Domain.DTO;
+using RouteManager.Domain.Entities.Base;
 using RouteManager.Domain.Entities.Enums;
 using RouteManager.Domain.Entities.Identity;
 using RouteManager.Domain.Identity.Extensions;
@@ -51,6 +52,17 @@ namespace RouteManager.Domain.Services
             return await DeserializeObjectResponse<T>(await PostAsync(path, content));
         }
 
+        public async Task<T> PostAsync<T>(string path, MultipartFormDataContent content)
+        {
+            return await DeserializeObjectResponse<T>(await PostAsync(path, content));
+        }
+
+        public async Task<HttpResponseMessage> PostAsync(string path, MultipartFormDataContent content)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
+            return await _httpClient.PostAsync(path, content);
+        }
+
         public async Task<HttpResponseMessage> PostAsync(string path, object content)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
@@ -84,19 +96,28 @@ namespace RouteManager.Domain.Services
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
 
-            return (await _httpClient.PostAsJsonAsync("Log/api/Logs", logRequest)).IsSuccessStatusCode;
+            return (await _httpClient.PostAsJsonAsync("Logging/api/Logs", logRequest)).IsSuccessStatusCode;
         }
-        public async Task<bool> PostLogAsync(object entityBefore, object entityAfter, Operation operation)
+
+        public async Task<bool> PostLogAsync<T>(object entityBefore, T entityAfter, Operation operation) where T : EntityBase
+        {
+            return await PostLogAsync(await GetCurrentUserAsync(), entityBefore, entityAfter, operation);
+        }
+
+        public async Task<bool> PostLogAsync<T>(User user, object entityBefore, T entityAfter, Operation operation) where T : EntityBase
         {
             LogRequest logRequest = new LogRequest
             {
-                User = await GetCurrentUserAsync(),
+                User = user,
+                EntityId = entityAfter.Id,
                 EntityBefore = entityBefore,
                 EntityAfter = entityAfter,
                 Operation = operation
             };
             return await PostLogAsync(logRequest);
         }
+
+
 
         public async Task<User> GetCurrentUserAsync()
         {
@@ -127,13 +148,24 @@ namespace RouteManager.Domain.Services
 
         protected async Task<T> DeserializeObjectResponse<T>(HttpResponseMessage responseMessage)
         {
-            var jsonString = await responseMessage.Content.ReadAsStringAsync();
+            var jsonStream = await responseMessage.Content.ReadAsStreamAsync();
 
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
-            return jsonString == null ? default(T) : JsonSerializer.Deserialize<T>(jsonString, options);
+
+            if (jsonStream == null) return default(T);
+
+            try
+            {
+                return await JsonSerializer.DeserializeAsync<T>(jsonStream, options);
+            }
+            catch
+            {
+
+                return default(T);
+            }
         }
     }
 }
