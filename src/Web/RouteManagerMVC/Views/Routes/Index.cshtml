@@ -8,6 +8,8 @@
 
 <hr class="sidebar-divider">
 
+
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <form method="post" enctype="multipart/form-data" asp-controller="Routes" asp-action="BatchRouteUpload">
@@ -53,12 +55,21 @@
                                 @item.UploadDate.ToString("dd/MM/yyyy hh:mm")
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Columns)
+                                <select asp-items="@(new SelectList(@item.Columns))" class="form-control"></select>
+
                             </td>
                             <td>
-                                <a asp-action="Import" asp-route-id="@item.Id">Importar</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Remover</a>
+                                <a asp-action="Import" asp-route-id="@item.Id" class="btn btn-warning btn-circle">
+                                    <i class="fas fa-file"></i>
+                                </a>
+
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-circle">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-circle">
+                                    <i class="fas fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     }

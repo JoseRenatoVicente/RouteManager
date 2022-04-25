@@ -10,6 +10,7 @@ namespace RouteManager.Domain.Identity.Extensions
         HttpContext GetHttpContext();
         string GetUserEmail();
         string GetUserId();
+        string GetName();
         string GetUserRefreshToken();
         string GetToken();
         bool HasRole(string role);

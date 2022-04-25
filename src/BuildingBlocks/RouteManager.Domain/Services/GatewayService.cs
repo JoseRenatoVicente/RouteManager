@@ -2,10 +2,12 @@
 using RouteManager.Domain.Entities.Base;
 using RouteManager.Domain.Entities.Enums;
 using RouteManager.Domain.Entities.Identity;
+using RouteManager.Domain.Extensions;
 using RouteManager.Domain.Identity.Extensions;
 using RouteManager.Domain.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -32,7 +34,12 @@ namespace RouteManager.Domain.Services
             {
                 using var response = await GetAsync(path);
 
-                return ErrorsResponse(response) ? await DeserializeObjectResponse<T>(response) : default(T);
+                if (response.IsSuccessStatusCode)
+                    return await DeserializeObjectResponse<T>(response);
+
+                await ErrorsResponse(response);
+
+                return default(T);
             }
             catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
             {
@@ -60,13 +67,21 @@ namespace RouteManager.Domain.Services
         public async Task<HttpResponseMessage> PostAsync(string path, MultipartFormDataContent content)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
-            return await _httpClient.PostAsync(path, content);
+
+            var response = await _httpClient.PostAsJsonAsync(path, content);
+            await ErrorsResponse(response);
+
+            return response;
         }
 
         public async Task<HttpResponseMessage> PostAsync(string path, object content)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
-            return await _httpClient.PostAsJsonAsync(path, content);
+
+            var response = await _httpClient.PostAsJsonAsync(path, content);
+            await ErrorsResponse(response);
+
+            return response;
         }
 
         public async Task<T> PutAsync<T>(string path, object content)
@@ -77,7 +92,11 @@ namespace RouteManager.Domain.Services
         public async Task<HttpResponseMessage> PutAsync(string path, object content)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
-            return await _httpClient.PutAsJsonAsync(path, content);
+
+            var response = await _httpClient.PutAsJsonAsync(path, content);
+            await ErrorsResponse(response);
+
+            return response;
         }
 
         public async Task<T> DeleteAsync<T>(string path)
@@ -88,7 +107,11 @@ namespace RouteManager.Domain.Services
         public async Task<HttpResponseMessage> DeleteAsync(string path)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
-            return await _httpClient.DeleteAsync(path);
+
+            var response = await _httpClient.DeleteAsync(path);
+            await ErrorsResponse(response);
+
+            return response;
         }
 
 
@@ -126,27 +149,30 @@ namespace RouteManager.Domain.Services
             return await GetFromJsonAsync<User>("Identity/api/Users/" + _aspNetUser.GetUserId());
         }
 
-        protected bool ErrorsResponse(HttpResponseMessage response)
+        protected async Task<bool> ErrorsResponse(HttpResponseMessage response)
         {
             switch ((int)response.StatusCode)
             {
+                case 400:
+                    foreach (var item in (await DeserializeObjectResponse<ErrorResult>(response)).Errors)
+                        Notification(item);
+
+                    return true;
+
                 case 401:
                 case 403:
                 case 404:
                 case 500:
-                    Notification("Internal error");
-                    return false;
-                //throw new CustomHttpRequestException(response.StatusCode);
+                    throw new CustomHttpRequestException(response.StatusCode);
 
-                case 400:
-                    return false;
+
             }
 
             response.EnsureSuccessStatusCode();
             return true;
         }
 
-        protected async Task<T> DeserializeObjectResponse<T>(HttpResponseMessage responseMessage)
+        public async Task<T> DeserializeObjectResponse<T>(HttpResponseMessage responseMessage)
         {
             var jsonStream = await responseMessage.Content.ReadAsStreamAsync();
 
@@ -166,6 +192,12 @@ namespace RouteManager.Domain.Services
 
                 return default(T);
             }
+        }
+
+        public class ErrorResult
+        {
+            public bool Success { get; set; }
+            public IEnumerable<string> Errors { get; set; }
         }
     }
 }

@@ -1,0 +1,60 @@
+﻿@model RouteManagerMVC.Models.RoleViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar</h1>
+<hr />
+
+<div class="row">
+    <div class="col">
+        <div class="card shadow mb-3">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Cidade</p>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col">
+                        <div class="mb-3">
+                            <label asp-for="RoleRequest.Description" class="control-label"></label>
+                            <input asp-for="RoleRequest.Description" class="form-control" />
+                            <span asp-validation-for="RoleRequest.Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-3">
+                            <label class="control-label">Selecione as áreas de acesso para Modificação</label>
+                            <select asp-for="NameClaims" asp-items="@(new SelectList(Model.GetClaims,"Id","Description"))" class="form-control"></select>
+                            <span asp-validation-for="NameClaims" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Salvar</button>&nbsp; &nbsp; &nbsp;
+
+                        <a asp-action="Index" class="btn btn-secondary btn-icon-split">
+                            <span class="icon text-gray-600">
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                            <span class="text">Voltar á lista</span>
+                        </a>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

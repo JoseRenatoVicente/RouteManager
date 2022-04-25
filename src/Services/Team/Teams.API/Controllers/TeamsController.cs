@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
@@ -50,6 +51,7 @@ namespace Teams.API.Controllers
             return Ok(team);
         }
 
+        [Authorize(Roles = "Equipes")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTeam(string id, Team team)
         {
@@ -61,12 +63,14 @@ namespace Teams.API.Controllers
             return await CustomResponseAsync(await _teamsService.UpdateTeamAsync(team));
         }
 
+        [Authorize(Roles = "Equipes")]
         [HttpPost]
         public async Task<ActionResult<Team>> PostTeam(Team team)
         {
             return await CustomResponseAsync(await _teamsService.AddTeamAsync(team));
         }
 
+        [Authorize(Roles = "Equipes")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeam(string id)
         {

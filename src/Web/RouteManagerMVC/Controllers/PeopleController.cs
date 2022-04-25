@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RouteManager.Domain.Entities;
+using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RouteManagerMVC.Controllers
@@ -13,7 +11,7 @@ namespace RouteManagerMVC.Controllers
     {
         private readonly IPersonService _personService;
 
-        public PeopleController(IPersonService personService)
+        public PeopleController(IPersonService personService, INotifier notifier) : base(notifier)
         {
             _personService = personService;
         }
@@ -48,15 +46,7 @@ namespace RouteManagerMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name")] PersonViewModel person)
         {
-            if (ModelState.IsValid)
-            {
-
-                if (ResponseHasErrors(await _personService.AddPersonAsync(person)))
-                    TempData["Erros"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(person);
+            return await CustomResponseAsync(await _personService.AddPersonAsync(person));
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -84,13 +74,7 @@ namespace RouteManagerMVC.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                await _personService.UpdatePersonAsync(person);
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(person);
+            return await CustomResponseAsync(await _personService.UpdatePersonAsync(person));
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -117,7 +101,7 @@ namespace RouteManagerMVC.Controllers
 
             await _personService.RemovePersonAsync(person.Id);
 
-            return RedirectToAction(nameof(Index));
+            return await CustomResponseAsync(person);
         }
 
     }

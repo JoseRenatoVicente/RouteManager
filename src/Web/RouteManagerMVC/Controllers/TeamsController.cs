@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace RouteManagerMVC.Controllers
 {
@@ -13,7 +13,7 @@ namespace RouteManagerMVC.Controllers
         private readonly IPersonService _personService;
         private readonly ITeamService _teamService;
 
-        public TeamsController(ICityService cityService, IPersonService personService, ITeamService teamService)
+        public TeamsController(ICityService cityService, IPersonService personService, ITeamService teamService, INotifier notifier) : base(notifier)
         {
             _cityService = cityService;
             _personService = personService;
@@ -56,9 +56,8 @@ namespace RouteManagerMVC.Controllers
         public async Task<IActionResult> Create([Bind("Team, PeopleIds")] TeamViewModel teamViewModel)
         {
             teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
-               await _teamService.AddTeamAsync(teamViewModel.Team);
 
-            return RedirectToAction(nameof(Index));
+            return await CustomResponseAsync(await _teamService.AddTeamAsync(teamViewModel.Team));
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -89,10 +88,7 @@ namespace RouteManagerMVC.Controllers
             teamViewModel.Team.Id = id;
             teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
 
-            await _teamService.UpdateTeamAsync(teamViewModel.Team);
-
-            return RedirectToAction(nameof(Index));
-
+            return await CustomResponseAsync(await _teamService.UpdateTeamAsync(teamViewModel.Team));
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -115,9 +111,11 @@ namespace RouteManagerMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            var team = await _teamService.GetTeamByIdAsync(id);
+
             await _teamService.RemoveTeamAsync(id);
 
-            return RedirectToAction(nameof(Index));
+            return await CustomResponseAsync(team);
         }
     }
 }

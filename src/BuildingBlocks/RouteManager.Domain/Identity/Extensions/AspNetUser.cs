@@ -19,6 +19,11 @@ namespace RouteManager.Domain.Identity.Extensions
             return IsAuthenticated() ? _accessor.HttpContext.User.GetUserId() : string.Empty;
         }
 
+        public string GetName()
+        {
+            return IsAuthenticated() ? _accessor.HttpContext.User.GetName() : "";
+        }
+
         public string GetUserEmail()
         {
             return IsAuthenticated() ? _accessor.HttpContext.User.GetUserEmail() : "";

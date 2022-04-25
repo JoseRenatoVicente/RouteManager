@@ -13,6 +13,14 @@ namespace RouteManager.Domain.Identity.Extensions
             return claim?.Value;
         }
 
+        public static string GetName(this ClaimsPrincipal principal)
+        {
+            if (principal == null) throw new ArgumentException(nameof(principal));
+
+            var claim = principal.FindFirst("Name");
+            return claim?.Value;
+        }
+
         public static string GetUserEmail(this ClaimsPrincipal principal)
         {
             if (principal == null) throw new ArgumentException(nameof(principal));

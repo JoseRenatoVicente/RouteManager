@@ -5,8 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RouteManagerMVC.Configuration;
-using RouteManagerMVC.Services;
-using System.Net;
+using RouteManagerMVC.Extensions;
 
 namespace RouteManagerMVC
 {
@@ -35,7 +34,7 @@ namespace RouteManagerMVC
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAuthService authService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -56,11 +55,13 @@ namespace RouteManagerMVC
 
             app.UseAuthorization();
 
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Auth}/{action=Login}/{id?}");
+                    pattern: "{controller=Routes}/{action=Index}/{id?}");
             });
         }
     }

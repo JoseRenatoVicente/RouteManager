@@ -15,18 +15,21 @@ namespace RouteManagerMVC.Configuration
 
             //services
             services.AddHttpClient<GatewayService>();
-            services.AddHttpClient<IAuthService, AuthService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddSingleton<ICityService, CityService>();
             services.AddSingleton<IPersonService, PersonService>();
             services.AddSingleton<ITeamService, TeamService>();
             services.AddSingleton<IRouteService, RouteService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IRoleService, RoleService>();
+            services.AddSingleton<IAccountService, AccountService>();
 
             //notification
             services.AddSingleton<INotifier, Notifier>();
 
             //Identity
             services.AddSingleton<IAspNetUser, AspNetUser>();
-            services.AddHttpContextAccessor();           
+            services.AddHttpContextAccessor();
 
         }
     }

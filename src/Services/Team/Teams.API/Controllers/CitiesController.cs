@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
@@ -37,6 +38,7 @@ namespace Teams.API.Controllers
             return city;
         }
 
+        [Authorize(Roles = "Cidades")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCity(string id, City city)
         {
@@ -48,12 +50,14 @@ namespace Teams.API.Controllers
             return await CustomResponseAsync(await _citysService.UpdateCityAsync(city));
         }
 
+        [Authorize(Roles = "Cidades")]
         [HttpPost]
         public async Task<ActionResult<City>> PostCity(City city)
         {
             return await CustomResponseAsync(await _citysService.AddCityAsync(city));
         }
 
+        [Authorize(Roles = "Cidades")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(string id)
         {
@@ -63,7 +67,6 @@ namespace Teams.API.Controllers
                 return NotFound();
             }
             return await CustomResponseAsync(await _citysService.RemoveCityAsync(city));
-
         }
     }
 }

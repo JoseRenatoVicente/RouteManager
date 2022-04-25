@@ -1,4 +1,5 @@
-﻿using RouteManager.Domain.Entities;
+﻿using MongoDB.Driver;
+using RouteManager.Domain.Entities;
 using RouteManager.Domain.Entities.Enums;
 using RouteManager.Domain.Services;
 using RouteManager.Domain.Services.Base;
@@ -31,28 +32,42 @@ namespace Teams.API.Services
 
         public async Task<City> AddCityAsync(City city)
         {
-            if (!ExecuteValidation(new CityValidation(), city)) return city;
-
             await _gatewayService.PostLogAsync(null, city, Operation.Create);
 
-            return await _cityRepository.AddAsync(city);
+            return !ExecuteValidation(new CityValidation(), city) ? city : await _cityRepository.AddAsync(city);
         }
 
         public async Task<City> UpdateCityAsync(City city)
         {
-            if (!ExecuteValidation(new CityValidation(), city)) return city;
-
             var cityBefore = await GetCityByIdAsync(city.Id);
 
             if (cityBefore == null)
             {
-                Notification("Not found");
+                Notification("Cidade não encontrada");
                 return city;
             }
 
+            var filterDefinition = Builders<Team>.Filter.Eq(p => p.City.Id, cityBefore.Id);
+            var updateDefinition = Builders<Team>.Update.Set(p => p.City, city);
+
+            await _teamRepository.UpdateAllAsync(filterDefinition, updateDefinition);
+
             await _gatewayService.PostLogAsync(cityBefore, city, Operation.Update);
 
-            return await _cityRepository.UpdateAsync(city);
+            return !ExecuteValidation(new CityValidation(), city) ? city : await _cityRepository.UpdateAsync(city);
+        }
+
+        public async Task<bool> RemoveCityAsync(string id)
+        {
+            var city = await GetCityByIdAsync(id);
+
+            if (city == null)
+            {
+                Notification("Cidade não encontrada");
+                return false;
+            }
+
+            return await RemoveCityAsync(city);
         }
 
         public async Task<bool> RemoveCityAsync(City city)
@@ -68,26 +83,7 @@ namespace Teams.API.Services
             return await _cityRepository.RemoveAsync(city);
         }
 
-        public async Task<bool> RemoveCityAsync(string id)
-        {
-            var city = await GetCityByIdAsync(id);
 
-            if (city == null)
-            {
-                Notification("Not found");
-                return false;
-            }
-
-            if (await _teamRepository.FindAsync(c => c.City.Id == city.Id) != null)
-            {
-                Notification("Essa cidade possui equipes vinculadas exclua primeiro a equipe para excluir a cidade");
-                return false;
-            }
-
-            await _gatewayService.PostLogAsync(null, city, Operation.Delete);
-
-            return await _cityRepository.RemoveAsync(id);
-        }
 
     }
 }

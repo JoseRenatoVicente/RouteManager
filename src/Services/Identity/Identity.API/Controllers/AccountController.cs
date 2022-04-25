@@ -1,11 +1,10 @@
 ﻿using Identity.API.Models;
-using Microsoft.AspNetCore.Authorization;
+using Identity.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities.Identity;
+using RouteManager.Domain.Identity.Extensions;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace Identity.API.Controllers
@@ -13,70 +12,41 @@ namespace Identity.API.Controllers
     [Route("api/[controller]")]
     public class AccountController : BaseController
     {
-        public AccountController(INotifier notifier) : base(notifier)
+        private readonly IUserService _userService;
+        private readonly IAspNetUser _aspNetUser;
+
+        public AccountController(IUserService userService, IAspNetUser aspNetUser, INotifier notifier) : base(notifier)
         {
+            _userService = userService;
+            _aspNetUser = aspNetUser;
         }
 
-        /*    private readonly SignInManager<Usuario> _signInManager;
-   private readonly UserManager<Usuario> _userManager;
-   private readonly ILogger _logger;
-
-   private readonly IEmailService _emailService;
-
-   public ContaController(SignInManager<Usuario> signInManager,
-                         IEmailService emailService,
-   UserManager<Usuario> userManager, ILogger<AutenticacaoController> logger)
-   {
-       _signInManager = signInManager;
-       _userManager = userManager;
-       _logger = logger;
-       _emailService = emailService;
-   }
-
-        
         [HttpGet]
-        public async Task<IActionResult> ObterDados()
+        public async Task<IActionResult> GetCurrentUser()
         {
-            var data = await (await _pessoaRepository.GetAllAsync())
-            .ProjectTo<PessoaUpdateViewModel>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(x => x.id_usuario == _user.ObterUserId());
-
-            return data is null ? NotFound() : CustomResponseAsync(data);
+            return await CustomResponseAsync(await _userService.GetUserByIdAsync(_aspNetUser.GetUserId()));
         }
 
         [HttpPut]
-        public async Task<IActionResult> AtualizarDados(AtualizarPessoaCommand atualizarPessoaCommand)
+        public async Task<IActionResult> UpdateCurrentUser(User user)
         {
-            atualizarPessoaCommand.UsuarioId = _user.ObterUserId();
-            return !ModelState.IsValid ? CustomResponseAsync(ModelState) : CustomResponseAsync(await _mediator.Send(atualizarPessoaCommand));
+            user.Id = _aspNetUser.GetUserId();
+            return await CustomResponseAsync(await _userService.UpdateUserAsync(user));
         }
 
         /// <summary>
         /// Requisição usada para mudar a senha de um usuário que esta logado
         /// </summary>
-        /// <param name="mudarSenha">É necessário enviar a senha atual e a nova senha</param>
+        /// <param name="changePassword">É necessário enviar a senha atual e a nova senha</param>
         /// <returns></returns>
-        [HttpPost("MudarSenha")]
-        public async Task<ActionResult> MudarSenha(MudarSenhaViewModel mudarSenha)
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordCurrentUserViewModel changePassword)
         {
-            if (!ModelState.IsValid) return CustomResponseAsync(ModelState);
-            var user = await _userManager.FindByIdAsync(_user.ObterUserId().ToString());
-            var result = await _userManager.ChangePasswordAsync(user, mudarSenha.SenhaAtual, mudarSenha.NovaSenha);
-
-            if (result.Succeeded)
-            {
-                await _emailService.SendEmailAsync(user.Email, "Sua senha foi alterada", "proteja sua conta");
-                return CustomResponseAsync();
-            }
-            foreach (var error in result.Errors)
-            {
-                AddError(error.Description);
-            }
-
-            return CustomResponseAsync();
-
+            changePassword.UserId = _aspNetUser.GetUserId();
+            return await CustomResponseAsync(await _userService.ChangePasswordCurrentUser(changePassword));
         }
 
+        /*
         /// <summary>
         /// Requisição usada para recuperação da conta
         /// </summary>
@@ -84,7 +54,7 @@ namespace Identity.API.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("EsqueceuSenha")]
-        public async Task<ActionResult> EsqueceuSenha(string email)
+        public async Task<IActionResult> EsqueceuSenha(string email)
         {
             if (!ModelState.IsValid) return await CustomResponseAsync(ModelState);
             var user = await _userManager.FindByEmailAsync(email);
@@ -112,7 +82,7 @@ namespace Identity.API.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("ResetSenha")]
-        public async Task<ActionResult> ResetSenha(ResetPasswordViewModel resetPassword)
+        public async Task<IActionResult> ResetSenha(ResetPasswordViewModel resetPassword)
         {
             if (!ModelState.IsValid) return await CustomResponseAsync(ModelState);
 
@@ -141,7 +111,7 @@ namespace Identity.API.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("ConfirmarEmail")]
-        public async Task<ActionResult> ConfirmarEmail([Required] string userId, [Required] string code)
+        public async Task<IActionResult> ConfirmarEmail([Required] string userId, [Required] string code)
         {
             if (!ModelState.IsValid) return await CustomResponseAsync(ModelState);
 
@@ -151,9 +121,7 @@ namespace Identity.API.Controllers
 
             return await CustomResponseAsync();
         }
-
         */
-
 
 
     }

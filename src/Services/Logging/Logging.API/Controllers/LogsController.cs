@@ -38,6 +38,8 @@ namespace Logging.API.Controllers
 
             return new LogRequest(log);
         }
+
+        [Authorize(Roles = "Logs")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLog(string id, Log log)
         {
@@ -51,13 +53,14 @@ namespace Logging.API.Controllers
             return NoContent();
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Logs")]
         [HttpPost]
         public async Task<ActionResult<LogRequest>> PostLog(LogRequest log)
         {
             return await CustomResponseAsync(new LogRequest(await _logsService.AddLogAsync(new Log(log))));
         }
 
+        [Authorize(Roles = "Logs")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLog(string id)
         {

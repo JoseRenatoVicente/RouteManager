@@ -1,21 +1,19 @@
-﻿using RouteManager.Domain.Entities;
-using RouteManager.Domain.Services;
-using RouteManagerMVC.Controllers.Base;
+﻿using RouteManager.Domain.Services;
 using RouteManagerMVC.Models;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RouteManagerMVC.Services
 {
     public interface IPersonService
     {
-        Task<ResponseResult> AddPersonAsync(PersonViewModel person);
+        Task<PersonViewModel> AddPersonAsync(PersonViewModel person);
         Task<PersonViewModel> GetPersonByIdAsync(string id);
         Task<IEnumerable<PersonViewModel>> GetPersonsByIdsAsync(IEnumerable<string> ids);
         Task<IEnumerable<PersonViewModel>> GetPersonsAsync();
         Task RemovePersonAsync(string id);
-        Task<ResponseResult> UpdatePersonAsync(PersonViewModel person);
+        Task<PersonViewModel> UpdatePersonAsync(PersonViewModel person);
     }
 
     public class PersonService : IPersonService
@@ -29,32 +27,32 @@ namespace RouteManagerMVC.Services
 
         public async Task<IEnumerable<PersonViewModel>> GetPersonsAsync()
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("People/api/People");
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/People");
         }
 
         public async Task<PersonViewModel> GetPersonByIdAsync(string id)
         {
-            return await _gatewayService.GetFromJsonAsync<PersonViewModel>("People/api/People/" + id);
+            return await _gatewayService.GetFromJsonAsync<PersonViewModel>("Teams/api/People/" + id);
         }
 
         public async Task<IEnumerable<PersonViewModel>> GetPersonsByIdsAsync(IEnumerable<string> ids)
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("People/api/People/list/" + string.Concat(ids.Select(c => c + ",")));
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/People/list/" + string.Concat(ids.Select(c => c + ",")));
         }
 
-        public async Task<ResponseResult> AddPersonAsync(PersonViewModel person)
+        public async Task<PersonViewModel> AddPersonAsync(PersonViewModel person)
         {
-            return await _gatewayService.PostAsync<ResponseResult>("People/api/People/", person);
+            return await _gatewayService.PostAsync<PersonViewModel>("Teams/api/People/", person);
         }
 
-        public async Task<ResponseResult> UpdatePersonAsync(PersonViewModel person)
+        public async Task<PersonViewModel> UpdatePersonAsync(PersonViewModel person)
         {
-            return await _gatewayService.PutAsync<ResponseResult>("People/api/People/" + person.Id, person);
+            return await _gatewayService.PutAsync<PersonViewModel>("Teams/api/People/" + person.Id, person);
         }
 
         public async Task RemovePersonAsync(string id)
         {
-            await _gatewayService.DeleteAsync("People/api/People/" + id);
+            await _gatewayService.DeleteAsync("Teams/api/People/" + id);
         }
 
     }

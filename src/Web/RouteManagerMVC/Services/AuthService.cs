@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using RouteManager.Domain.Identity.Extensions;
+using RouteManager.Domain.Services;
+using RouteManager.Domain.Services.Base;
+using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Models;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RouteManagerMVC.Services
@@ -16,78 +16,34 @@ namespace RouteManagerMVC.Services
     {
         Task<UserResponseLogin> LoginAsync(UserLogin userLogin);
         Task LogoutAsync();
-        Task<UserResponseLogin> RegisterAsync(UserRegister userForRegisterDto);
-        Task SaveTokenAsync(UserResponseLogin responseLogin);
+        Task<UserResponseLogin> SaveTokenAsync(UserResponseLogin responseLogin);
     }
 
-    public class AuthService : IAuthService
+    public class AuthService : BaseService, IAuthService
     {
-        private HttpClient _httpClient;
+        private GatewayService _gatewayService;
         private readonly IAuthenticationService _authenticationService;
         private readonly IAspNetUser _aspNetUser;
 
-        public AuthService(HttpClient httpClient, IAuthenticationService authenticationService, IAspNetUser aspNetUser)
+        public AuthService(GatewayService gatewayService, IAuthenticationService authenticationService, IAspNetUser aspNetUser, INotifier notifier) : base(notifier)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://localhost:7114");
+            _gatewayService = gatewayService;
             _authenticationService = authenticationService;
             _aspNetUser = aspNetUser;
         }
 
         public async Task<UserResponseLogin> LoginAsync(UserLogin userLogin)
         {
-            var responseMessage = await _httpClient.PostAsJsonAsync("Identity/api/Auth/login", userLogin);
-
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
-                var result = await JsonSerializer.DeserializeAsync<UserResponseLogin>(await responseMessage.Content.ReadAsStreamAsync(), options);
-
-                await SaveTokenAsync(result);
-
-                return result;
-            }
-            else
-            {
-                //errors
-            }
-            return null;
+            var userResponseLogin = await _gatewayService.PostAsync<UserResponseLogin>("Identity/api/Auth/Login", userLogin);
+            return userResponseLogin == null ? userResponseLogin : await SaveTokenAsync(userResponseLogin);
         }
 
-
-
-
-
-        public async Task<UserResponseLogin> RegisterAsync(UserRegister userForRegisterDto)
-        {
-            var responseMessage = await _httpClient.PostAsJsonAsync("Identity/api/Auth/register", userForRegisterDto);
-
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
-
-                var result = await JsonSerializer.DeserializeAsync<UserResponseLogin>(await responseMessage.Content.ReadAsStreamAsync(), options);
-
-                await SaveTokenAsync(result);
-            }
-            else
-            {
-                //errors
-            }
-            return null;
-        }
-
-        public async Task SaveTokenAsync(UserResponseLogin responseLogin)
+        public async Task<UserResponseLogin> SaveTokenAsync(UserResponseLogin responseLogin)
         {
             var claims = new List<Claim>();
             claims.Add(new Claim("JWT", responseLogin.AccessToken));
             claims.Add(new Claim("RefreshToken", responseLogin.RefreshToken.ToString()));
+            claims.Add(new Claim("Name", responseLogin.UserToken.Name));
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -102,6 +58,7 @@ namespace RouteManagerMVC.Services
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
+            return responseLogin;
         }
 
 

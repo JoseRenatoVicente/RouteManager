@@ -13,29 +13,22 @@ namespace Identity.API.Controllers
     public class AuthController : BaseController
     {
         private readonly IAspNetUser _aspNetUser;
-        private readonly AuthenticationService _authService;
+        private readonly AuthService _authService;
 
-        public AuthController(AuthenticationService authService, IAspNetUser aspNetUser, INotifier notifier) : base(notifier)
+        public AuthController(AuthService authService, IAspNetUser aspNetUser, INotifier notifier) : base(notifier)
         {
             _authService = authService;
             _aspNetUser = aspNetUser;
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<ActionResult> Register(UserRegister userRegister)
-        {
-            return await CustomResponseAsync(await _authService.CreateAsync(userRegister));
-        }
-
-        [AllowAnonymous]
-        [HttpPost("login")]
-        public async Task<ActionResult> Login(UserLogin usuarioLogin)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(UserLogin usuarioLogin)
         {
             return await CustomResponseAsync(await _authService.LoginAsync(usuarioLogin));
         }
 
-        [HttpPost("Checar-Login")]
+        [HttpPost("Check-Login")]
         public ActionResult CheckLogin()
         {
             return Ok(_aspNetUser.GetUserId());

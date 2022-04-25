@@ -1,4 +1,5 @@
 ﻿using Identity.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities.Identity;
 using RouteManager.WebAPI.Core.Controllers;
@@ -37,6 +38,7 @@ namespace Identity.API.Controllers
             return user;
         }
 
+        [Authorize(Roles = "Usuários")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(string id, User user)
         {
@@ -44,27 +46,26 @@ namespace Identity.API.Controllers
             {
                 return BadRequest();
             }
-
-            await _userService.UpdateUserAsync(user);
-
-            return NoContent();
+            return await CustomResponseAsync(await _userService.UpdateUserAsync(user));
         }
 
+        [Authorize(Roles = "Usuários")]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
             return await CustomResponseAsync(await _userService.AddUserAsync(user));
         }
 
+        [Authorize(Roles = "Usuários")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DisableUser(string id)
         {
             var user = await GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
-            await _userService.RemoveUserAsync(id);
+            await _userService.DisableUserAsync(id);
 
             return NoContent();
         }

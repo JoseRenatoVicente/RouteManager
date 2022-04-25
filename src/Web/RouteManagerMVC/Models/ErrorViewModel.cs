@@ -1,5 +1,3 @@
-using System;
-
 namespace RouteManagerMVC.Models
 {
     public class ErrorViewModel

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities;
+using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
@@ -13,14 +14,14 @@ namespace RouteManagerMVC.Controllers
     {
         private readonly IRouteService _routeService;
 
-        public RoutesController(IRouteService routeService)
+        public RoutesController(IRouteService routeService, INotifier notifier) : base(notifier)
         {
             _routeService = routeService;
         }
 
         public async Task<IActionResult> BatchRouteUpload(IFormFile file)
         {
-            return View(await _routeService.RouteUpload(file));
+            return await CustomResponseAsync(await _routeService.RouteUpload(file));
         }
 
         public async Task<IActionResult> Import(string id)
@@ -30,9 +31,22 @@ namespace RouteManagerMVC.Controllers
 
         public async Task<IActionResult> ExportToDocx(ReportRouteViewModel reportRoute)
         {
-            return File(await _routeService.ExportToDocx(reportRoute.UploadRequest), "application/octet-stream", "Routes" + DateTime.Now.ToString("dd_MM_yyyy") + ".docx");
-        }
+            var fileDocx = await _routeService.ExportToDocx(reportRoute.UploadRequest);
 
+            if (await IsOperationValid())
+            {
+                return File(fileDocx, "application/octet-stream", "Routes" + DateTime.Now.ToString("dd_MM_yyyy") + ".docx");
+            }
+            TempData["Errors"] = await GetErrors();
+
+            var report = await _routeService.GetRouteByIdAsync(reportRoute.UploadRequest.ExcelFileId);
+
+            reportRoute.Cities = report.Cities;
+            reportRoute.Teams = report.Teams;
+            reportRoute.ExcelFile = report.ExcelFile;
+
+            return View("Import", reportRoute);
+        }
 
         public async Task<IActionResult> Index()
         {
@@ -59,13 +73,7 @@ namespace RouteManagerMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OS,Base,Service,Address,Id")] Route route)
         {
-            if (ModelState.IsValid)
-            {
-                await _routeService.AddRouteAsync(route);
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(route);
+            return await CustomResponseAsync(await _routeService.AddRouteAsync(route));
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -92,13 +100,7 @@ namespace RouteManagerMVC.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                    await _routeService.UpdateRouteAsync(route);
-     
-                return RedirectToAction(nameof(Index));
-            }
-            return View(route);
+            return await CustomResponseAsync(await _routeService.UpdateRouteAsync(route));
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -122,10 +124,11 @@ namespace RouteManagerMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            var route = await _routeService.GetRouteByIdAsync(id);
+
             await _routeService.RemoveRouteAsync(id);
 
-            return RedirectToAction(nameof(Index));
+            return await CustomResponseAsync(route);
         }
-
     }
 }

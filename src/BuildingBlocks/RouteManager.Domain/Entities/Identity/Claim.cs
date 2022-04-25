@@ -2,6 +2,11 @@
 {
     public class Claim
     {
+        public Claim(string description)
+        {
+            Description = description;
+        }
+
         public string Description { get; set; }
     }
 }

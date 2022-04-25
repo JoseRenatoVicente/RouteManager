@@ -24,7 +24,7 @@ namespace Identity.API.Configurations
             services.AddHttpClient<GatewayService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IRoleService, RoleService>();
-            services.AddSingleton<AuthenticationService>();
+            services.AddSingleton<AuthService>();
             services.AddSingleton<SeederService>();
 
             //repositories

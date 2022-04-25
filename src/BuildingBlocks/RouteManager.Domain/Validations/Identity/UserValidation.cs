@@ -18,7 +18,7 @@ namespace RouteManager.Domain.Validations.Identity
 
             RuleFor(command => command.Password)
                 .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido")
-                .Length(8, 30).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
+                .Length(8, 200).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
             RuleFor(command => command.Role).NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido");
 

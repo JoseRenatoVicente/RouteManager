@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace RouteManager.WebAPI.Core.Notifications
 {
     public class NotificationFilter : IAsyncResultFilter
-	{
-		protected readonly INotifier _notifier;
+    {
+        protected readonly INotifier _notifier;
 
         public NotificationFilter(INotifier notifier)
         {
@@ -16,19 +16,19 @@ namespace RouteManager.WebAPI.Core.Notifications
         }
 
         public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
-		{
-			if (_notifier.IsNotified())
-			{
-				context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-				context.HttpContext.Response.ContentType = "application/json";
+        {
+            if (_notifier.IsNotified())
+            {
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.HttpContext.Response.ContentType = "application/json";
 
-				var notifications = JsonSerializer.Serialize(_notifier.GetNotifications());
-				await context.HttpContext.Response.WriteAsync(notifications);
+                var notifications = JsonSerializer.Serialize(_notifier.GetNotifications());
+                await context.HttpContext.Response.WriteAsync(notifications);
 
-				return;
-			}
+                return;
+            }
 
-			await next();
-		}
-	}
+            await next();
+        }
+    }
 }

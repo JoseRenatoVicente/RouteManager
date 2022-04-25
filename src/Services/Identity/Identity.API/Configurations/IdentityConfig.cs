@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using RouteManager.WebAPI.Core.Configuration;
-using RouteManager.WebAPI.Core.Identity;
 
 namespace Identity.API.Configurations
 {

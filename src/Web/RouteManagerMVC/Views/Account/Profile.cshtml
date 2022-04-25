@@ -1,0 +1,95 @@
+﻿@model RouteManagerMVC.Models.UserUpdate
+
+@{
+    ViewData["Title"] = "Gerenciar Perfil";
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+
+        <br>
+        <br>
+        <h2>Gerencie sua conta</h2>
+
+
+        <h4>Altere as configurações da sua conta</h4>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+
+                <div class="card mb-3">
+                    <div class="card-body shadow">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-action="Profile">Perfil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="ChangePassword">
+                                    Mudar
+                                    senha
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-9">
+                <form asp-action="Profile">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <h4>Perfil</h4>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input type="text" placeholder="Nome" asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label asp-for="UserName" class="control-label"></label>
+                                        <input type="text" placeholder="Nome de usuário" asp-for="UserName" class="form-control" />
+                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input type="email" placeholder="email@email.com" asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                    <button type="submit" class="btn btn-primary">Atualizar</button>&nbsp; &nbsp; &nbsp;
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+        </div>
+    </main>
+</div>
+
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

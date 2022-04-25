@@ -30,7 +30,14 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
-    <a asp-action="Index">Voltar á lista</a>
+<div class="mb-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>&nbsp; &nbsp; &nbsp;
+
+    <a asp-action="Index" class="btn btn-secondary btn-icon-split">
+        <span class="icon text-gray-600">
+            <i class="fas fa-arrow-right"></i>
+        </span>
+        <span class="text">Voltar á lista</span>
+    </a>
+
 </div>

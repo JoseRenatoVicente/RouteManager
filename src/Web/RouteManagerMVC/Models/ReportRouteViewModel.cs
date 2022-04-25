@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using RouteManager.Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace RouteManagerMVC.Models
@@ -33,7 +31,7 @@ namespace RouteManagerMVC.Models
         }
     }
 
-   public class RouteUploadRequest
+    public class RouteUploadRequest
     {
         public string NameOS { get; set; } = "OS";
         public string NameBase { get; set; } = "BASE";

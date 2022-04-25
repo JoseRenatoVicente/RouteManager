@@ -1,4 +1,5 @@
 ﻿using Identity.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities.Identity;
 using RouteManager.WebAPI.Core.Controllers;
@@ -12,10 +13,15 @@ namespace Identity.API.Controllers
     public class RolesController : BaseController
     {
         private readonly IRoleService _roleService;
-
         public RolesController(IRoleService roleService, INotifier notifier) : base(notifier)
         {
             _roleService = roleService;
+        }
+
+        [HttpGet("Claims")]
+        public async Task<ActionResult<IEnumerable<Role>>> GetCurrentClaims()
+        {
+            return Ok(await _roleService.GetCurrentClaimsAsync());
         }
 
         [HttpGet]
@@ -27,46 +33,40 @@ namespace Identity.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Role>> GetRole(string id)
         {
-            var Role = await _roleService.GetRoleByIdAsync(id);
+            var role = await _roleService.GetRoleByIdAsync(id);
 
-            if (Role == null)
-            {
-                return NotFound();
-            }
-
-            return Role;
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(string id, Role Role)
-        {
-            if (id != Role.Id)
-            {
-                return BadRequest();
-            }
-
-            await _roleService.UpdateRoleAsync(Role);
-
-            return NoContent();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Role>> PostRole(Role Role)
-        {
-            return await _roleService.AddRoleAsync(Role);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRole(string id)
-        {
-            var role = await GetRole(id);
             if (role == null)
             {
                 return NotFound();
             }
-            await _roleService.RemoveRoleAsync(id);
 
-            return NoContent();
+            return role;
+        }
+
+        [Authorize(Roles = "Funções")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRole(string id, Role role)
+        {
+            if (id != role.Id)
+            {
+                return BadRequest();
+            }
+
+            return await CustomResponseAsync(await _roleService.UpdateRoleAsync(role));
+        }
+
+        [Authorize(Roles = "Funções")]
+        [HttpPost]
+        public async Task<ActionResult<Role>> PostRole(Role role)
+        {
+            return await CustomResponseAsync(await _roleService.AddRoleAsync(role));
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            return await CustomResponseAsync(await _roleService.RemoveRoleAsync(id));
         }
     }
 }

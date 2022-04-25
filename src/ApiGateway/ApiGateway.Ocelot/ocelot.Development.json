@@ -32,19 +32,6 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44304
-        }
-      ],
-      "UpstreamPathTemplate": "/People/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "SwaggerKey": "People"
-    },
-    {
-      "DownstreamPathTemplate": "/{everything}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
           "Port": 44388
         }
       ],
@@ -84,16 +71,6 @@
           "Name": "Logging API",
           "Version": "v1",
           "Url": "https://localhost:44367/swagger/v1/swagger.json"
-        }
-      ]
-    },
-    {
-      "Key": "People",
-      "Config": [
-        {
-          "Name": "People API",
-          "Version": "v1",
-          "Url": "https://localhost:44304/swagger/v1/swagger.json"
         }
       ]
     },

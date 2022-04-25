@@ -1,0 +1,38 @@
+﻿@model RouteManagerMVC.Models.RoleRequestViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Remover</h1>
+
+<h3>Você tem certeza de que quer apagar isto?</h3>
+<div>
+    <h4>Cidade</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Claims)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Claims)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary btn-icon-split">
+            <span class="icon text-gray-600">
+                <i class="fas fa-arrow-right"></i>
+            </span>
+            <span class="text">Voltar á lista</span>
+        </a>
+    </form>
+</div>

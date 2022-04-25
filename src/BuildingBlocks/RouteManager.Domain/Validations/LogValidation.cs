@@ -7,7 +7,7 @@ namespace RouteManager.Domain.Validations
     {
         public LogValidation()
         {
-           
+
         }
     }
 }

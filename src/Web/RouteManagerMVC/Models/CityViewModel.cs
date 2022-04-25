@@ -9,7 +9,7 @@ namespace RouteManagerMVC.Models
         public string Id { get; set; }
 
         [Required(ErrorMessage = "O nome da cidade precisa deve ser preenchido")]
-        [MinLength(4, ErrorMessage = "O nome da cidade precia ter no mínimo 4 caracteres")]
+        [MinLength(3, ErrorMessage = "O nome da cidade precia ter no mínimo 3 caracteres")]
         [DisplayName("Nome")]
         public string Name { get; set; }
 

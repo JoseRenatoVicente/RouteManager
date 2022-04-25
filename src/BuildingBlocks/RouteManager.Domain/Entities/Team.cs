@@ -1,7 +1,5 @@
 ﻿using RouteManager.Domain.Entities.Base;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace RouteManager.Domain.Entities
 {

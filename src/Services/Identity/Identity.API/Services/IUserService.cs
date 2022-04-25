@@ -12,7 +12,8 @@ namespace Identity.API.Services
         Task<User> GetUserByLoginAsync(string login);
         Task<IEnumerable<User>> GetUsersAsync();
         Task<bool> PasswordSignInAsync(UserLogin userLogin);
-        Task RemoveUserAsync(string id);
+        Task<User> ChangePasswordCurrentUser(ChangePasswordCurrentUserViewModel changePassword);
+        Task DisableUserAsync(string id);
         Task<User> UpdateUserAsync(User user);
     }
 }

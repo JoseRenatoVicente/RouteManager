@@ -24,10 +24,12 @@ namespace Teams.API.Configuration
             services.AddHttpClient<GatewayService>();
             services.AddSingleton<ICityService, CityService>();
             services.AddSingleton<ITeamService, TeamService>();
+            services.AddSingleton<IPersonService, PersonService>();
 
             //repositories
             services.AddSingleton<ICityRepository, CityRepository>();
             services.AddSingleton<ITeamRepository, TeamRepository>();
+            services.AddSingleton<IPersonRepository, PersonRepository>();
 
             //notification
             services.AddSingleton<INotifier, Notifier>();

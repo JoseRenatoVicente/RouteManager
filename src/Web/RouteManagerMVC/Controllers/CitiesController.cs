@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RouteManagerMVC.Controllers
@@ -11,7 +11,7 @@ namespace RouteManagerMVC.Controllers
     {
         private readonly ICityService _cityService;
 
-        public CitiesController(ICityService cityService)
+        public CitiesController(ICityService cityService, INotifier notifier) : base(notifier)
         {
             _cityService = cityService;
         }
@@ -45,14 +45,7 @@ namespace RouteManagerMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,State,Id")] CityViewModel city)
         {
-            if (ModelState.IsValid)
-            {
-                if (ResponseHasErrors(await _cityService.AddCityAsync(city))) 
-                    TempData["Erros"] = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(city);
+            return await CustomResponseAsync(await _cityService.AddCityAsync(city));
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -78,14 +71,7 @@ namespace RouteManagerMVC.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                await _cityService.UpdateCityAsync(city);
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(city);
+            return await CustomResponseAsync(await _cityService.UpdateCityAsync(city));
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -100,7 +86,6 @@ namespace RouteManagerMVC.Controllers
             {
                 return NotFound();
             }
-
             return View(city);
         }
 
@@ -110,9 +95,9 @@ namespace RouteManagerMVC.Controllers
         {
             var city = await _cityService.GetCityByIdAsync(id);
 
-            await _cityService.RemoveCityAsync(city.Id);
+            await _cityService.RemoveCityAsync(id);
 
-            return RedirectToAction(nameof(Index));
+            return await CustomResponseAsync(city);
         }
     }
 }

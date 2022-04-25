@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RouteManager.WebAPI.Core.Notifications;
+using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Threading.Tasks;
 
 namespace RouteManagerMVC.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController : MVCBaseController
     {
         private IAuthService _authService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, INotifier notifier) : base(notifier)
         {
             _authService = authService;
         }
@@ -22,26 +24,11 @@ namespace RouteManagerMVC.Controllers
             var accessToken = await _authService.LoginAsync(userLogin);
             if (accessToken != null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Routes");
             }
             else
             {
-                return View("Login", accessToken);
-            }
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Register(UserRegister userRegister)
-        {
-            var accessToken = await _authService.RegisterAsync(userRegister);
-            if (accessToken != null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                return View("Register", accessToken);
+                return await CustomResponseAsync(userLogin, "Login");
             }
         }
 

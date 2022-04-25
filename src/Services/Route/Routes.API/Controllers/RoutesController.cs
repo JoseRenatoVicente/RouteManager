@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.Domain.Entities;
 using RouteManager.WebAPI.Core.Controllers;
@@ -38,6 +39,7 @@ namespace Routes.API.Controllers
             return route;
         }
 
+        [Authorize(Roles = "Rotas")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoute(string id, Route route)
         {
@@ -49,24 +51,28 @@ namespace Routes.API.Controllers
             return await CustomResponseAsync(await _routeService.UpdateRouteAsync(route));
         }
 
+        [Authorize(Roles = "Rotas")]
         [HttpPost]
         public async Task<ActionResult<Route>> PostRoute(Route route)
         {
             return await CustomResponseAsync(await _routeService.AddRouteAsync(route));
         }
 
+        [Authorize(Roles = "Rotas")]
         [HttpPost("ExcelFile")]
         public async Task<ActionResult<ExcelFile>> UploadExcelFileAsync(IFormFile file)
         {
             return await CustomResponseAsync(await _routeService.UploadExcelFileAsync(file));
         }
 
+        [Authorize(Roles = "Rotas")]
         [HttpPost("report")]
         public async Task<ActionResult<byte[]>> PostRoute(ReportRouteRequest reportRoute)
         {
             return await CustomResponseAsync(await _routeService.ReportRoutesToDocx(reportRoute));
         }
 
+        [Authorize(Roles = "Rotas")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoute(string id)
         {

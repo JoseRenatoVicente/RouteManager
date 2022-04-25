@@ -1,9 +1,9 @@
-﻿using RouteManager.WebAPI.Core.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RouteManager.WebAPI.Core.Identity;
 
 namespace RouteManager.WebAPI.Core.Configuration
 {

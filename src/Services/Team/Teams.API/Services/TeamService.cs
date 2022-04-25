@@ -14,12 +14,14 @@ namespace Teams.API.Services
         private readonly GatewayService _gatewayService;
         private readonly ITeamRepository _teamRepository;
         private readonly ICityRepository _cityRepository;
+        private readonly IPersonService _personService;
 
-        public TeamService(GatewayService gatewayService, ITeamRepository teamRepository, ICityRepository cityRepository, INotifier notifier) : base(notifier)
+        public TeamService(GatewayService gatewayService, ITeamRepository teamRepository, ICityRepository cityRepository, IPersonService personService, INotifier notifier) : base(notifier)
         {
             _gatewayService = gatewayService;
             _teamRepository = teamRepository;
             _cityRepository = cityRepository;
+            _personService = personService;
         }
 
         public async Task<IEnumerable<Team>> GetTeamsAsync() =>
@@ -43,7 +45,7 @@ namespace Teams.API.Services
                 peopleIds += item.Id + ",";
             }
 
-            team.People = await _gatewayService.GetFromJsonAsync<IEnumerable<Person>>("People/api/People/list/" + peopleIds);
+            team.People = await _personService.GetPersonsByIdsAsync(peopleIds);
             if (team.People == null)
             {
                 Notification("Pessoas não encontradas no sistema");

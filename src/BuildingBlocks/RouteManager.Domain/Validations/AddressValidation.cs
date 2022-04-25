@@ -1,5 +1,5 @@
-﻿using RouteManager.Domain.Entities;
-using FluentValidation;
+﻿using FluentValidation;
+using RouteManager.Domain.Entities;
 
 namespace RouteManager.Domain.Validations
 {
