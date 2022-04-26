@@ -70,12 +70,13 @@ namespace RouteManagerMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Id,UserName,Email,Active,Role")] UserViewModel user)
+        public async Task<IActionResult> Edit(string id, UserViewModel user)
         {
             if (id != user.Id)
             {
                 return NotFound();
             }
+            user.Roles = await _roleService.GetRolesAsync();
 
             return await CustomResponseAsync(await _userService.UpdateUserAsync(user));
         }

@@ -55,6 +55,16 @@ namespace RouteManagerMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Team, PeopleIds")] TeamViewModel teamViewModel)
         {
+            if (teamViewModel.PeopleIds == null)
+            {
+                await Notification("Nenhuma pessoa selecionada");
+                teamViewModel.Cities = await _cityService.GetCitysAsync();
+                teamViewModel.People = await _personService.GetPersonsAsync();
+                return await CustomResponseAsync(teamViewModel);
+            }
+
+
+
             teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
 
             return await CustomResponseAsync(await _teamService.AddTeamAsync(teamViewModel.Team));
@@ -86,9 +96,21 @@ namespace RouteManagerMVC.Controllers
         public async Task<IActionResult> Edit(string id, TeamViewModel teamViewModel)
         {
             teamViewModel.Team.Id = id;
-            teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
+            teamViewModel.Cities = await _cityService.GetCitysAsync();
+            teamViewModel.People = await _personService.GetPersonsAsync();
 
-            return await CustomResponseAsync(await _teamService.UpdateTeamAsync(teamViewModel.Team));
+
+            if (teamViewModel.PeopleIds == null)
+            {
+                await Notification("Nenhuma pessoa selecionada");
+
+                return await CustomResponseAsync(teamViewModel);
+            }
+
+            teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
+            await _teamService.UpdateTeamAsync(teamViewModel);
+
+            return await CustomResponseAsync(teamViewModel);
         }
 
         public async Task<IActionResult> Delete(string id)

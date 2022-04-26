@@ -63,7 +63,7 @@ namespace Routes.API.DTO
                 .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido");
 
             RuleFor(command => command.NameTeams)
-                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido");
+                .NotEmpty().WithMessage("Selecione o nome de alguma equipe");
         }
     }
 }

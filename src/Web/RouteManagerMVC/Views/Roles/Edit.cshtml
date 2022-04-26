@@ -28,10 +28,17 @@
                     <div class="col">
                         <div class="mb-3">
                             <label class="control-label">Selecione as áreas de acesso para Modificação</label>
-                            <select asp-for="NameClaims" asp-items="@(new SelectList(Model.GetClaims,"Id","Description"))" class="form-control"></select>
+                            <select class="form-control" id="NameClaims" multiple="multiple" name="NameClaims">
+                                @foreach (var claim in Model.GetClaims)
+                                {
+                                    <option selected="@( Model.RoleRequest.Claims != null ? Model.RoleRequest.Claims.Where(c => c.Description == claim.Description).FirstOrDefault() != null : false)" value="@claim.Description">@claim.Description</option>
+                                }
+                            </select>
                             <span asp-validation-for="NameClaims" class="text-danger"></span>
                         </div>
                     </div>
+
+
 
 
 

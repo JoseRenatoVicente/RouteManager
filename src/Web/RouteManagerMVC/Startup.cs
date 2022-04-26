@@ -61,7 +61,7 @@ namespace RouteManagerMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Routes}/{action=Index}/{id?}");
+                    pattern: "{controller=ReportRoutes}/{action=Index}/{id?}");
             });
         }
     }

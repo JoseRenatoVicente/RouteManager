@@ -6,7 +6,7 @@ namespace RouteManagerMVC.Models
 {
     public class TeamViewModel
     {
-        public TeamRequest Team { get; set; }
+        public TeamRequest Team { get; set; } = new TeamRequest();
         public virtual IEnumerable<string> PeopleIds { get; set; }
         public virtual IEnumerable<CityViewModel> Cities { get; set; }
         public virtual IEnumerable<PersonViewModel> People { get; set; }
@@ -24,7 +24,12 @@ namespace RouteManagerMVC.Models
         [DisplayName("Pessoas")]
         public virtual IEnumerable<PersonViewModel> People { get; set; }
         [DisplayName("Cidade")]
-        public virtual CityViewModel City { get; set; }
+        public virtual CityViewModel City { get; set; } = new CityViewModel();
+
+        public override string ToString()
+        {
+            return $"{Name} - {City.Name}";
+        }
 
         public string PeopleString()
         {

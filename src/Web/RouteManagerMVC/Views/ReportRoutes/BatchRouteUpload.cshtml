@@ -1,10 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Html
 @model RouteManagerMVC.Models.ReportRouteViewModel
 
-@{
-    ViewData["Title"] = "Import";
-}
-
 <div class="row">
     <div class="col">
         <div class="card shadow mb-3">
@@ -41,7 +37,7 @@
                         <div class="col">
                             <div class="mb-3">
                                 <label class="control-label">Escolha as equipes</label>
-                                <select asp-for="UploadRequest.NameTeams" asp-items="@(new SelectList(Model.Teams,"Name","Name"))" class="form-control"></select>
+                                <select asp-for="UploadRequest.NameTeams" asp-items="@(new SelectList(Model.Teams,"Name"))" class="form-control"></select>
                                 <span asp-validation-for="UploadRequest.NameTeams" class="text-danger"></span>
                             </div>
                         </div>

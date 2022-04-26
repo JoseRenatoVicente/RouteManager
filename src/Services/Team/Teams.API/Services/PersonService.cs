@@ -26,8 +26,10 @@ namespace Teams.API.Services
             _gatewayService = gatewayService;
         }
 
-        public async Task<IEnumerable<Person>> GetPersonsAsync() =>
-            await _personRepository.GetAllAsync();
+        public async Task<IEnumerable<Person>> GetPersonsAsync()
+        {
+            return await _personRepository.GetAllAsync();
+        }
 
         public async Task<Person> GetPersonByIdAsync(string id) =>
             await _personRepository.FindAsync(c => c.Id == id);
@@ -58,10 +60,20 @@ namespace Teams.API.Services
                 return person;
             }
 
-            var filterDefinition = Builders<Team>.Filter.Eq(p => p.People.Where(c => c.Id == person.Id).FirstOrDefault().Id, person.Id);
-            var updateDefinition = Builders<Team>.Update.Set(p => p.People.Where(c => c.Id == person.Id).FirstOrDefault(), person);
+            var team = await _teamRepository.FindAsync(c => c.People.Any(c => c.Id == person.Id) );
+            if (team != null)
+            {
+                team.People = team.People.Select(c =>
+                {
+                    if (c.Id == person.Id)
+                    {
+                        c = person;
+                    }
+                    return c;
+                });
+            }
 
-            await _teamRepository.UpdateAllAsync(filterDefinition, updateDefinition);
+            await _teamRepository.UpdateAsync(team);
 
             await _gatewayService.PostLogAsync(personBefore, person, Operation.Update);
 

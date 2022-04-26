@@ -66,7 +66,12 @@ namespace RouteManagerMVC.Controllers.Base
             _notifier.Clear();
             return _errors;
         }
-        protected Task AddError(string error)
+
+        protected Task Notification(string error)
+        {
+            return Task.Run(() => _notifier.Handle(error));
+        }
+        private Task AddError(string error)
         {
             return Task.Run(() => _errors.Add(error));
         }

@@ -43,7 +43,6 @@ namespace RouteManagerMVC.Models
         {
             return Description;
         }
-
         public string Description { get; set; }
     }
 }

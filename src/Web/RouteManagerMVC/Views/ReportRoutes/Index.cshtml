@@ -9,13 +9,12 @@
 <hr class="sidebar-divider">
 
 
-
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <form method="post" enctype="multipart/form-data" asp-controller="Routes" asp-action="BatchRouteUpload">
+        <form method="post" enctype="multipart/form-data" asp-controller="ReportRoutes" asp-action="BatchRouteUpload">
             <div class="row">
                 <div class="col-md-4">
-                    <input type="file" name="file" value="Escolher Arquivo" multiple />
+                    <input type="file" name="file" value="Escolher Arquivo"  class="btn btn-primary" />
                 </div>
                 <div class="col-md-3">
                     <input type="submit" value="Enviar Arquivo" class="btn btn-primary" />

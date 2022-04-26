@@ -1,4 +1,4 @@
-﻿@model RouteManager.Domain.Entities.Route
+﻿@model RouteManagerMVC.Models.ReportRouteViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,27 +11,26 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OS)
+            @Html.DisplayNameFor(model => model.ExcelFile.FileName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OS)
+            @Html.DisplayFor(model => model.ExcelFile.FileName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Base)
+            @Html.DisplayNameFor(model => model.ExcelFile.UploadDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Base)
+            @Model.ExcelFile.UploadDate.ToString("dd/MM/yyyy hh:mm")
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Service)
+            @Html.DisplayNameFor(model => model.ExcelFile.Columns)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Service)
+            <select asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
         </dd>
     </dl>
 </div>
 <div class="mb-3">
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>&nbsp; &nbsp; &nbsp;
 
     <a asp-action="Index" class="btn btn-secondary btn-icon-split">
         <span class="icon text-gray-600">

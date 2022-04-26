@@ -51,6 +51,12 @@ namespace Identity.API.Services
 
         public async Task<Role> AddRoleAsync(Role role)
         {
+            if (role.Claims == null)
+            {
+                Notification("Nenhuma claim selecionada");
+                return role;
+            }
+
             await _gatewayService.PostLogAsync(null, role, Operation.Create);
 
             return !ExecuteValidation(new RoleValidation(), role) ? role : await _roleRepository.AddAsync(role);

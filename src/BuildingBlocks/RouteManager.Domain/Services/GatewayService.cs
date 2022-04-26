@@ -68,7 +68,7 @@ namespace RouteManager.Domain.Services
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
 
-            var response = await _httpClient.PostAsJsonAsync(path, content);
+            var response = await _httpClient.PostAsync(path, content);
             await ErrorsResponse(response);
 
             return response;

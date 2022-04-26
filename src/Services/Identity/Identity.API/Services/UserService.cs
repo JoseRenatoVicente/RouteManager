@@ -2,6 +2,7 @@
 using Identity.API.Repository;
 using RouteManager.Domain.Entities.Enums;
 using RouteManager.Domain.Entities.Identity;
+using RouteManager.Domain.Identity.Extensions;
 using RouteManager.Domain.Services;
 using RouteManager.Domain.Services.Base;
 using RouteManager.Domain.Validations.Identity;
@@ -18,12 +19,13 @@ namespace Identity.API.Services
     public class UserService : BaseService, IUserService
     {
         private readonly GatewayService _gatewayService;
-
+        private readonly IAspNetUser _aspNetUser;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
-        public UserService(GatewayService gatewayService, IUserRepository userRepository, IRoleRepository roleRepository, INotifier notifier) : base(notifier)
+        public UserService(GatewayService gatewayService, IAspNetUser aspNetUser, IUserRepository userRepository, IRoleRepository roleRepository, INotifier notifier) : base(notifier)
         {
             _gatewayService = gatewayService;
+            _aspNetUser = aspNetUser;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
         }
@@ -39,6 +41,7 @@ namespace Identity.API.Services
 
         public async Task<User> AddUserAsync(User user)
         {
+            user.Role = await _roleRepository.FindAsync(c => c.Id == user.Role.Id);
             if (!ExecuteValidation(new UserValidation(), user)) return user;
 
             if (await _userRepository.FindAsync(c => c.UserName == user.UserName || c.Email == user.Email) != null)
@@ -46,7 +49,6 @@ namespace Identity.API.Services
                 Notification("Nome de usuário ou email indisponíveis");
                 return null;
             }
-            user.Role = await _roleRepository.FindAsync(c => c.Id == user.Role.Id);
 
 
             var passwordResult = await CreatePasswordHashAsync(user.Password);
@@ -136,6 +138,12 @@ namespace Identity.API.Services
         {
             var user = await GetUserByIdAsync(id);
             user.Active = false;
+
+            if (user.Id == _aspNetUser.GetUserId())
+            {
+                Notification("Não é possivel excluir o proprio usuário logado nessa sessão");
+                return;
+            }            
 
             await UpdateUserAsync(user);
 

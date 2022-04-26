@@ -21,6 +21,7 @@ namespace RouteManagerMVC.Models
                     "INSTALAÇÃO",
                     "MUDANÇA DE ENDEREÇO",
                     "MUDANÇA DE LOCAL",
+                    "MUDANCA DE PACOTE",
                     "REFAZER MANUTENÇÃO",
                     "REINSTALAÇÃO",
                     "RETORNO CREDENCIADA",

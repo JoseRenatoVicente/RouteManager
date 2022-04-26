@@ -15,7 +15,7 @@ namespace RouteManagerMVC.Models
 
         [Required(ErrorMessage = "Selecione um estado")]
         [DisplayName("Estado")]
-        public string State { get; set; }
+        public string State { get; set; } = "SP";
 
         public override string ToString()
         {

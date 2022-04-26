@@ -43,7 +43,9 @@ namespace RouteManagerMVC.Services
 
         public async Task<UserViewModel> UpdateUserAsync(UserViewModel user)
         {
-            return await _gatewayService.PutAsync<UserViewModel>("Identity/api/Users/" + user.Id, user);
+
+            await _gatewayService.PutAsync<UserViewModel>("Identity/api/Users/" + user.Id, user);
+            return user;
         }
 
         public async Task DisableUserAsync(string id)

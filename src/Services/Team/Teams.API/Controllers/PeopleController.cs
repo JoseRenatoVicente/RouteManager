@@ -72,9 +72,8 @@ namespace Teams.API.Controllers
             {
                 return NotFound();
             }
-            await _personsService.RemovePersonAsync(id);
 
-            return NoContent();
+            return await CustomResponseAsync(await _personsService.RemovePersonAsync(id));
         }
     }
 }

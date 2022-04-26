@@ -19,10 +19,10 @@ namespace RouteManagerMVC.Configuration
             services.AddSingleton<ICityService, CityService>();
             services.AddSingleton<IPersonService, PersonService>();
             services.AddSingleton<ITeamService, TeamService>();
-            services.AddSingleton<IRouteService, RouteService>();
+            services.AddSingleton<IReportRouteService, ReportRouteService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IRoleService, RoleService>();
-            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IAccountService, AccountService>();            
 
             //notification
             services.AddSingleton<INotifier, Notifier>();

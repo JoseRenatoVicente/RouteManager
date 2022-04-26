@@ -27,6 +27,7 @@ namespace Routes.API.Configuration
             //repositories
             services.AddSingleton<IRouteRepository, RouteRepository>();
             services.AddSingleton<IExcelFileRepository, ExcelFileRepository>();
+            services.AddSingleton<IExcelFileService, ExcelFileService>();
 
             //notification
             services.AddSingleton<INotifier, Notifier>();

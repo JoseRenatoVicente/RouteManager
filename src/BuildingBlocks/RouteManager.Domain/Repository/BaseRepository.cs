@@ -16,38 +16,38 @@ namespace RouteManager.Domain.Repository
             DbSet = database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync() =>
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync() =>
             await DbSet.Find(entity => true).ToListAsync();
 
-        public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> where) =>
+        public virtual async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> where) =>
             await DbSet.Find(where).ToListAsync();
 
-        public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> where) =>
+        public virtual async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> where) =>
             await DbSet.Find(where).FirstOrDefaultAsync();
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
             await DbSet.InsertOneAsync(entity);
             return entity;
         }
-        public async Task<TEntity> UpdateAsync(TEntity entity)
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
             await DbSet.ReplaceOneAsync(c => c.Id == entity.Id, entity);
             return entity;
         }
 
-        public async Task<bool> UpdateAllAsync(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update)
+        public virtual async Task<bool> UpdateAllAsync(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update)
         {
             return (await DbSet.UpdateManyAsync(filter, update)).IsAcknowledged;
         }
 
-        public async Task<bool> RemoveAsync(TEntity entityRemove) =>
+        public virtual async Task<bool> RemoveAsync(TEntity entityRemove) =>
             (await DbSet.DeleteOneAsync(entity => entity.Id == entityRemove.Id)).DeletedCount != 0;
 
-        public async Task<bool> RemoveAsync(string id) =>
+        public virtual async Task<bool> RemoveAsync(string id) =>
            (await DbSet.DeleteOneAsync(entity => entity.Id == id)).DeletedCount != 0;
 
-        public async Task<long> Count() =>
+        public virtual async Task<long> Count() =>
             await DbSet.CountDocumentsAsync(entity => true);
     }
 }

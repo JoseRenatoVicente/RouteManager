@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.9'
 
 services:
   identity.api:
@@ -12,4 +12,18 @@ services:
     build:
       context: .
       dockerfile: src/Services/Logging/Logging.API/Dockerfile
+
+
+  routes.api:
+    image: ${DOCKER_REGISTRY-}routesapi
+    build:
+      context: .
+      dockerfile: src/Services/Route/Routes.API/Dockerfile
+
+
+  teams.api:
+    image: ${DOCKER_REGISTRY-}teamsapi
+    build:
+      context: .
+      dockerfile: src/Services/Team/Teams.API/Dockerfile
 

@@ -67,7 +67,7 @@ namespace Identity.API.Controllers
             }
             await _userService.DisableUserAsync(id);
 
-            return NoContent();
+            return await CustomResponseAsync();
         }
     }
 }

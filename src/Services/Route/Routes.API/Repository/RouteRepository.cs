@@ -1,6 +1,8 @@
 ﻿using MongoDB.Driver;
 using RouteManager.Domain.Entities;
 using RouteManager.Domain.Repository;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Routes.API.Repository
 {
@@ -9,5 +11,6 @@ namespace Routes.API.Repository
         public RouteRepository(IMongoDatabase database) : base(database)
         {
         }
+
     }
 }

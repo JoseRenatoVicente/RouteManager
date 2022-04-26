@@ -1,14 +1,17 @@
 ﻿using Identity.API.Repository;
 using RouteManager.Domain.Entities.Identity;
+using System.Linq;
 
 namespace Identity.API.Services
 {
     public class SeederService
     {
+        private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
 
-        public SeederService(IRoleRepository roleRepository)
+        public SeederService(IUserRepository userRepository, IRoleRepository roleRepository)
         {
+            _userRepository = userRepository;
             _roleRepository = roleRepository;
         }
 
@@ -57,6 +60,8 @@ namespace Identity.API.Services
             if (await _roleRepository.FindAsync(c => c.Description == roleAdmin.Description) == null)
                 await _roleRepository.AddAsync(roleAdmin);
 
+            if (!(await _userRepository.GetAllAsync()).Any())
+                await _userRepository.AddAsync(userAdmin);
 
         }
     }

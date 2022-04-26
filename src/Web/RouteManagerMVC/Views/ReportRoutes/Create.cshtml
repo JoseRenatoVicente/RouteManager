@@ -1,0 +1,54 @@
+﻿@model RouteManager.Domain.Entities.Route
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Criar</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col">
+        <div class="card shadow mb-3">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Exportar arquivo Word</p>
+            </div>
+            <div class="card-body">
+                <form asp-action="ExportToDocx">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                    <hr />
+                    <h3>O Nome das colunas estão corretos?</h3>
+
+
+
+                    <div class="mb-3">
+
+
+                        <button type="submit" class="btn btn-primary">Importar rotas e exportar relátorio</button>&nbsp; &nbsp; &nbsp;
+
+                        <a asp-action="Index" class="btn btn-secondary btn-icon-split">
+                            <span class="icon text-gray-600">
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                            <span class="text">Voltar</span>
+                        </a>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Voltar á lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

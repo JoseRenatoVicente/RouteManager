@@ -24,7 +24,7 @@ namespace RouteManagerMVC.Controllers
             var accessToken = await _authService.LoginAsync(userLogin);
             if (accessToken != null)
             {
-                return RedirectToAction("Index", "Routes");
+                return RedirectToAction("Index", "ReportRoutes");
             }
             else
             {

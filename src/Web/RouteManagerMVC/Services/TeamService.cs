@@ -11,7 +11,7 @@ namespace RouteManagerMVC.Services
         Task<TeamRequest> GetTeamByIdAsync(string id);
         Task<IEnumerable<TeamRequest>> GetTeamsAsync();
         Task RemoveTeamAsync(string id);
-        Task<TeamRequest> UpdateTeamAsync(TeamRequest team);
+        Task<TeamViewModel> UpdateTeamAsync(TeamViewModel team);
     }
 
     public class TeamService : ITeamService
@@ -38,9 +38,10 @@ namespace RouteManagerMVC.Services
             return await _gatewayService.PostAsync<TeamRequest>("Teams/api/Teams/", team);
         }
 
-        public async Task<TeamRequest> UpdateTeamAsync(TeamRequest team)
+        public async Task<TeamViewModel> UpdateTeamAsync(TeamViewModel team)
         {
-            return await _gatewayService.PutAsync<TeamRequest>("Teams/api/Teams/" + team.Id, team);
+            await _gatewayService.PutAsync("Teams/api/Teams/" + team.Team.Id, team.Team);
+            return team;
         }
 
         public async Task RemoveTeamAsync(string id)

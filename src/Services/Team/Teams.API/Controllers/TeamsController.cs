@@ -79,9 +79,10 @@ namespace Teams.API.Controllers
             {
                 return NotFound();
             }
+
             await _teamsService.RemoveTeamAsync(id);
 
-            return NoContent();
+            return await CustomResponseAsync();
         }
     }
 }

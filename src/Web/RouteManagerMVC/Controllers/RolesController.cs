@@ -62,17 +62,16 @@ namespace RouteManagerMVC.Controllers
             {
                 return NotFound();
             }
-            return View(role);
+
+
+            return View(new RoleViewModel { GetClaims = await _roleService.GetCurrentClaimsAsync(), RoleRequest = role});
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Description,Claims,Id")] RoleViewModel role)
+        public async Task<IActionResult> Edit(string id, [Bind("RoleRequest,NameClaims")] RoleViewModel role)
         {
-            if (id != role.RoleRequest.Id)
-            {
-                return NotFound();
-            }
+            role.RoleRequest.Id = id;
 
             role.RoleRequest.Claims = role.NameClaims.Select(c => new ClaimViewModel(c));
             return await CustomResponseAsync(await _roleService.UpdateRoleAsync(role.RoleRequest));

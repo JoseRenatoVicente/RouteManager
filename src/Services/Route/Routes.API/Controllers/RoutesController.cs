@@ -27,7 +27,7 @@ namespace Routes.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ExcelFile>> GetRoute(string id)
+        public async Task<ActionResult<Route>> GetRoute(string id)
         {
             var route = await _routeService.GetRouteByIdAsync(id);
 
@@ -59,31 +59,19 @@ namespace Routes.API.Controllers
         }
 
         [Authorize(Roles = "Rotas")]
-        [HttpPost("ExcelFile")]
-        public async Task<ActionResult<ExcelFile>> UploadExcelFileAsync(IFormFile file)
-        {
-            return await CustomResponseAsync(await _routeService.UploadExcelFileAsync(file));
-        }
-
-        [Authorize(Roles = "Rotas")]
-        [HttpPost("report")]
-        public async Task<ActionResult<byte[]>> PostRoute(ReportRouteRequest reportRoute)
-        {
-            return await CustomResponseAsync(await _routeService.ReportRoutesToDocx(reportRoute));
-        }
-
-        [Authorize(Roles = "Rotas")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoute(string id)
         {
-            var route = await GetRoute(id);
+            var route = await _routeService.GetRouteByIdAsync(id);
             if (route == null)
             {
                 return NotFound();
             }
-            await _routeService.RemoveRouteAsync(id);
+            await _routeService.RemoveRouteAsync(route);
 
-            return NoContent();
+            return await CustomResponseAsync();
         }
+
+
     }
 }

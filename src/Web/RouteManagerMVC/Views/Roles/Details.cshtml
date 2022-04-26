@@ -7,7 +7,7 @@
 <h1>Detalhes</h1>
 
 <div>
-    <h4>Cidade</h4>
+    <h4>Role</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -20,7 +20,10 @@
             @Html.DisplayNameFor(model => model.Claims)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Claims)
+            @foreach (var item in Model.Claims)
+            {
+                <p>@item</p>
+            }
         </dd>
     </dl>
 </div>
