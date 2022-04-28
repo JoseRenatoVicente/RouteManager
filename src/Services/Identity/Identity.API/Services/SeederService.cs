@@ -26,7 +26,6 @@ namespace Identity.API.Services
                         new("Funções"),
                         new("Usuários"),
                         new("Logs"),
-                        new("Rotas"),
                         new("Relátorio Rotas"),
                         new("Equipes"),
                         new("Cidades"),
@@ -39,7 +38,7 @@ namespace Identity.API.Services
                 Description = "User",
                 Claims = new Claim[]
                 {
-                    new("Rotas")
+                    new("Relátorio Rotas")
                 }
             };
 

@@ -4,6 +4,7 @@ using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace RouteManagerMVC.Controllers
 {
@@ -46,7 +47,7 @@ namespace RouteManagerMVC.Controllers
             var viewModel = new TeamViewModel
             {
                 Cities = await _cityService.GetCitysAsync(),
-                People = await _personService.GetPersonsAsync()
+                People = await _personService.GetPersonsAsync(true)
             };
             return View(viewModel);
         }
@@ -55,15 +56,22 @@ namespace RouteManagerMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Team, PeopleIds")] TeamViewModel teamViewModel)
         {
+            teamViewModel.Cities = await _cityService.GetCitysAsync();
+            teamViewModel.People = await _personService.GetPersonsAsync(true);
+
             if (teamViewModel.PeopleIds == null)
             {
                 await Notification("Nenhuma pessoa selecionada");
-                teamViewModel.Cities = await _cityService.GetCitysAsync();
-                teamViewModel.People = await _personService.GetPersonsAsync();
+ 
                 return await CustomResponseAsync(teamViewModel);
             }
 
+            if (teamViewModel.Team.City == null)
+            {
+                await Notification("Nenhuma cidade selecionada");
 
+                return await CustomResponseAsync(teamViewModel);
+            }
 
             teamViewModel.Team.People = await _personService.GetPersonsByIdsAsync(teamViewModel.PeopleIds);
 
@@ -80,10 +88,12 @@ namespace RouteManagerMVC.Controllers
             var viewModel = new TeamViewModel
             {
                 Cities = await _cityService.GetCitysAsync(),
-                People = await _personService.GetPersonsAsync()
+                People = await _personService.GetPersonsAsync(true)
             };
 
             viewModel.Team = await _teamService.GetTeamByIdAsync(id);
+            viewModel.People = viewModel.People.Concat(viewModel.Team.People);
+
 
             if (viewModel == null)
             {
@@ -97,12 +107,19 @@ namespace RouteManagerMVC.Controllers
         {
             teamViewModel.Team.Id = id;
             teamViewModel.Cities = await _cityService.GetCitysAsync();
-            teamViewModel.People = await _personService.GetPersonsAsync();
+            teamViewModel.People = await _personService.GetPersonsAsync(true);
 
 
             if (teamViewModel.PeopleIds == null)
             {
                 await Notification("Nenhuma pessoa selecionada");
+
+                return await CustomResponseAsync(teamViewModel);
+            }
+
+            if (teamViewModel.Team.City == null)
+            {
+                await Notification("Nenhuma cidade selecionada");
 
                 return await CustomResponseAsync(teamViewModel);
             }

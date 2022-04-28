@@ -28,7 +28,9 @@
                         <div class="col">
                             <div class="mb-3">
                                 <label class="control-label">Escolha a Cidade</label>
-                                <select asp-for="UploadRequest.City.Id" asp-items="@(new SelectList(Model.Cities,"Id","Name","State"))" class="form-control"></select>
+                                <select asp-for="UploadRequest.City.Id" asp-items="@(new SelectList(Model.Cities,"Id","Name","State"))" onChange="getValue(this)" class="form-control">
+                                    <option value="" disabled selected hidden>Selecione a Cidade...</option>
+                                </select>
                                 <span asp-validation-for="UploadRequest.City.Id" class="text-danger"></span>
                             </div>
                         </div>
@@ -41,7 +43,7 @@
                         <div class="col">
                             <div class="mb-3">
                                 <label class="control-label">Escolha as equipes</label>
-                                <select asp-for="UploadRequest.NameTeams" asp-items="@(new SelectList(Model.Teams,"Name"))" class="form-control"></select>
+                                <select asp-for="UploadRequest.NameTeams" asp-items="@(new SelectList(Model.Teams,"Name", ""))" class="form-control"></select>
                                 <span asp-validation-for="UploadRequest.NameTeams" class="text-danger"></span>
                             </div>
                         </div>
@@ -50,7 +52,7 @@
                         <div class="col">
                             <div class="mb-3">
                                 <label class="control-label">Adicione alguma coluna ao relatório</label>
-                                <select asp-for="UploadRequest.ReportColumns" asp-items="@(new SelectList(Model.ExcelFile.Columns))" class="form-control"></select>
+                                <select asp-for="UploadRequest.ReportColumns" asp-items="@(new SelectList(Model.Columns))" class="form-control"></select>
                                 <span asp-validation-for="UploadRequest.ReportColumns" class="text-danger"></span>
                             </div>
                         </div>
@@ -157,6 +159,64 @@
     </div>
 </div>
 
+
+<script>
+
+    const initListTeams = document.getElementById("UploadRequest_NameTeams")
+
+    let teams = []
+    let countTeams = initListTeams.length
+
+       for(let i = 0; i < countTeams; i++)
+       {
+
+        let currentTeam = initListTeams.options[i].text      
+        teams.push(currentTeam)
+    
+       }
+
+     document.querySelectorAll("#UploadRequest_NameTeams option").forEach(team => team.remove())
+
+    function getValue(object)
+    {
+       let select = object
+       let nameCity = select.options[select.selectedIndex].text    
+
+
+       let countTeams = teams.length
+
+       let filterTeam = []
+
+       for(let i = 0; i < countTeams; i++)
+       {
+         let team = teams[i]
+                  
+         if(team.indexOf(nameCity) != -1)
+         {
+             filterTeam.push(team.split("-")[0])
+         }
+
+       }
+
+
+       let removeTeams = document.querySelectorAll("#UploadRequest_NameTeams option")
+        removeTeams.forEach(team => team.remove())
+
+       filterTeam.forEach(team => {
+
+         let optionElememt = document.createElement("option")       
+         optionElememt.value = team
+         optionElememt.text = team
+         initListTeams.appendChild(optionElememt)
+           
+       })
+       
+    }
+
+</script>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }

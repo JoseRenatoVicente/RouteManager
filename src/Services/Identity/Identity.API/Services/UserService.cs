@@ -66,7 +66,10 @@ namespace Identity.API.Services
             var userBefore = await GetUserByIdAsync(user.Id);
             user.Password = userBefore.Password;
             user.PasswordSalt = userBefore.PasswordSalt;
-            user.Role = userBefore.Role;
+            if (user.Role == null)
+            {
+                user.Role = userBefore.Role;
+            }
 
             if (userBefore == null)
             {

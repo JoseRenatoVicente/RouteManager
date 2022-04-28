@@ -24,7 +24,7 @@ namespace RouteManagerMVC.Models
         [DisplayName("Pessoas")]
         public virtual IEnumerable<PersonViewModel> People { get; set; }
         [DisplayName("Cidade")]
-        public virtual CityViewModel City { get; set; } = new CityViewModel();
+        public virtual CityViewModel City { get; set; }
 
         public override string ToString()
         {

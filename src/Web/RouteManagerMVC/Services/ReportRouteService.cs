@@ -82,6 +82,7 @@ namespace RouteManagerMVC.Services
         public async Task<IEnumerable<ExcelFileViewModel>> GetRoutesAsync()
         {
             return await _gatewayService.GetFromJsonAsync<IEnumerable<ExcelFileViewModel>>("Routes/api/ExcelFile");
+
         }
 
         public async Task<ReportRouteViewModel> GetRouteByIdAsync(string id)
@@ -92,6 +93,17 @@ namespace RouteManagerMVC.Services
             reportRoute.Teams = await _teamService.GetTeamsAsync();
 
             var excelFile = await _gatewayService.GetFromJsonAsync<ExcelFileViewModel>("Routes/api/ExcelFile/" + id);
+
+            IEnumerable<string> columns = new string[] { "OS", "BASE", "SERVIÇO", "ENDEREÇO", "NUMERO" , "COMPLEMENTO", "BAIRRO", "CEP" };
+
+            reportRoute.Columns = excelFile.Columns.Copy();
+            foreach (var item in columns)
+            {
+                reportRoute.Columns.Remove(item);
+            }
+
+
+
             reportRoute.ExcelFile = excelFile;
             reportRoute.UploadRequest.ExcelFileId = excelFile.Id;
 

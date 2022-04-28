@@ -1,6 +1,10 @@
 version: '3.9'
 
 services:
+
+  nosqldata:
+    image: mongo
+
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
     build:
@@ -26,4 +30,11 @@ services:
     build:
       context: .
       dockerfile: src/Services/Team/Teams.API/Dockerfile
+
+
+  apigateway.ocelot:
+    image: ${DOCKER_REGISTRY-}apigatewayocelot
+    build:
+      context: .
+      dockerfile: src/ApiGateway/ApiGateway.Ocelot/Dockerfile
 

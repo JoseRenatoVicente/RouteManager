@@ -20,9 +20,9 @@ namespace Teams.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPerson()
+        public async Task<ActionResult<IEnumerable<Person>>> GetPerson(bool available = false)
         {
-            return Ok(await _personsService.GetPersonsAsync());
+            return Ok(await _personsService.GetPersonsAsync(available));
         }
 
         [HttpGet("{id}")]

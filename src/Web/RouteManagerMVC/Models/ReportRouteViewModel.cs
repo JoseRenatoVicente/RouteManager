@@ -11,6 +11,7 @@ namespace RouteManagerMVC.Models
 
         public ExcelFileViewModel ExcelFile { get; set; }
 
+        public List<string> Columns { get; set; }
         public IEnumerable<CityViewModel> Cities { get; set; }
         public IEnumerable<TeamRequest> Teams { get; set; }
         public IEnumerable<string> TypeSevices

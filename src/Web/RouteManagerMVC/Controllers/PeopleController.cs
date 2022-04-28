@@ -18,7 +18,7 @@ namespace RouteManagerMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _personService.GetPersonsAsync());
+            return View(await _personService.GetPersonsAsync(false));
         }
 
         public async Task<IActionResult> Details(string id)

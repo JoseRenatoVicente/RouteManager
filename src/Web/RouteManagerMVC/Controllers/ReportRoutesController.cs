@@ -7,6 +7,7 @@ using RouteManagerMVC.Services;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace RouteManagerMVC.Controllers
 {
@@ -43,6 +44,14 @@ namespace RouteManagerMVC.Controllers
             reportRoute.Cities = report.Cities;
             reportRoute.Teams = report.Teams;
             reportRoute.ExcelFile = report.ExcelFile;
+
+            IEnumerable<string> columns = new string[] { "OS", "BASE", "SERVIÇO", "ENDEREÇO", "NUMERO", "COMPLEMENTO", "BAIRRO", "CEP" };
+
+            reportRoute.Columns = reportRoute.ExcelFile.Columns.Copy();
+            foreach (var item in columns)
+            {
+                reportRoute.Columns.Remove(item);
+            }
 
             var fileDocx = await _routeService.ExportToDocx(reportRoute.UploadRequest);
 

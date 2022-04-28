@@ -26,8 +26,12 @@ namespace Teams.API.Services
             _gatewayService = gatewayService;
         }
 
-        public async Task<IEnumerable<Person>> GetPersonsAsync()
+        public async Task<IEnumerable<Person>> GetPersonsAsync(bool available = false)
         {
+            if (available)
+            {
+                return await _personRepository.FindAllAsync(c => c.Active == true);
+            }
             return await _personRepository.GetAllAsync();
         }
 
@@ -53,6 +57,7 @@ namespace Teams.API.Services
         public async Task<Person> UpdatePersonAsync(Person person)
         {
             var personBefore = await GetPersonByIdAsync(person.Id);
+            person.Active = personBefore.Active;
 
             if (personBefore == null)
             {
@@ -60,7 +65,7 @@ namespace Teams.API.Services
                 return person;
             }
 
-            var team = await _teamRepository.FindAsync(c => c.People.Any(c => c.Id == person.Id) );
+            var team = await _teamRepository.FindAsync(c => c.People.Any(c => c.Id == person.Id));
             if (team != null)
             {
                 team.People = team.People.Select(c =>
@@ -71,9 +76,9 @@ namespace Teams.API.Services
                     }
                     return c;
                 });
+                await _teamRepository.UpdateAsync(team);
             }
 
-            await _teamRepository.UpdateAsync(team);
 
             await _gatewayService.PostLogAsync(personBefore, person, Operation.Update);
 

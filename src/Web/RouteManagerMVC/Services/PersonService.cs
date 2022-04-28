@@ -11,7 +11,7 @@ namespace RouteManagerMVC.Services
         Task<PersonViewModel> AddPersonAsync(PersonViewModel person);
         Task<PersonViewModel> GetPersonByIdAsync(string id);
         Task<IEnumerable<PersonViewModel>> GetPersonsByIdsAsync(IEnumerable<string> ids);
-        Task<IEnumerable<PersonViewModel>> GetPersonsAsync();
+        Task<IEnumerable<PersonViewModel>> GetPersonsAsync(bool available = true);
         Task RemovePersonAsync(string id);
         Task<PersonViewModel> UpdatePersonAsync(PersonViewModel person);
     }
@@ -25,9 +25,9 @@ namespace RouteManagerMVC.Services
             _gatewayService = gatewayService;
         }
 
-        public async Task<IEnumerable<PersonViewModel>> GetPersonsAsync()
+        public async Task<IEnumerable<PersonViewModel>> GetPersonsAsync(bool available = false)
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/People");
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/People?available=" + available);
         }
 
         public async Task<PersonViewModel> GetPersonByIdAsync(string id)
