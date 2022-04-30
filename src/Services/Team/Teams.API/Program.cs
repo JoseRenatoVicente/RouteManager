@@ -1,20 +1,24 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Teams.API.Configuration;
 
-namespace Teams.API
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.ResolveDependencies(builder.Configuration);
+builder.Services.AddMvcConfiguration();
+builder.Services.AddHealthChecks();
+builder.Services.AddSwaggerConfiguration();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseDeveloperExceptionPage();
+    app.UseSwaggerSetup();
 }
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthConfiguration();
+app.UseHealthChecksConfiguration();
+app.MapControllers();
+app.Run();

@@ -37,10 +37,10 @@ namespace RouteManager.WebAPI.Core.Controllers
 
         protected async Task<ActionResult> CustomResponseAsync(ModelStateDictionary modelState)
         {
-            var erros = modelState.Values.SelectMany(e => e.Errors);
-            foreach (var erro in erros)
+            var errors = modelState.Values.SelectMany(e => e.Errors);
+            foreach (var error in errors)
             {
-                await AddError(erro.ErrorMessage);
+                await AddError(error.ErrorMessage);
             }
 
             return await CustomResponseAsync();

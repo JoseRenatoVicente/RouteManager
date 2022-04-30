@@ -114,7 +114,7 @@ namespace Routes.API.Services
             return await CreateDocx(reportRoute, excelFile);
         }
 
-        public async Task<byte[]> CreateDocx(ReportRouteRequest reportRoute, ExcelFile excelFile)
+        public Task<byte[]> CreateDocx(ReportRouteRequest reportRoute, ExcelFile excelFile)
         {
             XWPFDocument document = new();
             CreateTitle(document);
@@ -171,7 +171,8 @@ namespace Routes.API.Services
             MemoryStream memoryStream = new();
             document.Write(memoryStream);
             memoryStream.Flush();
-            return memoryStream.ToArray();
+
+            return Task.Run(() => memoryStream.ToArray());
         }
 
 
@@ -188,7 +189,7 @@ namespace Routes.API.Services
         }
 
 
-        public async Task<List<List<string>>> GetTableExcel(IFormFile file)
+        public Task<List<List<string>>> GetTableExcel(IFormFile file)
         {
             ISheet sheet;
 
@@ -217,7 +218,7 @@ namespace Routes.API.Services
                     table[indexRow].Add(row.GetCell(column) == null ? null : row.GetCell(column).ToString());
             }
 
-            return table;
+            return Task.Run(() => table);
         }
     }
 }

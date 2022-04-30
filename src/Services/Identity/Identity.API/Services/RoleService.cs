@@ -24,9 +24,9 @@ namespace Identity.API.Services
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<Claim>> GetCurrentClaimsAsync()
+        public Task<Claim[]> GetCurrentClaimsAsync()
         {
-            return new Claim[]
+            return Task.Run(() => new Claim[]
             {
                 new("Funções"),
                 new("Usuários"),
@@ -37,7 +37,7 @@ namespace Identity.API.Services
                 new("Cidades"),
                 new("Pessoas")
 
-            };
+            });
         }
 
         public async Task<IEnumerable<Role>> GetRolesAsync() =>

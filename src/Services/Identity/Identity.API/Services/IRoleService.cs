@@ -7,7 +7,7 @@ namespace Identity.API.Services
     public interface IRoleService
     {
 
-        Task<IEnumerable<Claim>> GetCurrentClaimsAsync();
+        Task<Claim[]> GetCurrentClaimsAsync();
         Task<Role> AddRoleAsync(Role role);
         Task<Role> GetRoleByDescriptionAsync(string description);
         Task<Role> GetRoleByIdAsync(string id);

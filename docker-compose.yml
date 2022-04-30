@@ -38,3 +38,10 @@ services:
       context: .
       dockerfile: src/ApiGateway/ApiGateway.Ocelot/Dockerfile
 
+
+  routemanagermvc:
+    image: ${DOCKER_REGISTRY-}routemanagermvc
+    build:
+      context: .
+      dockerfile: src/Web/RouteManagerMVC/Dockerfile
+

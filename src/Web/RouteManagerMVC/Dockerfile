@@ -1,13 +1,15 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Web/RouteManagerMVC/RouteManagerMVC.csproj", "src/Web/RouteManagerMVC/"]
+COPY ["src/BuildingBlocks/RouteManager.Domain/RouteManager.Domain.csproj", "src/BuildingBlocks/RouteManager.Domain/"]
+COPY ["src/BuildingBlocks/RouteManager.WebAPI.Core/RouteManager.WebAPI.Core.csproj", "src/BuildingBlocks/RouteManager.WebAPI.Core/"]
 RUN dotnet restore "src/Web/RouteManagerMVC/RouteManagerMVC.csproj"
 COPY . .
 WORKDIR "/src/src/Web/RouteManagerMVC"

@@ -1,20 +1,27 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Identity.API.Configurations;
+using Identity.API.Services;
 
-namespace Identity.API
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ResolveDependencies(builder.Configuration);
+builder.Services.AddIdentityConfig(builder.Configuration);
+builder.Services.AddMvcConfiguration();
+builder.Services.AddHealthChecks();
+builder.Services.AddSwaggerConfiguration();
+
+var app = builder.Build();
+var seederService = app.Services.GetService<SeederService>();
+
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseDeveloperExceptionPage();
+    app.UseSwaggerSetup();
 }
+
+seederService.Seed();
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthConfiguration();
+app.UseHealthChecksConfiguration();
+app.MapControllers();
+app.Run();

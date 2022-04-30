@@ -52,7 +52,7 @@ namespace Identity.API.Services
             return GetResponseToken(encodedToken, user);
         }
 
-        private async Task<ClaimsIdentity> GetClaimsUser(User user)
+        private Task<ClaimsIdentity> GetClaimsUser(User user)
         {
             ICollection<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>();
 
@@ -69,7 +69,7 @@ namespace Identity.API.Services
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);
 
-            return identityClaims;
+            return Task.Run(() => identityClaims);
         }
 
         private string EncodeToken(ClaimsIdentity identityClaims)
