@@ -13,7 +13,7 @@ Ao inciar o sistema um usuário é criado de forma automática para configuraç�
 
 ## Tecnologias usadas:
 
-- ASP.NET Core 5.0
+- ASP.NET Core 6.0
 - Internal API Gateway com Ocelot
 - JWT Bearer Authentication com tokens assimétricos
 - Swagger UI com suporte ao JWT
