@@ -1,4 +1,4 @@
-﻿using RouteManager.Domain.Entities;
+﻿using RouteManager.Domain.Core.Entities;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

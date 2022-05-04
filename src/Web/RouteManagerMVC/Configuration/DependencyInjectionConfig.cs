@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using RouteManager.Domain.Identity.Extensions;
-using RouteManager.Domain.Services;
+using RouteManager.Domain.Core.Identity.Extensions;
+using RouteManager.Domain.Core.Services;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Services;
 using System;

@@ -1,9 +1,9 @@
 ﻿using Identity.API.Certificates;
 using Identity.API.Models;
+using Identity.Domain.Entities.v1;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RouteManager.Domain.Entities.Identity;
-using RouteManager.Domain.Services.Base;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Identity;
 using RouteManager.WebAPI.Core.Notifications;
 using System;

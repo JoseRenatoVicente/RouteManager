@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NPOI.HSSF.UserModel;
-using NPOI.OpenXmlFormats.Wordprocessing;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NPOI.XWPF.Model;
 using NPOI.XWPF.UserModel;
-using RouteManager.Domain.Entities;
-using RouteManager.Domain.Entities.Enums;
-using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
-using RouteManager.Domain.Utils;
+using RouteManager.Domain.Core.Entities.Enums;
+using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
+using RouteManager.Domain.Core.Utils;
 using RouteManager.WebAPI.Core.Notifications;
 using Routes.API.DTO;
 using Routes.API.Extensions;
-using Routes.API.Repository;
+using Routes.Domain.Contracts.v1;
+using Routes.Domain.Entities.v1;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -91,7 +89,7 @@ namespace Routes.API.Services
 
             var excelFile = await GetExcelFileByIdAsync(reportRoute.ExcelFileId);
 
-            reportRoute.City = await _gatewayService.GetFromJsonAsync<City>("Teams/api/Cities/" + reportRoute.City.Id);
+            reportRoute.City = await _gatewayService.GetFromJsonAsync<City>("Teams/api/v1/Cities/" + reportRoute.City.Id);
 
             excelFile.Table.RemoveAll(row => !StringUtils.CompareToIgnore(row[excelFile.Columns.IndexOf(reportRoute.NameCity)], reportRoute.City.Name) ||
                                              !StringUtils.CompareToIgnore(row[excelFile.Columns.IndexOf(reportRoute.NameService)], reportRoute.TypeService));

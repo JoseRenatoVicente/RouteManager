@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Identity.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class OperationsController : BaseController
     {
         public OperationsController(INotifier notifier) : base(notifier)

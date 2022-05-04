@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using RouteManager.Domain.Identity.Extensions;
-using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
+using RouteManager.Domain.Core.Identity.Extensions;
+using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Models;
 using System;
@@ -34,7 +34,7 @@ namespace RouteManagerMVC.Services
 
         public async Task<UserResponseLogin> LoginAsync(UserLogin userLogin)
         {
-            var userResponseLogin = await _gatewayService.PostAsync<UserResponseLogin>("Identity/api/Auth/Login", userLogin);
+            var userResponseLogin = await _gatewayService.PostAsync<UserResponseLogin>("Identity/api/v1/Auth/Login", userLogin);
             return userResponseLogin == null ? userResponseLogin : await SaveTokenAsync(userResponseLogin);
         }
 

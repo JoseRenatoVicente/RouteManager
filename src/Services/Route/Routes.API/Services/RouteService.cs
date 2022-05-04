@@ -1,10 +1,10 @@
-﻿using RouteManager.Domain.Entities;
-using RouteManager.Domain.Entities.Enums;
-using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
-using RouteManager.Domain.Validations;
+﻿using RouteManager.Domain.Core.Entities.Enums;
+using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
-using Routes.API.Repository;
+using Routes.Domain.Contracts.v1;
+using Routes.Domain.Entities.v1;
+using Routes.Domain.Validations.v1;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

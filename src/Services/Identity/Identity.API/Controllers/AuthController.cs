@@ -2,14 +2,14 @@
 using Identity.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RouteManager.Domain.Identity.Extensions;
+using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Threading.Tasks;
 
 namespace Identity.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class AuthController : BaseController
     {
         private readonly IAspNetUser _aspNetUser;

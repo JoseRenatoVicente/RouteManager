@@ -1,9 +1,9 @@
 ﻿using AndreAirLines.Domain.Services;
-using Logs.API.Repository;
+using Logging.Domain.Contracts.v1;
+using Logging.Infra.Data.Repositories.v1;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using RouteManager.Domain.Identity.Extensions;
+using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
 

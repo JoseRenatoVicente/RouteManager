@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using RouteManager.Domain.Identity.Extensions;
-using RouteManager.Domain.Services;
+using RouteManager.Domain.Core.Identity.Extensions;
+using RouteManager.Domain.Core.Services;
 using RouteManager.WebAPI.Core.Notifications;
-using Routes.API.Repository;
 using Routes.API.Services;
+using Routes.Domain.Contracts.v1;
+using Routes.Infra.Data.Repositories.v1;
 using System;
 
 namespace Routes.API.Configuration

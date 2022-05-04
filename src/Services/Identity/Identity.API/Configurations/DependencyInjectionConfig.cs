@@ -1,10 +1,10 @@
-﻿using Identity.API.Repository;
-using Identity.API.Services;
+﻿using Identity.API.Services;
+using Identity.Domain.Contracts.v1;
+using Identity.Infra.Data.Repositories.v1;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using RouteManager.Domain.Identity.Extensions;
-using RouteManager.Domain.Services;
+using RouteManager.Domain.Core.Identity.Extensions;
+using RouteManager.Domain.Core.Services;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
 

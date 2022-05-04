@@ -1,5 +1,4 @@
-﻿using RouteManager.Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AndreAirLines.Domain.Services

@@ -1,4 +1,4 @@
-﻿using RouteManager.Domain.Services;
+﻿using RouteManager.Domain.Core.Services;
 using RouteManagerMVC.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,28 +25,28 @@ namespace RouteManagerMVC.Services
 
         public async Task<IEnumerable<TeamRequest>> GetTeamsAsync()
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<TeamRequest>>("Teams/api/Teams");
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<TeamRequest>>("Teams/api/v1/Teams");
         }
 
         public async Task<TeamRequest> GetTeamByIdAsync(string id)
         {
-            return await _gatewayService.GetFromJsonAsync<TeamRequest>("Teams/api/Teams/" + id);
+            return await _gatewayService.GetFromJsonAsync<TeamRequest>("Teams/api/v1/Teams/" + id);
         }
 
         public async Task<TeamRequest> AddTeamAsync(TeamRequest team)
         {
-            return await _gatewayService.PostAsync<TeamRequest>("Teams/api/Teams/", team);
+            return await _gatewayService.PostAsync<TeamRequest>("Teams/api/v1/Teams/", team);
         }
 
         public async Task<TeamViewModel> UpdateTeamAsync(TeamViewModel team)
         {
-            await _gatewayService.PutAsync("Teams/api/Teams/" + team.Team.Id, team.Team);
+            await _gatewayService.PutAsync("Teams/api/v1/Teams/" + team.Team.Id, team.Team);
             return team;
         }
 
         public async Task RemoveTeamAsync(string id)
         {
-            await _gatewayService.DeleteAsync("Teams/api/Teams/" + id);
+            await _gatewayService.DeleteAsync("Teams/api/v1/Teams/" + id);
         }
 
     }

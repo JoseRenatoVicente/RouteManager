@@ -1,5 +1,5 @@
-﻿using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
+﻿using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Models;
 using System.Collections.Generic;
@@ -27,30 +27,30 @@ namespace RouteManagerMVC.Services
 
         public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<UserViewModel>>("Identity/api/Users");
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<UserViewModel>>("Identity/api/v1/Users");
         }
 
         public async Task<UserViewModel> GetUserByIdAsync(string id)
         {
-            return await _gatewayService.GetFromJsonAsync<UserViewModel>("Identity/api/Users/" + id);
+            return await _gatewayService.GetFromJsonAsync<UserViewModel>("Identity/api/v1/Users/" + id);
         }
 
         public async Task<UserRegister> AddUserAsync(UserRegister user)
         {
-            await _gatewayService.PostAsync("Identity/api/Users/", user);
+            await _gatewayService.PostAsync("Identity/api/v1/Users/", user);
             return user;
         }
 
         public async Task<UserViewModel> UpdateUserAsync(UserViewModel user)
         {
 
-            await _gatewayService.PutAsync<UserViewModel>("Identity/api/Users/" + user.Id, user);
+            await _gatewayService.PutAsync<UserViewModel>("Identity/api/v1/Users/" + user.Id, user);
             return user;
         }
 
         public async Task DisableUserAsync(string id)
         {
-            await _gatewayService.DeleteAsync("Identity/api/Users/" + id);
+            await _gatewayService.DeleteAsync("Identity/api/v1/Users/" + id);
         }
 
     }

@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RouteManager.Domain.Entities;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Teams.API.Services;
+using Teams.Domain.Entities.v1;
 
 namespace Teams.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class TeamsController : BaseController
     {
         private readonly ITeamService _teamsService;

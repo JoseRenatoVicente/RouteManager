@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using RouteManager.Domain.Extensions;
+using RouteManager.Domain.Core.Extensions;
 using RouteManagerMVC.Services;
 using System.Net;
 using System.Threading.Tasks;

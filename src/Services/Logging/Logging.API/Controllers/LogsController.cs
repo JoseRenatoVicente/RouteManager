@@ -1,8 +1,7 @@
 ﻿using AndreAirLines.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RouteManager.Domain.DTO;
-using RouteManager.Domain.Entities;
+using RouteManager.Domain.Core.DTO;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Logging.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class LogsController : BaseController
     {
         private readonly ILogService _logsService;

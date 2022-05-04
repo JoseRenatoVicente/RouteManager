@@ -1,17 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RouteManager.Domain.Entities;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
-using Routes.API.DTO;
 using Routes.API.Services;
+using Routes.Domain.Entities.v1;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Routes.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class RoutesController : BaseController
     {
         private readonly IRouteService _routeService;

@@ -1,4 +1,4 @@
-﻿using RouteManager.Domain.Entities.Identity;
+﻿using Identity.Domain.Entities.v1;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

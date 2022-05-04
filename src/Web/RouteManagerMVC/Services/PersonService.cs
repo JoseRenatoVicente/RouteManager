@@ -1,4 +1,4 @@
-﻿using RouteManager.Domain.Services;
+﻿using RouteManager.Domain.Core.Services;
 using RouteManagerMVC.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,32 +27,32 @@ namespace RouteManagerMVC.Services
 
         public async Task<IEnumerable<PersonViewModel>> GetPersonsAsync(bool available = false)
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/People?available=" + available);
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/v1/People?available=" + available);
         }
 
         public async Task<PersonViewModel> GetPersonByIdAsync(string id)
         {
-            return await _gatewayService.GetFromJsonAsync<PersonViewModel>("Teams/api/People/" + id);
+            return await _gatewayService.GetFromJsonAsync<PersonViewModel>("Teams/api/v1/People/" + id);
         }
 
         public async Task<IEnumerable<PersonViewModel>> GetPersonsByIdsAsync(IEnumerable<string> ids)
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/People/list/" + string.Concat(ids.Select(c => c + ",")));
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<PersonViewModel>>("Teams/api/v1/People/list/" + string.Concat(ids.Select(c => c + ",")));
         }
 
         public async Task<PersonViewModel> AddPersonAsync(PersonViewModel person)
         {
-            return await _gatewayService.PostAsync<PersonViewModel>("Teams/api/People/", person);
+            return await _gatewayService.PostAsync<PersonViewModel>("Teams/api/v1/People/", person);
         }
 
         public async Task<PersonViewModel> UpdatePersonAsync(PersonViewModel person)
         {
-            return await _gatewayService.PutAsync<PersonViewModel>("Teams/api/People/" + person.Id, person);
+            return await _gatewayService.PutAsync<PersonViewModel>("Teams/api/v1/People/" + person.Id, person);
         }
 
         public async Task RemovePersonAsync(string id)
         {
-            await _gatewayService.DeleteAsync("Teams/api/People/" + id);
+            await _gatewayService.DeleteAsync("Teams/api/v1/People/" + id);
         }
 
     }

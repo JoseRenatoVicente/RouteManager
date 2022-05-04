@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NPOI.Util;
-using RouteManager.Domain.Entities;
-using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
+using RouteManager.Domain.Core.Entities;
+using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Models;
 using System;
@@ -66,7 +66,7 @@ namespace RouteManagerMVC.Services
             var bytes = new ByteArrayContent(stream.ToArray());
             multiForm.Add(bytes, "file", file.FileName);
 
-            var excelFile = await _gatewayService.PostAsync<ExcelFileViewModel>("Routes/api/ExcelFile", multiForm);
+            var excelFile = await _gatewayService.PostAsync<ExcelFileViewModel>("Routes/api/v1/ExcelFile", multiForm);
             reportRoute.ExcelFile = excelFile;
             reportRoute.UploadRequest.ExcelFileId = excelFile.Id;
 
@@ -75,14 +75,14 @@ namespace RouteManagerMVC.Services
 
         public async Task<byte[]> ExportToDocx(RouteUploadRequest reportRoute)
         {
-            var response = await _gatewayService.PostAsync("Routes/api/ExcelFile/report", reportRoute);
+            var response = await _gatewayService.PostAsync("Routes/api/v1/ExcelFile/report", reportRoute);
 
             return response.IsSuccessStatusCode ? Convert.FromBase64String((await response.Content.ReadAsStringAsync()).Trim('"')) : null;
         }
 
         public async Task<IEnumerable<ExcelFileViewModel>> GetRoutesAsync()
         {
-            return await _gatewayService.GetFromJsonAsync<IEnumerable<ExcelFileViewModel>>("Routes/api/ExcelFile");
+            return await _gatewayService.GetFromJsonAsync<IEnumerable<ExcelFileViewModel>>("Routes/api/v1/ExcelFile");
 
         }
 
@@ -93,7 +93,7 @@ namespace RouteManagerMVC.Services
             reportRoute.Cities = await _cityService.GetCitysAsync();
             reportRoute.Teams = await _teamService.GetTeamsAsync();
 
-            var excelFile = await _gatewayService.GetFromJsonAsync<ExcelFileViewModel>("Routes/api/ExcelFile/" + id);
+            var excelFile = await _gatewayService.GetFromJsonAsync<ExcelFileViewModel>("Routes/api/v1/ExcelFile/" + id);
 
             IEnumerable<string> columns = new string[] { "OS", "BASE", "SERVIÇO", "ENDEREÇO", "NUMERO" , "COMPLEMENTO", "BAIRRO", "CEP" };
 
@@ -113,7 +113,7 @@ namespace RouteManagerMVC.Services
 
         public async Task RemoveRouteAsync(string id)
         {
-            await _gatewayService.DeleteAsync("Routes/api/ExcelFile/" + id);
+            await _gatewayService.DeleteAsync("Routes/api/v1/ExcelFile/" + id);
         }
 
     }

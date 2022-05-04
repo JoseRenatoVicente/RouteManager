@@ -1,12 +1,12 @@
-﻿using RouteManager.Domain.Entities;
-using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
-using RouteManager.Domain.Validations;
+﻿using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Teams.API.Repository;
+using Teams.Domain.Contracts.v1;
+using Teams.Domain.Entities.v1;
+using Teams.Domain.Validations.v1;
 
 namespace Teams.API.Services
 {

@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\RouteManager.Domain\RouteManager.Domain.csproj" />
+    <ProjectReference Include="..\Identity.Infra.Data\Identity.Infra.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using RouteManager.Domain.Identity.Extensions;
-using RouteManager.Domain.Services;
+using RouteManager.Domain.Core.Identity.Extensions;
+using RouteManager.Domain.Core.Services;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
-using Teams.API.Repository;
 using Teams.API.Services;
+using Teams.Domain.Contracts.v1;
+using Teams.Infra.Data.Repositories.v1;
 
 namespace Teams.API.Configuration
 {

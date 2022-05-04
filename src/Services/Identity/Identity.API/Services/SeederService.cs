@@ -1,5 +1,5 @@
-﻿using Identity.API.Repository;
-using RouteManager.Domain.Entities.Identity;
+﻿using Identity.Domain.Contracts.v1;
+using Identity.Domain.Entities.v1;
 using System.Linq;
 
 namespace Identity.API.Services

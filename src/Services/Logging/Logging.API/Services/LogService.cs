@@ -1,7 +1,6 @@
-﻿using Logs.API.Repository;
-using RouteManager.Domain.Entities;
-using RouteManager.Domain.Services.Base;
-using RouteManager.Domain.Validations;
+﻿using Logging.Domain.Contracts.v1;
+using Logging.Domain.Validations.v1;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;

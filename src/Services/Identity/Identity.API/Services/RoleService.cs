@@ -1,10 +1,10 @@
-﻿using Identity.API.Repository;
+﻿using Identity.Domain.Contracts.v1;
+using Identity.Domain.Entities.v1;
+using Identity.Domain.Validations.v1;
 using MongoDB.Driver;
-using RouteManager.Domain.Entities.Enums;
-using RouteManager.Domain.Entities.Identity;
-using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
-using RouteManager.Domain.Validations.Identity;
+using RouteManager.Domain.Core.Entities.Enums;
+using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;

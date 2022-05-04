@@ -8,7 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Services/Route/Routes.API/Routes.API.csproj", "src/Services/Route/Routes.API/"]
-COPY ["src/BuildingBlocks/RouteManager.Domain/RouteManager.Domain.csproj", "src/BuildingBlocks/RouteManager.Domain/"]
+COPY ["src/BuildingBlocks/RouteManager.Domain.Core/RouteManager.Domain.Core.csproj", "src/BuildingBlocks/RouteManager.Domain.Core/"]
 COPY ["src/BuildingBlocks/RouteManager.WebAPI.Core/RouteManager.WebAPI.Core.csproj", "src/BuildingBlocks/RouteManager.WebAPI.Core/"]
 RUN dotnet restore "src/Services/Route/Routes.API/Routes.API.csproj"
 COPY . .

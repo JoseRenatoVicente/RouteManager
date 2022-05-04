@@ -1,5 +1,5 @@
-﻿using RouteManager.Domain.Services;
-using RouteManager.Domain.Services.Base;
+﻿using RouteManager.Domain.Core.Services;
+using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Models;
 using System.Threading.Tasks;
@@ -24,12 +24,12 @@ namespace RouteManagerMVC.Services
 
         public async Task<UserUpdate> GetCurrentUser()
         {
-            return await _gatewayService.GetFromJsonAsync<UserUpdate>("Identity/api/Account");
+            return await _gatewayService.GetFromJsonAsync<UserUpdate>("Identity/api/v1/Account");
         }
 
         public async Task<UserUpdate> UpdateCurrentUserAsync(UserUpdate user)
         {
-            var responseMessage = await _gatewayService.PutAsync("Identity/api/Account", user);
+            var responseMessage = await _gatewayService.PutAsync("Identity/api/v1/Account", user);
 
             if (!responseMessage.IsSuccessStatusCode)
             {
@@ -43,7 +43,7 @@ namespace RouteManagerMVC.Services
 
         public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel changePassword)
         {
-            var responseMessage = await _gatewayService.PostAsync("Identity/api/Account/ChangePassword", changePassword);
+            var responseMessage = await _gatewayService.PostAsync("Identity/api/v1/Account/ChangePassword", changePassword);
 
             if (!responseMessage.IsSuccessStatusCode)
             {

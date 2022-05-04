@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RouteManager.Domain.Entities;
+using Routes.Domain.Entities.v1;
 using System.Collections.Generic;
 
 namespace Routes.API.DTO
