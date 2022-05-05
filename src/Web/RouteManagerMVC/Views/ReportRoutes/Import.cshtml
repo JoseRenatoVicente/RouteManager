@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Html
-@model RouteManagerMVC.Models.ReportRouteViewModel
+﻿@model RouteManagerMVC.Models.ReportRouteViewModel
 
 @{
     ViewData["Title"] = "Import";
@@ -162,55 +161,55 @@
 
 <script>
 
-    const initListTeams = document.getElementById("UploadRequest_NameTeams")
+    const initListTeams = document.getElementById("UploadRequest_NameTeams");
 
-    let teams = []
-    let countTeams = initListTeams.length
+    let teams = [];
+    let countTeams = initListTeams.length;
 
-       for(let i = 0; i < countTeams; i++)
+    for(let i = 0; i < countTeams; i++)
        {
 
-        let currentTeam = initListTeams.options[i].text      
-        teams.push(currentTeam)
-    
+        let currentTeam = initListTeams.options[i].text;
+        teams.push(currentTeam);
+
        }
 
-     document.querySelectorAll("#UploadRequest_NameTeams option").forEach(team => team.remove())
+     document.querySelectorAll("#UploadRequest_NameTeams option").forEach(team => team.remove());
 
     function getValue(object)
     {
-       let select = object
-       let nameCity = select.options[select.selectedIndex].text    
+       let select = object;
+       let nameCity = select.options[select.selectedIndex].text;
 
 
-       let countTeams = teams.length
+       let countTeams = teams.length;
 
-       let filterTeam = []
+       let filterTeam = [];
 
        for(let i = 0; i < countTeams; i++)
        {
-         let team = teams[i]
-                  
+         let team = teams[i];
+
          if(team.indexOf(nameCity) != -1)
          {
-             filterTeam.push(team.split("-")[0])
+             filterTeam.push(team.split("-")[0]);
          }
 
        }
 
 
-       let removeTeams = document.querySelectorAll("#UploadRequest_NameTeams option")
-        removeTeams.forEach(team => team.remove())
+       let removeTeams = document.querySelectorAll("#UploadRequest_NameTeams option");
+       removeTeams.forEach(team => team.remove());
 
        filterTeam.forEach(team => {
 
-         let optionElememt = document.createElement("option")       
-         optionElememt.value = team
-         optionElememt.text = team
-         initListTeams.appendChild(optionElememt)
-           
-       })
-       
+         let optionElememt = document.createElement("option");
+         optionElememt.value = team;
+         optionElememt.text = team;
+         initListTeams.appendChild(optionElememt);
+
+       });
+
     }
 
 </script>

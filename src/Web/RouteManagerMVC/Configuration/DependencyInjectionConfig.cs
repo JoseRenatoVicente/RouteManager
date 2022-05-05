@@ -1,36 +1,34 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using RouteManager.Domain.Core.Identity.Extensions;
+﻿using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.Domain.Core.Services;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Services;
 using System;
 
-namespace RouteManagerMVC.Configuration
+namespace RouteManagerMVC.Configuration;
+
+public static class DependencyInjectionConfig
 {
-    public static class DependencyInjectionConfig
+    public static void ResolveDependencies(this IServiceCollection services)
     {
-        public static void ResolveDependencies(this IServiceCollection services)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+        if (services == null) throw new ArgumentNullException(nameof(services));
 
-            //services
-            services.AddHttpClient<GatewayService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddSingleton<ICityService, CityService>();
-            services.AddSingleton<IPersonService, PersonService>();
-            services.AddSingleton<ITeamService, TeamService>();
-            services.AddSingleton<IReportRouteService, ReportRouteService>();
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IRoleService, RoleService>();
-            services.AddSingleton<IAccountService, AccountService>();            
+        //services
+        services.AddHttpClient<GatewayService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddSingleton<ICityService, CityService>();
+        services.AddSingleton<IPersonService, PersonService>();
+        services.AddSingleton<ITeamService, TeamService>();
+        services.AddSingleton<IReportRouteService, ReportRouteService>();
+        services.AddSingleton<IUserService, UserService>();
+        services.AddSingleton<IRoleService, RoleService>();
+        services.AddSingleton<IAccountService, AccountService>();
 
-            //notification
-            services.AddSingleton<INotifier, Notifier>();
+        //notification
+        services.AddSingleton<INotifier, Notifier>();
 
-            //Identity
-            services.AddSingleton<IAspNetUser, AspNetUser>();
-            services.AddHttpContextAccessor();
+        //Identity
+        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddHttpContextAccessor();
 
-        }
     }
 }

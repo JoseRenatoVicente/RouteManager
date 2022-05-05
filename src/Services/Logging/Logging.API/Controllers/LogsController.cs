@@ -1,76 +1,50 @@
-﻿using AndreAirLines.Domain.Services;
+﻿using Logging.API.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RouteManager.Domain.Core.DTO;
+using RouteManager.Domain.Core.Models;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Logging.Domain.Commands.Create;
+using Logging.Domain.Entities.v1;
 
-namespace Logging.API.Controllers
+namespace Logging.API.Controllers;
+
+[Route("api/v1/[controller]")]
+public class LogsController : BaseController
 {
-    [Route("api/v1/[controller]")]
-    public class LogsController : BaseController
+    private readonly ILogService _logsService;
+
+    public LogsController(ILogService logsService, IMediator mediator, INotifier notifier) : base(mediator, notifier)
     {
-        private readonly ILogService _logsService;
+        _logsService = logsService;
+    }
 
-        public LogsController(ILogService logsService, INotifier notifier) : base(notifier)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Log>>> GetLog()
+    {
+        return Ok(await _logsService.GetLogsAsync());
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetLog(string id)
+    {
+        var log = await _logsService.GetLogByIdAsync(id);
+
+        if (log == null)
         {
-            _logsService = logsService;
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Log>>> GetLog()
-        {
-            return Ok(await _logsService.GetLogsAsync());
-        }
+        return Ok(log);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<LogRequest>> GetLog(string id)
-        {
-            var log = await _logsService.GetLogByIdAsync(id);
-
-            if (log == null)
-            {
-                return NotFound();
-            }
-
-            return new LogRequest(log);
-        }
-
-        [Authorize(Roles = "Logs")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLog(string id, Log log)
-        {
-            if (id != log.Id)
-            {
-                return BadRequest();
-            }
-
-            await _logsService.UpdateLogAsync(log);
-
-            return NoContent();
-        }
-
-        [Authorize(Roles = "Logs")]
-        [HttpPost]
-        public async Task<ActionResult<LogRequest>> PostLog(LogRequest log)
-        {
-            return await CustomResponseAsync(new LogRequest(await _logsService.AddLogAsync(new Log(log))));
-        }
-
-        [Authorize(Roles = "Logs")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLog(string id)
-        {
-            var log = await GetLog(id);
-            if (log == null)
-            {
-                return NotFound();
-            }
-            await _logsService.RemoveLogAsync(id);
-
-            return NoContent();
-        }
+    [Authorize(Roles = "Logs")]
+    [HttpPost]
+    public async Task<ActionResult<LogRequest>> PostLog(CreateLogCommand createLogCommand)
+    {
+        return await CustomResponseAsync(createLogCommand);
     }
 }

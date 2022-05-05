@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Net;
 
-namespace RouteManager.Domain.Core.Extensions
+namespace RouteManager.Domain.Core.Extensions;
+
+public class CustomHttpRequestException : Exception
 {
-    public class CustomHttpRequestException : Exception
+    public readonly HttpStatusCode StatusCode;
+
+    public CustomHttpRequestException(HttpStatusCode statusCode)
     {
-        public HttpStatusCode StatusCode;
-
-        public CustomHttpRequestException() { }
-
-        public CustomHttpRequestException(string message, Exception innerException)
-            : base(message, innerException) { }
-
-        public CustomHttpRequestException(HttpStatusCode statusCode)
-        {
-            StatusCode = statusCode;
-        }
+        StatusCode = statusCode;
     }
 }

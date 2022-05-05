@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace RouteManager.Domain.Core.Identity.Extensions
+namespace RouteManager.Domain.Core.Identity.Extensions;
+
+public interface IAspNetUser
 {
-    public interface IAspNetUser
-    {
-        IEnumerable<Claim> GetClaims();
-        HttpContext GetHttpContext();
-        string GetUserEmail();
-        string GetUserId();
-        string GetName();
-        string GetUserRefreshToken();
-        string GetToken();
-        bool HasRole(string role);
-        bool IsAuthenticated();
-    }
+    IEnumerable<Claim> GetClaims();
+    HttpContext GetHttpContext();
+    string GetUserEmail();
+    string GetUserId();
+    string GetName();
+    string GetUserRefreshToken();
+    string GetToken();
+    bool HasRole(string role);
+    bool IsAuthenticated();
 }

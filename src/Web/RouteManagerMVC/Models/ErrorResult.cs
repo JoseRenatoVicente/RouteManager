@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace RouteManagerMVC.Models
+namespace RouteManagerMVC.Models;
+
+public class ErrorResult
 {
-    public class ErrorResult
-    {
-        public bool Success { get; set; }
-        public IEnumerable<string> Errors { get; set; }
-    }
+    public bool Success { get; set; }
+    public IEnumerable<string> Errors { get; set; }
 }

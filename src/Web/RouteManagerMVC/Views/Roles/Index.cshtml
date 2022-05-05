@@ -35,7 +35,7 @@
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
                             <td>
-                                <select asp-items="@(new SelectList(@item.Claims))" class="form-control"></select>
+                                <select asp-items="@(new SelectList(item.Claims))" class="form-control"></select>
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-circle">

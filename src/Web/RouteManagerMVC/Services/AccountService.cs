@@ -4,55 +4,54 @@ using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Models;
 using System.Threading.Tasks;
 
-namespace RouteManagerMVC.Services
+namespace RouteManagerMVC.Services;
+
+public interface IAccountService
 {
-    public interface IAccountService
+    Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel changePassword);
+    Task<UserUpdate> GetCurrentUser();
+    Task<UserUpdate> UpdateCurrentUserAsync(UserUpdate user);
+}
+
+public class AccountService : BaseService, IAccountService
+{
+    private readonly GatewayService _gatewayService;
+
+    public AccountService(GatewayService gatewayService, INotifier notifier) : base(notifier)
     {
-        Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel changePassword);
-        Task<UserUpdate> GetCurrentUser();
-        Task<UserUpdate> UpdateCurrentUserAsync(UserUpdate user);
+        _gatewayService = gatewayService;
     }
 
-    public class AccountService : BaseService, IAccountService
+    public async Task<UserUpdate> GetCurrentUser()
     {
-        private readonly GatewayService _gatewayService;
+        return await _gatewayService.GetFromJsonAsync<UserUpdate>("Identity/api/v1/Account");
+    }
 
-        public AccountService(GatewayService gatewayService, INotifier notifier) : base(notifier)
+    public async Task<UserUpdate> UpdateCurrentUserAsync(UserUpdate user)
+    {
+        var responseMessage = await _gatewayService.PutAsync("Identity/api/v1/Account", user);
+
+        if (!responseMessage.IsSuccessStatusCode)
         {
-            _gatewayService = gatewayService;
-        }
-
-        public async Task<UserUpdate> GetCurrentUser()
-        {
-            return await _gatewayService.GetFromJsonAsync<UserUpdate>("Identity/api/v1/Account");
-        }
-
-        public async Task<UserUpdate> UpdateCurrentUserAsync(UserUpdate user)
-        {
-            var responseMessage = await _gatewayService.PutAsync("Identity/api/v1/Account", user);
-
-            if (!responseMessage.IsSuccessStatusCode)
+            foreach (var item in (await _gatewayService.DeserializeObjectResponse<ErrorResult>(responseMessage)).Errors)
             {
-                foreach (var item in (await _gatewayService.DeserializeObjectResponse<ErrorResult>(responseMessage)).Errors)
-                {
-                    Notification(item);
-                };
+                Notification(item);
             }
-            return user;
         }
+        return user;
+    }
 
-        public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel changePassword)
+    public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel changePassword)
+    {
+        var responseMessage = await _gatewayService.PostAsync("Identity/api/v1/Account/ChangePassword", changePassword);
+
+        if (!responseMessage.IsSuccessStatusCode)
         {
-            var responseMessage = await _gatewayService.PostAsync("Identity/api/v1/Account/ChangePassword", changePassword);
-
-            if (!responseMessage.IsSuccessStatusCode)
+            foreach (var item in (await _gatewayService.DeserializeObjectResponse<ErrorResult>(responseMessage)).Errors)
             {
-                foreach (var item in (await _gatewayService.DeserializeObjectResponse<ErrorResult>(responseMessage)).Errors)
-                {
-                    Notification(item);
-                };
+                Notification(item);
             }
-            return changePassword;
         }
+        return changePassword;
     }
 }

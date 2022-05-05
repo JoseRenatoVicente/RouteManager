@@ -4,16 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text.Json.Serialization;
 
-namespace RouteManager.WebAPI.Core.Configuration
+namespace RouteManager.WebAPI.Core.Configuration;
+
+public static class MvcConfig
 {
-    public static class MvcConfig
+    public static void AddMvcConfiguration(this IServiceCollection services)
     {
-        public static void AddMvcConfiguration(this IServiceCollection services)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+        if (services == null) throw new ArgumentNullException(nameof(services));
 
 
-            services.AddControllers(options =>
+        services.AddControllers(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
@@ -25,6 +25,5 @@ namespace RouteManager.WebAPI.Core.Configuration
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
-        }
     }
 }

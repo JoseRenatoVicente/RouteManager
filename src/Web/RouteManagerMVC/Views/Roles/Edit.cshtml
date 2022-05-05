@@ -31,7 +31,7 @@
                             <select class="form-control" id="NameClaims" multiple="multiple" name="NameClaims">
                                 @foreach (var claim in Model.GetClaims)
                                 {
-                                    <option selected="@( Model.RoleRequest.Claims != null ? Model.RoleRequest.Claims.Where(c => c.Description == claim.Description).FirstOrDefault() != null : false)" value="@claim.Description">@claim.Description</option>
+                                    <option selected="@(Model.RoleRequest.Claims != null && Model.RoleRequest.Claims.FirstOrDefault(c => c.Description == claim.Description) != null)" value="@claim.Description">@claim.Description</option>
                                 }
                             </select>
                             <span asp-validation-for="NameClaims" class="text-danger"></span>

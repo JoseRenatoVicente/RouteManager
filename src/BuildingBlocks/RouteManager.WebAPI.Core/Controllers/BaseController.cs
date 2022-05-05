@@ -1,83 +1,76 @@
-﻿using FluentValidation.Results;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RouteManager.WebAPI.Core.Configuration;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace RouteManager.WebAPI.Core.Controllers
+namespace RouteManager.WebAPI.Core.Controllers;
+
+[SecurityHeaders]
+[ApiController]
+public abstract class BaseController : ControllerBase
 {
-    [SecurityHeaders]
-    [ApiController]
-    public abstract class BaseController : ControllerBase
+
+    protected readonly IMediator Mediator;
+
+    protected readonly ICollection<string> Errors = new List<string>();
+    protected readonly INotifier Notifier;
+    protected BaseController(IMediator mediator, INotifier notifier)
     {
-        protected readonly ICollection<string> _errors = new List<string>();
-        protected readonly INotifier _notifier;
-        protected BaseController(INotifier notifier)
+        Mediator = mediator;
+        Notifier = notifier;
+    }
+
+    protected async Task<ActionResult> CustomResponseAsync(object result = null)
+    {
+        if (await IsOperationValid())
         {
-            _notifier = notifier;
+            return Ok(result);
         }
 
-        protected async Task<ActionResult> CustomResponseAsync(object result = null)
+        return BadRequest(new
         {
-            if (await IsOperationValid())
-            {
-                return Ok(result);
-            }
+            success = false,
+            errors = await GetErrors(),
+        });
+    }
 
-            return BadRequest(new
-            {
-                success = false,
-                errors = await GetErrors(),
-            });
+    protected async Task<ActionResult> CustomResponseAsync<TRequest>(IRequest<TRequest> request)
+    {
+        var response = await ExecuteAsync(request);
+        response.Errors = await GetErrors();
+
+        if (await IsOperationValid())
+        {
+            return Ok(response);
         }
 
+        return BadRequest(response);
+    }
 
-        protected async Task<ActionResult> CustomResponseAsync(ModelStateDictionary modelState)
+    protected async Task<Response> ExecuteAsync<TRequest>(IRequest<TRequest> request)
+    {
+        return await Mediator.Send(request) as Response ?? new Response();
+    }
+
+
+    protected Task<bool> IsOperationValid()
+    {
+        return Task.Run(() => !Notifier.IsNotified());
+    }
+
+    protected async Task<IEnumerable<string>> GetErrors()
+    {
+        foreach (var item in Notifier.GetNotifications())
         {
-            var errors = modelState.Values.SelectMany(e => e.Errors);
-            foreach (var error in errors)
-            {
-                await AddError(error.ErrorMessage);
-            }
-
-            return await CustomResponseAsync();
+            await AddError(item);
         }
-
-        protected async Task<ActionResult> CustomResponseAsync(ValidationResult validationResult)
-        {
-            foreach (var error in validationResult.Errors)
-            {
-                await AddError(error.ErrorMessage);
-            }
-
-            return await CustomResponseAsync();
-        }
-
-        protected Task<bool> IsOperationValid()
-        {
-            return Task.Run(() => !_notifier.IsNotified());
-        }
-
-        protected async Task<IEnumerable<string>> GetErrors()
-        {
-            foreach (var item in _notifier.GetNotifications())
-            {
-                await AddError(item);
-            }
-            _notifier.Clear();
-            return _errors;
-        }
-        protected Task AddError(string error)
-        {
-            return Task.Run(() => _errors.Add(error));
-        }
-        protected Task ClearErrors()
-        {
-            return Task.Run(() => _notifier.Clear());
-        }
-
+        Notifier.Clear();
+        return Errors;
+    }
+    protected Task AddError(string error)
+    {
+        return Task.Run(() => Errors.Add(error));
     }
 }

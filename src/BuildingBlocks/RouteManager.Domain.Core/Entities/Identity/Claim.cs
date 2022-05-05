@@ -1,12 +1,11 @@
-﻿namespace RouteManager.Domain.Core.Entities.Identity
-{
-    public class Claim
-    {
-        public Claim(string description)
-        {
-            Description = description;
-        }
+﻿namespace RouteManager.Domain.Core.Entities.Identity;
 
-        public string Description { get; set; }
+public class Claim
+{
+    public Claim(string description)
+    {
+        Description = description;
     }
+
+    private string Description { get; }
 }

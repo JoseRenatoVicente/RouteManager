@@ -4,28 +4,27 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 
-namespace RouteManager.WebAPI.Core.Identity
+namespace RouteManager.WebAPI.Core.Identity;
+
+public class SigningIssuerCertificate : IDisposable
 {
-    public class SigningIssuerCertificate : IDisposable
+    private readonly RSA _rsa;
+
+    public SigningIssuerCertificate()
     {
-        private readonly RSA rsa;
+        _rsa = RSA.Create();
+    }
 
-        public SigningIssuerCertificate()
-        {
-            rsa = RSA.Create();
-        }
+    public RsaSecurityKey GetIssuerSigningKey()
+    {
+        string publicXmlKey = File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Identity//public_key.xml"));
+        _rsa.FromXmlString(publicXmlKey);
 
-        public RsaSecurityKey GetIssuerSigningKey()
-        {
-            string publicXmlKey = File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Identity//public_key.xml"));
-            rsa.FromXmlString(publicXmlKey);
+        return new RsaSecurityKey(_rsa);
+    }
 
-            return new RsaSecurityKey(rsa);
-        }
-
-        public void Dispose()
-        {
-            rsa?.Dispose();
-        }
+    public void Dispose()
+    {
+        _rsa?.Dispose();
     }
 }

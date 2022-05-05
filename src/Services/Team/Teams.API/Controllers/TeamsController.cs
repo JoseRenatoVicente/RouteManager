@@ -1,88 +1,83 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Teams.API.Services;
+using Teams.Domain.Commands.Teams.Create;
+using Teams.Domain.Commands.Teams.Delete;
+using Teams.Domain.Commands.Teams.Update;
 using Teams.Domain.Entities.v1;
 
-namespace Teams.API.Controllers
+namespace Teams.API.Controllers;
+
+[Route("api/v1/[controller]")]
+public class TeamsController : BaseController
 {
-    [Route("api/v1/[controller]")]
-    public class TeamsController : BaseController
+    private readonly ITeamService _teamsService;
+
+    public TeamsController(ITeamService teamsService, IMediator mediator, INotifier notifier) : base(mediator, notifier)
     {
-        private readonly ITeamService _teamsService;
+        _teamsService = teamsService;
+    }
 
-        public TeamsController(INotifier notifier, ITeamService teamsService) : base(notifier)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Team>>> GetTeam()
+    {
+        return Ok(await _teamsService.GetTeamsAsync());
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Team>> GetTeam(string id)
+    {
+        var team = await _teamsService.GetTeamByIdAsync(id);
+
+        if (team == null)
         {
-            _teamsService = teamsService;
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeam()
+        return team;
+    }
+
+    [HttpGet("City/{nameCity}")]
+    public async Task<ActionResult<IEnumerable<Team>>> GetTeamByNameCity(string nameCity)
+    {
+        var team = await _teamsService.GetTeamByNameCityAsync(nameCity);
+
+        if (team == null)
         {
-            return Ok(await _teamsService.GetTeamsAsync());
+            return NotFound();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(string id)
+        return Ok(team);
+    }
+
+    [Authorize(Roles = "Equipes")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutTeam(string id, UpdateTeamCommand updateTeam)
+    {
+        if (id != updateTeam.Id)
         {
-            var team = await _teamsService.GetTeamByIdAsync(id);
-
-            if (team == null)
-            {
-                return NotFound();
-            }
-
-            return team;
+            return BadRequest();
         }
 
-        [HttpGet("City/{nameCity}")]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeamByNameCity(string nameCity)
-        {
-            var team = await _teamsService.GetTeamByNameCityAsync(nameCity);
+        return await CustomResponseAsync(updateTeam);
+    }
 
-            if (team == null)
-            {
-                return NotFound();
-            }
+    [Authorize(Roles = "Equipes")]
+    [HttpPost]
+    public async Task<ActionResult<Team>> PostTeam(CreateTeamCommand createTeam)
+    {
+        return await CustomResponseAsync(createTeam);
+    }
 
-            return Ok(team);
-        }
-
-        [Authorize(Roles = "Equipes")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam(string id, Team team)
-        {
-            if (id != team.Id)
-            {
-                return BadRequest();
-            }
-
-            return await CustomResponseAsync(await _teamsService.UpdateTeamAsync(team));
-        }
-
-        [Authorize(Roles = "Equipes")]
-        [HttpPost]
-        public async Task<ActionResult<Team>> PostTeam(Team team)
-        {
-            return await CustomResponseAsync(await _teamsService.AddTeamAsync(team));
-        }
-
-        [Authorize(Roles = "Equipes")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam(string id)
-        {
-            var team = await GetTeam(id);
-            if (team == null)
-            {
-                return NotFound();
-            }
-
-            await _teamsService.RemoveTeamAsync(id);
-
-            return await CustomResponseAsync();
-        }
+    [Authorize(Roles = "Equipes")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTeam([FromRoute] DeleteTeamCommand deleteTeam)
+    {
+        return await CustomResponseAsync(deleteTeam);
     }
 }

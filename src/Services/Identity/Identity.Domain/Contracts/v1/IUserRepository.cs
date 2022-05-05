@@ -1,9 +1,8 @@
 ﻿using Identity.Domain.Entities.v1;
 using RouteManager.Domain.Core.Repository;
 
-namespace Identity.Domain.Contracts.v1
+namespace Identity.Domain.Contracts.v1;
+
+public interface IUserRepository : IBaseRepository<User>
 {
-    public interface IUserRepository : IBaseRepository<User>
-    {
-    }
 }

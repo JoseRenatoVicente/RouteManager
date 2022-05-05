@@ -1,18 +1,17 @@
 ﻿using System;
 
-namespace Identity.API.Models
-{
-    public class RefreshToken
-    {
-        public RefreshToken()
-        {
-            Id = Guid.NewGuid();
-            Token = Guid.NewGuid();
-        }
+namespace Identity.API.Models;
 
-        public Guid Id { get; set; }
-        public string Username { get; set; }
-        public Guid Token { get; set; }
-        public DateTime ExpirationDate { get; set; }
+public record RefreshToken
+{
+    public RefreshToken()
+    {
+        Id = Guid.NewGuid();
+        Token = Guid.NewGuid();
     }
+
+    private Guid Id { get; }
+    public string Username { get; set; }
+    private Guid Token { get; }
+    public DateTime ExpirationDate { get; set; }
 }

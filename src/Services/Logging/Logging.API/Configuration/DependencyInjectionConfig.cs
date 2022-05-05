@@ -1,4 +1,4 @@
-﻿using AndreAirLines.Domain.Services;
+﻿using Logging.API.Services;
 using Logging.Domain.Contracts.v1;
 using Logging.Infra.Data.Repositories.v1;
 using Microsoft.Extensions.Configuration;
@@ -7,32 +7,30 @@ using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
 
-namespace Logging.API.Configuration
+namespace Logging.API.Configuration;
+
+public static class DependencyInjectionConfig
 {
-    public static class DependencyInjectionConfig
+    public static void ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        public static void ResolveDependencies(this IServiceCollection services, IConfiguration Configuration)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+        if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.AddSingleton(s =>
-            new MongoClient(Configuration.GetConnectionString("MongoDb"))
-            .GetDatabase(Configuration["ConnectionStrings:DatabaseName"]));
+        services.AddSingleton(new MongoClient(configuration.GetConnectionString("MongoDb"))
+            .GetDatabase(configuration["ConnectionStrings:DatabaseName"]));
 
-            //services
-            services.AddSingleton<ILogService, LogService>();
-            services.AddSingleton<IAspNetUser, AspNetUser>();
+        //services
+        services.AddSingleton<ILogService, LogService>();
+        services.AddSingleton<IAspNetUser, AspNetUser>();
 
-            //repositories
-            services.AddSingleton<ILogRepository, LogRepository>();
+        //repositories
+        services.AddSingleton<ILogRepository, LogRepository>();
 
-            //notification
-            services.AddSingleton<INotifier, Notifier>();
+        //notification
+        services.AddSingleton<INotifier, Notifier>();
 
-            //Identity
-            services.AddSingleton<IAspNetUser, AspNetUser>();
-            services.AddHttpContextAccessor();
+        //Identity
+        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddHttpContextAccessor();
 
-        }
     }
 }

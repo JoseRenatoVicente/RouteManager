@@ -8,34 +8,31 @@ using Routes.Domain.Contracts.v1;
 using Routes.Infra.Data.Repositories.v1;
 using System;
 
-namespace Routes.API.Configuration
-{
-    public static class DependencyInjectionConfig
-    {
-        public static void ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+namespace Routes.API.Configuration;
 
-            services.AddSingleton(s =>
-            new MongoClient(configuration.GetConnectionString("MongoDb"))
+public static class DependencyInjectionConfig
+{
+    public static void ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (services == null) throw new ArgumentNullException(nameof(services));
+
+        services.AddSingleton(new MongoClient(configuration.GetConnectionString("MongoDb"))
             .GetDatabase(configuration["ConnectionStrings:DatabaseName"]));
 
-            //services
-            services.AddHttpClient<GatewayService>();
-            services.AddSingleton<IRouteService, RouteService>();
+        //services
+        services.AddHttpClient<GatewayService>();
 
-            //repositories
-            services.AddSingleton<IRouteRepository, RouteRepository>();
-            services.AddSingleton<IExcelFileRepository, ExcelFileRepository>();
-            services.AddSingleton<IExcelFileService, ExcelFileService>();
+        //repositories
+        services.AddSingleton<IRouteRepository, RouteRepository>();
+        services.AddSingleton<IExcelFileRepository, ExcelFileRepository>();
+        services.AddSingleton<IExcelFileService, ExcelFileService>();
 
-            //notification
-            services.AddSingleton<INotifier, Notifier>();
+        //notification
+        services.AddSingleton<INotifier, Notifier>();
 
-            //Identity
-            services.AddSingleton<IAspNetUser, AspNetUser>();
-            services.AddHttpContextAccessor();
+        //Identity
+        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddHttpContextAccessor();
 
-        }
     }
 }

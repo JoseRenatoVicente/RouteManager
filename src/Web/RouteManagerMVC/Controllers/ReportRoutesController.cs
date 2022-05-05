@@ -1,130 +1,110 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.Util;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Controllers.Base;
 using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
-using NPOI.Util;
+using System.Threading.Tasks;
 
-namespace RouteManagerMVC.Controllers
+namespace RouteManagerMVC.Controllers;
+
+public class ReportRoutesController : MvcBaseController
 {
-    public class ReportRoutesController : MVCBaseController
+    private readonly IReportRouteService _routeService;
+
+    public ReportRoutesController(IReportRouteService routeService, INotifier notifier) : base(notifier)
     {
-        private readonly IReportRouteService _routeService;
+        _routeService = routeService;
+    }
 
-        public ReportRoutesController(IReportRouteService routeService, INotifier notifier) : base(notifier)
+    public async Task<IActionResult> BatchRouteUpload(IFormFile file)
+    {
+        var report = await _routeService.RouteUpload(file);
+
+        if (await IsOperationValid())
         {
-            _routeService = routeService;
+            return RedirectToAction("Index");
+        }
+        TempData["Errors"] = await GetErrors();
+
+        return await CustomResponseAsync(report);
+    }
+
+    public async Task<IActionResult> Import(string id)
+    {
+        return View(await _routeService.GetRouteByIdAsync(id));
+    }
+
+    public async Task<IActionResult> ExportToDocx(ReportRouteViewModel reportRoute)
+    {
+        var report = await _routeService.GetRouteByIdAsync(reportRoute.UploadRequest.ExcelFileId);
+        reportRoute.Cities = report.Cities;
+        reportRoute.Teams = report.Teams;
+        reportRoute.ExcelFile = report.ExcelFile;
+
+        IEnumerable<string> columns = new[] { "OS", "BASE", "SERVIÇO", "ENDEREÇO", "NUMERO", "COMPLEMENTO", "BAIRRO", "CEP" };
+
+        reportRoute.Columns = reportRoute.ExcelFile.Columns.Copy();
+        foreach (var item in columns)
+        {
+            reportRoute.Columns.Remove(item);
         }
 
-        public async Task<IActionResult> BatchRouteUpload(IFormFile file)
+        var fileDocx = await _routeService.ExportToDocx(reportRoute.UploadRequest);
+
+        if (await IsOperationValid())
         {
-            var report = await _routeService.RouteUpload(file);
+            return File(fileDocx, "application/octet-stream", "Routes" + DateTime.Now.ToString("dd_MM_yyyy") + ".docx");
+        }
+        TempData["Errors"] = await GetErrors();
 
-            if (await IsOperationValid())
-            {
-                return RedirectToAction("Index");
-            }
-            TempData["Errors"] = await GetErrors();
+        return View("Import", reportRoute);
+    }
 
-            return await CustomResponseAsync(report);
+    public async Task<IActionResult> Index()
+    {
+        return View(await _routeService.GetRoutesAsync());
+    }
+
+    public async Task<IActionResult> Details(string id)
+    {
+        if (id == null) return NotFound();
+
+        var route = await _routeService.GetRouteByIdAsync(id);
+
+        if (route == null) return NotFound();
+
+        return View(route);
+    }
+
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> Import(string id)
+        var route = await _routeService.GetRouteByIdAsync(id);
+
+        if (route == null)
         {
-            return View(await _routeService.GetRouteByIdAsync(id));
+            return NotFound();
         }
 
-        public async Task<IActionResult> ExportToDocx(ReportRouteViewModel reportRoute)
-        {
-            var report = await _routeService.GetRouteByIdAsync(reportRoute.UploadRequest.ExcelFileId);
-            reportRoute.Cities = report.Cities;
-            reportRoute.Teams = report.Teams;
-            reportRoute.ExcelFile = report.ExcelFile;
+        return View(route);
+    }
 
-            IEnumerable<string> columns = new string[] { "OS", "BASE", "SERVIÇO", "ENDEREÇO", "NUMERO", "COMPLEMENTO", "BAIRRO", "CEP" };
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(string id)
+    {
+        var route = await _routeService.GetRouteByIdAsync(id);
 
-            reportRoute.Columns = reportRoute.ExcelFile.Columns.Copy();
-            foreach (var item in columns)
-            {
-                reportRoute.Columns.Remove(item);
-            }
+        await _routeService.RemoveRouteAsync(id);
 
-            var fileDocx = await _routeService.ExportToDocx(reportRoute.UploadRequest);
-
-            if (await IsOperationValid())
-            {
-                return File(fileDocx, "application/octet-stream", "Routes" + DateTime.Now.ToString("dd_MM_yyyy") + ".docx");
-            }
-            TempData["Errors"] = await GetErrors();
-
-            return View("Import", reportRoute);
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            return View(await _routeService.GetRoutesAsync());
-        }
-
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null) return NotFound();
-
-            var route = await _routeService.GetRouteByIdAsync(id);
-
-            if (route == null) return NotFound();
-
-            return View(route);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var route = await _routeService.GetRouteByIdAsync(id);
-            if (route == null)
-            {
-                return NotFound();
-            }
-            return View(route);
-        }
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var route = await _routeService.GetRouteByIdAsync(id);
-
-            if (route == null)
-            {
-                return NotFound();
-            }
-
-            return View(route);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var route = await _routeService.GetRouteByIdAsync(id);
-
-            await _routeService.RemoveRouteAsync(id);
-
-            return await CustomResponseAsync(route);
-        }
+        return await CustomResponseAsync(route);
     }
 }

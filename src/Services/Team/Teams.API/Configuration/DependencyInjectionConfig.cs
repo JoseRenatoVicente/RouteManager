@@ -8,36 +8,34 @@ using Teams.API.Services;
 using Teams.Domain.Contracts.v1;
 using Teams.Infra.Data.Repositories.v1;
 
-namespace Teams.API.Configuration
-{
-    public static class DependencyInjectionConfig
-    {
-        public static void ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+namespace Teams.API.Configuration;
 
-            services.AddSingleton(s =>
-            new MongoClient(configuration.GetConnectionString("MongoDb"))
+public static class DependencyInjectionConfig
+{
+    public static void ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (services == null) throw new ArgumentNullException(nameof(services));
+
+        services.AddSingleton(new MongoClient(configuration.GetConnectionString("MongoDb"))
             .GetDatabase(configuration["ConnectionStrings:DatabaseName"]));
 
-            //services
-            services.AddHttpClient<GatewayService>();
-            services.AddSingleton<ICityService, CityService>();
-            services.AddSingleton<ITeamService, TeamService>();
-            services.AddSingleton<IPersonService, PersonService>();
+        //services
+        services.AddHttpClient<GatewayService>();
+        services.AddSingleton<ICityService, CityService>();
+        services.AddSingleton<ITeamService, TeamService>();
+        services.AddSingleton<IPersonService, PersonService>();
 
-            //repositories
-            services.AddSingleton<ICityRepository, CityRepository>();
-            services.AddSingleton<ITeamRepository, TeamRepository>();
-            services.AddSingleton<IPersonRepository, PersonRepository>();
+        //repositories
+        services.AddSingleton<ICityRepository, CityRepository>();
+        services.AddSingleton<ITeamRepository, TeamRepository>();
+        services.AddSingleton<IPersonRepository, PersonRepository>();
 
-            //notification
-            services.AddSingleton<INotifier, Notifier>();
+        //notification
+        services.AddSingleton<INotifier, Notifier>();
 
-            //Identity
-            services.AddSingleton<IAspNetUser, AspNetUser>();
-            services.AddHttpContextAccessor();
+        //Identity
+        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddHttpContextAccessor();
 
-        }
     }
 }

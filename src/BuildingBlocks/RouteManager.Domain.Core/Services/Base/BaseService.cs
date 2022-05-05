@@ -2,39 +2,38 @@
 using FluentValidation.Results;
 using RouteManager.WebAPI.Core.Notifications;
 
-namespace RouteManager.Domain.Core.Services.Base
+namespace RouteManager.Domain.Core.Services.Base;
+
+public abstract class BaseService
 {
-    public abstract class BaseService
+    private readonly INotifier _notifier;
+
+    protected BaseService(INotifier notifier)
     {
-        private readonly INotifier _notifier;
+        _notifier = notifier;
+    }
 
-        protected BaseService(INotifier notifier)
+    private void Notification(ValidationResult validationResult)
+    {
+        foreach (var error in validationResult.Errors)
         {
-            _notifier = notifier;
+            Notification(error.ErrorMessage);
         }
+    }
 
-        protected void Notification(ValidationResult validationResult)
-        {
-            foreach (var error in validationResult.Errors)
-            {
-                Notification(error.ErrorMessage);
-            }
-        }
+    protected void Notification(string message)
+    {
+        _notifier.Handle(message);
+    }
 
-        protected void Notification(string message)
-        {
-            _notifier.Handle(message);
-        }
+    protected bool ExecuteValidation<TValidation, TEntity>(TValidation validation, TEntity entity) where TValidation : AbstractValidator<TEntity>
+    {
+        var validator = validation.Validate(entity);
 
-        protected bool ExecuteValidation<TValidation, TEntity>(TValidation validation, TEntity entity) where TValidation : AbstractValidator<TEntity>
-        {
-            var validator = validation.Validate(entity);
+        if (validator.IsValid) return true;
 
-            if (validator.IsValid) return true;
+        Notification(validator);
 
-            Notification(validator);
-
-            return false;
-        }
+        return false;
     }
 }

@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Logging.Domain.Entities.v1;
 
-namespace AndreAirLines.Domain.Services
+namespace Logging.API.Services;
+
+public interface ILogService
 {
-    public interface ILogService
-    {
-        Task<Log> AddLogAsync(Log log);
-        Task<Log> GetLogByIdAsync(string id);
-        Task<IEnumerable<Log>> GetLogsAsync();
-        Task RemoveLogAsync(Log log);
-        Task RemoveLogAsync(string id);
-        Task<Log> UpdateLogAsync(Log log);
-    }
+    Task<Log> GetLogByIdAsync(string id);
+    Task<IEnumerable<Log>> GetLogsAsync();
+    Task<IEnumerable<Log>> GetLogsByEntityIdAsync(string entityId);
 }

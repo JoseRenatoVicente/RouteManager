@@ -3,12 +3,11 @@ using Identity.Domain.Entities.v1;
 using MongoDB.Driver;
 using RouteManager.Domain.Core.Repository;
 
-namespace Identity.Infra.Data.Repositories.v1
+namespace Identity.Infra.Data.Repositories.v1;
+
+public class RoleRepository : BaseRepository<Role>, IRoleRepository
 {
-    public class RoleRepository : BaseRepository<Role>, IRoleRepository
+    public RoleRepository(IMongoDatabase database) : base(database)
     {
-        public RoleRepository(IMongoDatabase database) : base(database)
-        {
-        }
     }
 }

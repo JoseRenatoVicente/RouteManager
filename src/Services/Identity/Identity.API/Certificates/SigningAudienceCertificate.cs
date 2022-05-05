@@ -3,30 +3,29 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Identity.API.Certificates
+namespace Identity.API.Certificates;
+
+public class SigningAudienceCertificate : IDisposable
 {
-    public class SigningAudienceCertificate : IDisposable
+    private readonly RSA _rsa;
+
+    public SigningAudienceCertificate()
     {
-        private readonly RSA rsa;
+        _rsa = RSA.Create();
+    }
 
-        public SigningAudienceCertificate()
-        {
-            rsa = RSA.Create();
-        }
+    public SigningCredentials GetAudienceSigningKey()
+    {
+        string privateXmlKey = File.ReadAllText("./Keys/private_key.xml");
+        _rsa.FromXmlString(privateXmlKey);
 
-        public SigningCredentials GetAudienceSigningKey()
-        {
-            string privateXmlKey = File.ReadAllText("./Keys/private_key.xml");
-            rsa.FromXmlString(privateXmlKey);
+        return new SigningCredentials(
+            key: new RsaSecurityKey(_rsa),
+            algorithm: SecurityAlgorithms.RsaSha256);
+    }
 
-            return new SigningCredentials(
-                key: new RsaSecurityKey(rsa),
-                algorithm: SecurityAlgorithms.RsaSha256);
-        }
-
-        public void Dispose()
-        {
-            rsa?.Dispose();
-        }
+    public void Dispose()
+    {
+        _rsa?.Dispose();
     }
 }

@@ -1,4 +1,4 @@
-﻿using RouteManager.Domain.Core.Entities;
+﻿using Logging.Domain.Entities.v1;
 using RouteManager.Domain.Core.Repository;
 
 namespace Logging.Domain.Contracts.v1;

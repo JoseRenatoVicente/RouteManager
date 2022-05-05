@@ -1,4 +1,6 @@
+using MediatR;
 using Routes.API.Configuration;
+using Routes.Domain.Commands.ExcelFiles.Report;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ builder.Services.ResolveDependencies(builder.Configuration);
 builder.Services.AddMvcConfiguration();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerConfiguration();
+builder.Services.AddMediatR(typeof(ReportRouteCommand));
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

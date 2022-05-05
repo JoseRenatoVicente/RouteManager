@@ -1,16 +1,15 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace RouteManager.Domain.Core.Entities.Base
-{
-    public abstract class EntityBase
-    {
-        protected EntityBase()
-        {
-            Id = ObjectId.GenerateNewId().ToString();
-        }
+namespace RouteManager.Domain.Core.Entities.Base;
 
-        [BsonId, BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+public abstract class EntityBase
+{
+    protected EntityBase()
+    {
+        Id = ObjectId.GenerateNewId().ToString();
     }
+
+    [BsonId, BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
 }

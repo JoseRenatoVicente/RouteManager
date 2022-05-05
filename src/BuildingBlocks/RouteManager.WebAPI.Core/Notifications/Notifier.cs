@@ -1,35 +1,34 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace RouteManager.WebAPI.Core.Notifications
+namespace RouteManager.WebAPI.Core.Notifications;
+
+public class Notifier : INotifier
 {
-    public class Notifier : INotifier
+    private readonly ICollection<string> _notifications;
+
+    public Notifier()
     {
-        private ICollection<string> _notifications;
+        _notifications = new List<string>();
+    }
 
-        public Notifier()
-        {
-            _notifications = new List<string>();
-        }
+    public void Handle(string notification)
+    {
+        _notifications.Add(notification);
+    }
 
-        public void Handle(string notification)
-        {
-            _notifications.Add(notification);
-        }
+    public IEnumerable<string> GetNotifications()
+    {
+        return _notifications;
+    }
 
-        public IEnumerable<string> GetNotifications()
-        {
-            return _notifications;
-        }
+    public bool IsNotified()
+    {
+        return _notifications.Any();
+    }
 
-        public bool IsNotified()
-        {
-            return _notifications.Any();
-        }
-
-        public void Clear()
-        {
-            _notifications.Clear();
-        }
+    public void Clear()
+    {
+        _notifications.Clear();
     }
 }

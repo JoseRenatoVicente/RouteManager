@@ -1,73 +1,69 @@
 ﻿using Identity.API.Services;
 using Identity.Domain.Entities.v1;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Identity.Domain.Commands.Users.Create;
+using Identity.Domain.Commands.Users.Delete;
+using Identity.Domain.Commands.Users.Update;
 
-namespace Identity.API.Controllers
+namespace Identity.API.Controllers;
+
+[Route("api/v1/[controller]")]
+public class UsersController : BaseController
 {
-    [Route("api/v1/[controller]")]
-    public class UsersController : BaseController
+    private readonly IUserService _userService;
+
+    public UsersController(IUserService userService, IMediator mediator, INotifier notifier) : base(mediator, notifier)
     {
-        private readonly IUserService _userService;
+        _userService = userService;
+    }
 
-        public UsersController(IUserService userService, INotifier notifier) : base(notifier)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<User>>> GetUser()
+    {
+        return Ok(await _userService.GetUsersAsync());
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<User>> GetUser(string id)
+    {
+        var user = await _userService.GetUserByIdAsync(id);
+
+        if (user == null)
         {
-            _userService = userService;
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        return user;
+    }
+
+    [Authorize(Roles = "Usuários")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutUser(string id, UpdateUserCommand updateUserCommand)
+    {
+        if (id != updateUserCommand.Id)
         {
-            return Ok(await _userService.GetUsersAsync());
+            return BadRequest();
         }
+        return await CustomResponseAsync(updateUserCommand);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(string id)
-        {
-            var user = await _userService.GetUserByIdAsync(id);
+    [Authorize(Roles = "Usuários")]
+    [HttpPost]
+    public async Task<ActionResult<User>> PostUser(CreateUserCommand createUserCommand)
+    {
+        return await CustomResponseAsync(createUserCommand);
+    }
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
-
-        [Authorize(Roles = "Usuários")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-            return await CustomResponseAsync(await _userService.UpdateUserAsync(user));
-        }
-
-        [Authorize(Roles = "Usuários")]
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            return await CustomResponseAsync(await _userService.AddUserAsync(user));
-        }
-
-        [Authorize(Roles = "Usuários")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DisableUser(string id)
-        {
-            var user = await GetUser(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            await _userService.DisableUserAsync(id);
-
-            return await CustomResponseAsync();
-        }
+    [Authorize(Roles = "Usuários")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DisableUser([FromRoute] DeleteUserCommand deleteUserCommand)
+    {
+        return await CustomResponseAsync(deleteUserCommand);
     }
 }

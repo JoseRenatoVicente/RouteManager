@@ -6,47 +6,41 @@ using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Threading.Tasks;
 
-namespace RouteManagerMVC.Controllers
+namespace RouteManagerMVC.Controllers;
+
+public class AuthController : MvcBaseController
 {
-    public class AuthController : MVCBaseController
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService, INotifier notifier) : base(notifier)
     {
-        private IAuthService _authService;
+        _authService = authService;
+    }
 
-        public AuthController(IAuthService authService, INotifier notifier) : base(notifier)
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<IActionResult> Login(UserLogin userLogin)
+    {
+        var accessToken = await _authService.LoginAsync(userLogin);
+        if (accessToken != null)
         {
-            _authService = authService;
+            return RedirectToAction("Index", "ReportRoutes");
         }
+        else
+        {
+            return await CustomResponseAsync(userLogin, "Login");
+        }
+    }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Login(UserLogin userLogin)
-        {
-            var accessToken = await _authService.LoginAsync(userLogin);
-            if (accessToken != null)
-            {
-                return RedirectToAction("Index", "ReportRoutes");
-            }
-            else
-            {
-                return await CustomResponseAsync(userLogin, "Login");
-            }
-        }
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        await _authService.LogoutAsync();
+        return RedirectToAction("Login");
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            await _authService.LogoutAsync();
-            return RedirectToAction("Login");
-        }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        public IActionResult Register()
-        {
-            return View();
-        }
+    public IActionResult Login()
+    {
+        return View();
     }
 }

@@ -1,79 +1,76 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Teams.API.Services;
+using Teams.Domain.Commands.People.Create;
+using Teams.Domain.Commands.People.Delete;
+using Teams.Domain.Commands.People.Update;
 using Teams.Domain.Entities.v1;
 
-namespace Teams.API.Controllers
+namespace Teams.API.Controllers;
+
+[Route("api/v1/[controller]")]
+public class PeopleController : BaseController
 {
-    [Route("api/v1/[controller]")]
-    public class PeopleController : BaseController
+    private readonly IPersonService _personsService;
+
+    public PeopleController(IPersonService personsService, IMediator mediator, INotifier notifier) : base(mediator, notifier)
     {
-        private readonly IPersonService _personsService;
+        _personsService = personsService;
+    }
 
-        public PeopleController(INotifier notifier, IPersonService personsService) : base(notifier)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Person>>> GetPerson(bool available = false)
+    {
+        return Ok(await _personsService.GetPersonsAsync(available));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Person>> GetPerson(string id)
+    {
+        var person = await _personsService.GetPersonByIdAsync(id);
+
+        if (person == null)
         {
-            _personsService = personsService;
+            return NotFound();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPerson(bool available = false)
+        return person;
+    }
+
+    [HttpGet("list/{ids}")]
+    public async Task<ActionResult<Person>> GetPersons(string ids)
+    {
+        return Ok(await _personsService.GetPersonsByIdsAsync(ids));
+    }
+
+    [Authorize(Roles = "Pessoas")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutPerson(string id, UpdatePersonCommand updatePerson)
+    {
+        if (id != updatePerson.Id)
         {
-            return Ok(await _personsService.GetPersonsAsync(available));
+            return BadRequest();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(string id)
-        {
-            var person = await _personsService.GetPersonByIdAsync(id);
+        return await CustomResponseAsync(updatePerson);
+    }
 
-            if (person == null)
-            {
-                return NotFound();
-            }
+    [Authorize(Roles = "Pessoas")]
+    [HttpPost]
+    public async Task<ActionResult<Person>> PostPerson(CreatePersonCommand createPerson)
+    {
+        return await CustomResponseAsync(createPerson);
+    }
 
-            return person;
-        }
-
-        [HttpGet("list/{ids}")]
-        public async Task<ActionResult<Person>> GetPersons(string ids)
-        {
-            return Ok(await _personsService.GetPersonsByIdsAsync(ids));
-        }
-
-        [Authorize(Roles = "Pessoas")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(string id, Person person)
-        {
-            if (id != person.Id)
-            {
-                return BadRequest();
-            }
-
-            return await CustomResponseAsync(await _personsService.UpdatePersonAsync(person));
-        }
-
-        [Authorize(Roles = "Pessoas")]
-        [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
-        {
-            return await CustomResponseAsync(await _personsService.AddPersonAsync(person));
-        }
-
-        [Authorize(Roles = "Pessoas")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson(string id)
-        {
-            var person = await GetPerson(id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            return await CustomResponseAsync(await _personsService.RemovePersonAsync(id));
-        }
+    [Authorize(Roles = "Pessoas")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeletePerson([FromRoute] DeletePersonCommand deletePerson)
+    {
+        return await CustomResponseAsync(deletePerson);
     }
 }

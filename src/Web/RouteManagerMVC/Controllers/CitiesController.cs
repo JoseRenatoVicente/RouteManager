@@ -5,99 +5,98 @@ using RouteManagerMVC.Models;
 using RouteManagerMVC.Services;
 using System.Threading.Tasks;
 
-namespace RouteManagerMVC.Controllers
+namespace RouteManagerMVC.Controllers;
+
+public class CitiesController : MvcBaseController
 {
-    public class CitiesController : MVCBaseController
+    private readonly ICityService _cityService;
+
+    public CitiesController(ICityService cityService, INotifier notifier) : base(notifier)
     {
-        private readonly ICityService _cityService;
+        _cityService = cityService;
+    }
 
-        public CitiesController(ICityService cityService, INotifier notifier) : base(notifier)
+    public async Task<IActionResult> Index()
+    {
+        return View(await _cityService.GetCitysAsync());
+    }
+
+    public async Task<IActionResult> Details(string id)
+    {
+        if (id == null)
         {
-            _cityService = cityService;
+            return NotFound();
         }
 
-        public async Task<IActionResult> Index()
+        var city = await _cityService.GetCityByIdAsync(id);
+        if (city == null)
         {
-            return View(await _cityService.GetCitysAsync());
+            return NotFound();
         }
 
-        public async Task<IActionResult> Details(string id)
+        return View(city);
+    }
+
+    public IActionResult Create()
+    {
+        return View();
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Name,State,Id")] CityViewModel city)
+    {
+        return await CustomResponseAsync(await _cityService.AddCityAsync(city));
+    }
+
+    public async Task<IActionResult> Edit(string id)
+    {
+        if (id == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var city = await _cityService.GetCityByIdAsync(id);
-            if (city == null)
-            {
-                return NotFound();
-            }
-
-            return View(city);
+            return NotFound();
         }
 
-        public IActionResult Create()
+        var city = await _cityService.GetCityByIdAsync(id);
+        if (city == null)
         {
-            return View();
+            return NotFound();
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,State,Id")] CityViewModel city)
+        return View(city);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(string id, [Bind("Name,State,Id")] CityViewModel city)
+    {
+        if (id != city.Id)
         {
-            return await CustomResponseAsync(await _cityService.AddCityAsync(city));
+            return NotFound();
         }
+        return await CustomResponseAsync(await _cityService.UpdateCityAsync(city));
+    }
 
-        public async Task<IActionResult> Edit(string id)
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (id == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var city = await _cityService.GetCityByIdAsync(id);
-            if (city == null)
-            {
-                return NotFound();
-            }
-            return View(city);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,State,Id")] CityViewModel city)
-        {
-            if (id != city.Id)
-            {
-                return NotFound();
-            }
-            return await CustomResponseAsync(await _cityService.UpdateCityAsync(city));
+            return NotFound();
         }
 
-        public async Task<IActionResult> Delete(string id)
+        var city = await _cityService.GetCityByIdAsync(id);
+        if (city == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var city = await _cityService.GetCityByIdAsync(id);
-            if (city == null)
-            {
-                return NotFound();
-            }
-            return View(city);
+            return NotFound();
         }
+        return View(city);
+    }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var city = await _cityService.GetCityByIdAsync(id);
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(string id)
+    {
+        var city = await _cityService.GetCityByIdAsync(id);
 
-            await _cityService.RemoveCityAsync(id);
+        await _cityService.RemoveCityAsync(id);
 
-            return await CustomResponseAsync(city);
-        }
+        return await CustomResponseAsync(city);
     }
 }

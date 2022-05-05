@@ -46,7 +46,7 @@
                                 <select class="form-control" id="PeopleIds" multiple="multiple" name="PeopleIds">
                                     @foreach (var person in Model.People)
                                     {
-                                        <option selected="@( Model.Team.People != null ? Model.Team.People.Where(c => c.Id == person.Id).FirstOrDefault() != null : false)" value="@person.Id">@person.Name</option>
+                                        <option selected="@(Model.Team.People != null && Model.Team.People.FirstOrDefault(c => c.Id == person.Id) != null)" value="@person.Id">@person.Name</option>
                                     }
                                 </select>
     

@@ -1,9 +1,8 @@
-﻿namespace RouteManager.Domain.Core.Entities.Enums
+﻿namespace RouteManager.Domain.Core.Entities.Enums;
+
+public enum Operation
 {
-    public enum Operation
-    {
-        Create = 0,
-        Delete = 1,
-        Update = 2
-    }
+    Create = 0,
+    Delete = 1,
+    Update = 2
 }

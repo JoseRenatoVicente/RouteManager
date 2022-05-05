@@ -10,65 +10,66 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace RouteManagerMVC.Services
+namespace RouteManagerMVC.Services;
+
+public interface IAuthService
 {
-    public interface IAuthService
+    Task<UserResponseLogin> LoginAsync(UserLogin userLogin);
+    Task LogoutAsync();
+    Task<UserResponseLogin> SaveTokenAsync(UserResponseLogin responseLogin);
+}
+
+public class AuthService : BaseService, IAuthService
+{
+    private readonly GatewayService _gatewayService;
+    private readonly IAuthenticationService _authenticationService;
+    private readonly IAspNetUser _aspNetUser;
+
+    public AuthService(GatewayService gatewayService, IAuthenticationService authenticationService, IAspNetUser aspNetUser, INotifier notifier) : base(notifier)
     {
-        Task<UserResponseLogin> LoginAsync(UserLogin userLogin);
-        Task LogoutAsync();
-        Task<UserResponseLogin> SaveTokenAsync(UserResponseLogin responseLogin);
+        _gatewayService = gatewayService;
+        _authenticationService = authenticationService;
+        _aspNetUser = aspNetUser;
     }
 
-    public class AuthService : BaseService, IAuthService
+    public async Task<UserResponseLogin> LoginAsync(UserLogin userLogin)
     {
-        private GatewayService _gatewayService;
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IAspNetUser _aspNetUser;
-
-        public AuthService(GatewayService gatewayService, IAuthenticationService authenticationService, IAspNetUser aspNetUser, INotifier notifier) : base(notifier)
-        {
-            _gatewayService = gatewayService;
-            _authenticationService = authenticationService;
-            _aspNetUser = aspNetUser;
-        }
-
-        public async Task<UserResponseLogin> LoginAsync(UserLogin userLogin)
-        {
-            var userResponseLogin = await _gatewayService.PostAsync<UserResponseLogin>("Identity/api/v1/Auth/Login", userLogin);
-            return userResponseLogin == null ? userResponseLogin : await SaveTokenAsync(userResponseLogin);
-        }
-
-        public async Task<UserResponseLogin> SaveTokenAsync(UserResponseLogin responseLogin)
-        {
-            var claims = new List<Claim>();
-            claims.Add(new Claim("JWT", responseLogin.AccessToken));
-            claims.Add(new Claim("RefreshToken", responseLogin.RefreshToken.ToString()));
-            claims.Add(new Claim("Name", responseLogin.UserToken.Name));
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties
-            {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8),
-                IsPersistent = true
-            };
-
-            await _authenticationService.SignInAsync(
-                    _aspNetUser.GetHttpContext(),
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
-                    authProperties);
-            return responseLogin;
-        }
-
-
-        public async Task LogoutAsync()
-        {
-            await _authenticationService.SignOutAsync(
-                _aspNetUser.GetHttpContext(),
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                null);
-        }
-
+        var userResponseLogin = await _gatewayService.PostAsync<UserResponseLogin>("Identity/api/v1/Auth/Login", userLogin);
+        return userResponseLogin == null ? null : await SaveTokenAsync(userResponseLogin);
     }
+
+    public async Task<UserResponseLogin> SaveTokenAsync(UserResponseLogin responseLogin)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim("JWT", responseLogin.AccessToken),
+            new Claim("RefreshToken", responseLogin.RefreshToken.ToString()),
+            new Claim("Name", responseLogin.UserToken.Name)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8),
+            IsPersistent = true
+        };
+
+        await _authenticationService.SignInAsync(
+            _aspNetUser.GetHttpContext(),
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity),
+            authProperties);
+        return responseLogin;
+    }
+
+
+    public async Task LogoutAsync()
+    {
+        await _authenticationService.SignOutAsync(
+            _aspNetUser.GetHttpContext(),
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            null);
+    }
+
 }

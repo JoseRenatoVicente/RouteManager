@@ -1,4 +1,7 @@
+using MediatR;
+using System;
 using Teams.API.Configuration;
+using Teams.Domain.Commands.Cities.Create;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,8 @@ builder.Services.ResolveDependencies(builder.Configuration);
 builder.Services.AddMvcConfiguration();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerConfiguration();
+builder.Services.AddMediatR(typeof(CreateCityCommand));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
