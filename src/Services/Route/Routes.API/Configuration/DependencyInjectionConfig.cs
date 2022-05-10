@@ -2,7 +2,6 @@
 using MongoDB.Driver;
 using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.Domain.Core.Services;
-using RouteManager.WebAPI.Core.Notifications;
 using Routes.API.Services;
 using Routes.Domain.Contracts.v1;
 using Routes.Infra.Data.Repositories.v1;
@@ -23,15 +22,12 @@ public static class DependencyInjectionConfig
         services.AddHttpClient<GatewayService>();
 
         //repositories
-        services.AddSingleton<IRouteRepository, RouteRepository>();
-        services.AddSingleton<IExcelFileRepository, ExcelFileRepository>();
-        services.AddSingleton<IExcelFileService, ExcelFileService>();
-
-        //notification
-        services.AddSingleton<INotifier, Notifier>();
-
+        services.AddScoped<IRouteRepository, RouteRepository>();
+        services.AddScoped<IExcelFileRepository, ExcelFileRepository>();
+        services.AddScoped<IExcelFileService, ExcelFileService>();
+        
         //Identity
-        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();
 
     }

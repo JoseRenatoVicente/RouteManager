@@ -2,8 +2,8 @@
 
 public class AppSettings
 {
-    public int ExpirationHours { get; set; }
-    public string Issuer { get; set; }
-    public string Audience { get; set; }
-    public int RefreshTokenExpiration { get; set; }
+    public int ExpirationHours { get; init; }
+    public string Issuer { get; init; }
+    public string Audience { get; init; }
+    public int RefreshTokenExpiration { get; init; }
 }

@@ -3,6 +3,7 @@ using RouteManager.Domain.Core.Services;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Services;
 using System;
+using Polly;
 
 namespace RouteManagerMVC.Configuration;
 
@@ -13,21 +14,23 @@ public static class DependencyInjectionConfig
         if (services == null) throw new ArgumentNullException(nameof(services));
 
         //services
-        services.AddHttpClient<GatewayService>();
+        services.AddHttpClient<GatewayService>()
+            .AddTransientHttpErrorPolicy(policy=> policy.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds((600))));
+
         services.AddScoped<IAuthService, AuthService>();
-        services.AddSingleton<ICityService, CityService>();
-        services.AddSingleton<IPersonService, PersonService>();
-        services.AddSingleton<ITeamService, TeamService>();
-        services.AddSingleton<IReportRouteService, ReportRouteService>();
-        services.AddSingleton<IUserService, UserService>();
-        services.AddSingleton<IRoleService, RoleService>();
-        services.AddSingleton<IAccountService, AccountService>();
+        services.AddScoped<ICityService, CityService>();
+        services.AddScoped<IPersonService, PersonService>();
+        services.AddScoped<ITeamService, TeamService>();
+        services.AddScoped<IReportRouteService, ReportRouteService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IAccountService, AccountService>();
 
         //notification
-        services.AddSingleton<INotifier, Notifier>();
+        services.AddScoped<INotifier, Notifier>();
 
         //Identity
-        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();
 
     }

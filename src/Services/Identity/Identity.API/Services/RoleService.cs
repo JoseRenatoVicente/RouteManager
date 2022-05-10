@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Identity.API.Services;
 
-public class RoleService :IRoleService
+public class RoleService : IRoleService
 {
 
     private readonly IRoleRepository _roleRepository;
@@ -39,5 +39,5 @@ public class RoleService :IRoleService
 
     public async Task<Role> GetRoleByIdAsync(string id) =>
         await _roleRepository.FindAsync(c => c.Id == id);
-    
+
 }

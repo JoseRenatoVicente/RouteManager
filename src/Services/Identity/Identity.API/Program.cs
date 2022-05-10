@@ -1,7 +1,6 @@
 using Identity.API.Configurations;
 using Identity.API.Services;
-using Identity.Domain.Commands.Roles.Create;
-using MediatR;
+using RouteManager.Domain.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +9,10 @@ builder.Services.AddIdentityConfig(builder.Configuration);
 builder.Services.AddMvcConfiguration();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerConfiguration();
-builder.Services.AddMediatR(typeof(CreateRoleCommand));
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddDomainContext();
 
 var app = builder.Build();
-var seederService = app.Services.GetService<SeederService>();
+//var seederService = app.Services.GetService<SeederService>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -22,7 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerSetup();
 }
 
-seederService?.Seed();
+//seederService?.Seed();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthConfiguration();

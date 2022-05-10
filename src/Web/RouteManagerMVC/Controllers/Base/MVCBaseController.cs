@@ -11,15 +11,15 @@ namespace RouteManagerMVC.Controllers.Base;
 //[SecurityHeaders]
 public class MvcBaseController : Controller
 {
-    private readonly ICollection<string> Errors = new List<string>();
-    private readonly INotifier Notifier;
+    private readonly ICollection<string> _errors = new List<string>();
+    private readonly INotifier _notifier;
 
     public MvcBaseController(INotifier notifier)
     {
-        Notifier = notifier;
+        _notifier = notifier;
     }
 
-    protected async Task<ActionResult> CustomResponseAsync(object result = null, string actionName = "Index")
+    protected async Task<IActionResult> CustomResponseAsync(object result = null, string actionName = "Index")
     {
         if (await IsOperationValid())
         {
@@ -30,7 +30,7 @@ public class MvcBaseController : Controller
         return View(result);
     }
 
-    protected async Task<ActionResult> CustomResponseAsync(ModelStateDictionary modelState)
+    protected async Task<IActionResult> CustomResponseAsync(ModelStateDictionary modelState)
     {
         var erros = modelState.Values.SelectMany(e => e.Errors);
         foreach (var erro in erros)
@@ -41,7 +41,7 @@ public class MvcBaseController : Controller
         return await CustomResponseAsync();
     }
 
-    protected async Task<ActionResult> CustomResponseAsync(ValidationResult validationResult)
+    protected async Task<IActionResult> CustomResponseAsync(ValidationResult validationResult)
     {
         foreach (var error in validationResult.Errors)
         {
@@ -53,30 +53,26 @@ public class MvcBaseController : Controller
 
     protected Task<bool> IsOperationValid()
     {
-        return Task.Run(() => !Notifier.IsNotified());
+        return Task.Run(() => !_notifier.IsNotified());
     }
 
     protected async Task<IEnumerable<string>> GetErrors()
     {
-        foreach (var item in Notifier.GetNotifications())
+        foreach (var item in _notifier.GetNotifications())
         {
             await AddError(item);
         }
-        Notifier.Clear();
-        return Errors;
+        _notifier.Clear();
+        return _errors;
     }
 
     protected Task Notification(string error)
     {
-        return Task.Run(() => Notifier.Handle(error));
+        return Task.Run(() => _notifier.Handle(error));
     }
     private Task AddError(string error)
     {
-        return Task.Run(() => Errors.Add(error));
-    }
-    protected Task ClearErrors()
-    {
-        return Task.Run(() => Notifier.Clear());
+        return Task.Run(() => _errors.Add(error));
     }
 
 }

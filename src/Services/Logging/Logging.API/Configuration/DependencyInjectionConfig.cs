@@ -4,7 +4,6 @@ using Logging.Infra.Data.Repositories.v1;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using RouteManager.Domain.Core.Identity.Extensions;
-using RouteManager.WebAPI.Core.Notifications;
 using System;
 
 namespace Logging.API.Configuration;
@@ -19,17 +18,14 @@ public static class DependencyInjectionConfig
             .GetDatabase(configuration["ConnectionStrings:DatabaseName"]));
 
         //services
-        services.AddSingleton<ILogService, LogService>();
-        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddScoped<ILogService, LogService>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
 
         //repositories
-        services.AddSingleton<ILogRepository, LogRepository>();
-
-        //notification
-        services.AddSingleton<INotifier, Notifier>();
-
+        services.AddScoped<ILogRepository, LogRepository>();
+        
         //Identity
-        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();
 
     }

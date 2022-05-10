@@ -1,6 +1,6 @@
 ﻿namespace Identity.Domain.Entities.v1;
 
-public class Claim
+public sealed class Claim
 {
     public Claim(string description)
     {

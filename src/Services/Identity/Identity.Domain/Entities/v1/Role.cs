@@ -2,8 +2,8 @@
 
 namespace Identity.Domain.Entities.v1;
 
-public class Role : EntityBase
+public sealed class Role : EntityBase
 {
-    public string? Description { get; init; }
-    public IEnumerable<Claim>? Claims { get; init; }
+    public string? Description { get; set; }
+    public IEnumerable<Claim>? Claims { get; set; }
 }

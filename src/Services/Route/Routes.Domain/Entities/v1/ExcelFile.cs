@@ -2,7 +2,7 @@
 
 namespace Routes.Domain.Entities.v1;
 
-public class ExcelFile : EntityBase
+public sealed class ExcelFile : EntityBase
 {
     public DateTime UploadDate { get; set; } = DateTime.Now;
     public string? FileName { get; set; }

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.Domain.Core.Services;
-using RouteManager.WebAPI.Core.Notifications;
 using System;
 
 namespace Identity.API.Configurations;
@@ -21,20 +20,17 @@ public static class DependencyInjectionConfig
 
         //services
         services.AddHttpClient<GatewayService>();
-        services.AddSingleton<IUserService, UserService>();
-        services.AddSingleton<IRoleService, RoleService>();
-        services.AddSingleton<AuthService>();
-        services.AddSingleton<SeederService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<AuthService>();
+        services.AddScoped<SeederService>();
 
         //repositories
-        services.AddSingleton<IUserRepository, UserRepository>();
-        services.AddSingleton<IRoleRepository, RoleRepository>();
-
-        //notification
-        services.AddSingleton<INotifier, Notifier>();
-
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        
         //identity
-        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();
     }
 }

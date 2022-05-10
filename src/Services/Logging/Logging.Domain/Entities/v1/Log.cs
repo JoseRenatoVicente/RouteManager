@@ -1,16 +1,15 @@
 ﻿using RouteManager.Domain.Core.Entities.Base;
 using RouteManager.Domain.Core.Entities.Enums;
-using RouteManager.Domain.Core.Entities.Identity;
 using RouteManager.Domain.Core.Models;
 using System.Text.Json;
 
 namespace Logging.Domain.Entities.v1;
 
-public class Log : EntityBase
+public sealed class Log : EntityBase
 {
     public Log(LogRequest logRequest)
     {
-        User = logRequest.User;
+        UserId = logRequest.UserId;
         EntityId = logRequest.EntityId;
         EntityBefore = JsonSerializer.Serialize(logRequest.EntityBefore);
         EntityAfter = JsonSerializer.Serialize(logRequest.EntityAfter);
@@ -21,11 +20,11 @@ public class Log : EntityBase
 
     }
 
-    public User? User { get; }
-    public string? EntityId { get; }
-    public string? EntityBefore { get; }
-    public string? EntityAfter { get; }
-    public Operation Operation { get; }
+    public string? UserId { get; set; }
+    public string? EntityId { get; set; }
+    public string? EntityBefore { get; set; }
+    public string? EntityAfter { get; set; }
+    public Operation Operation { get; set; }
     public DateTime CreationDate { get; set; } = DateTime.Now;
 
 }

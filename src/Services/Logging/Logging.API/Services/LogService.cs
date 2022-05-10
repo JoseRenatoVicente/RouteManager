@@ -22,6 +22,6 @@ public class LogService : ILogService
 
     public async Task<IEnumerable<Log>> GetLogsByEntityIdAsync(string entityId) =>
         await _logRepository.FindAllAsync(c => c.EntityId == entityId);
-    
+
 
 }

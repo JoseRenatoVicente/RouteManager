@@ -1,9 +1,5 @@
-﻿using RouteManager.Domain.Core.Entities.Base;
-using RouteManager.Domain.Core.Entities.Enums;
-using RouteManager.Domain.Core.Entities.Identity;
-using RouteManager.Domain.Core.Extensions;
+﻿using RouteManager.Domain.Core.Extensions;
 using RouteManager.Domain.Core.Identity.Extensions;
-using RouteManager.Domain.Core.Models;
 using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
@@ -48,7 +44,7 @@ public class GatewayService : BaseService
         }
     }
 
-    public async Task<HttpResponseMessage> GetAsync(string path)
+    private async Task<HttpResponseMessage> GetAsync(string path)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
         return await _httpClient.GetAsync(path);
@@ -64,7 +60,7 @@ public class GatewayService : BaseService
         return await DeserializeObjectResponse<T>(await PostAsync(path, content));
     }
 
-    public async Task<HttpResponseMessage> PostAsync(string path, MultipartFormDataContent content)
+    private async Task<HttpResponseMessage> PostAsync(string path, MultipartFormDataContent content)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
 
@@ -115,41 +111,7 @@ public class GatewayService : BaseService
     }
 
 
-    public async Task<bool> PostLogAsync(LogRequest logRequest)
-    {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
-
-        return (await _httpClient.PostAsJsonAsync("Logging/api/v1/Logs", logRequest)).IsSuccessStatusCode;
-    }
-
-    public async Task<bool> PostLogAsync<T>(object entityBefore, T entityAfter, Operation operation) where T : EntityBase
-    {
-        return await PostLogAsync(await GetCurrentUserAsync(), entityBefore, entityAfter, operation);
-    }
-
-    public async Task<bool> PostLogAsync<T>(User user, object entityBefore, T entityAfter, Operation operation) where T : EntityBase
-    {
-        LogRequest logRequest = new LogRequest
-        {
-            User = user,
-            EntityId = entityAfter.Id,
-            EntityBefore = entityBefore,
-            EntityAfter = entityAfter,
-            Operation = operation
-        };
-        return await PostLogAsync(logRequest);
-    }
-
-
-
-    public async Task<User> GetCurrentUserAsync()
-    {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _aspNetUser.GetToken());
-
-        return await GetFromJsonAsync<User>("Identity/api/v1/Users/" + _aspNetUser.GetUserId());
-    }
-
-    protected async Task<bool> ErrorsResponse(HttpResponseMessage response)
+    private async Task ErrorsResponse(HttpResponseMessage response)
     {
         switch ((int)response.StatusCode)
         {
@@ -157,7 +119,7 @@ public class GatewayService : BaseService
                 foreach (var item in (await DeserializeObjectResponse<ErrorResult>(response)).Errors)
                     Notification(item);
 
-                return true;
+                return;
 
             case 401:
             case 403:
@@ -169,7 +131,6 @@ public class GatewayService : BaseService
         }
 
         response.EnsureSuccessStatusCode();
-        return true;
     }
 
     public async Task<T> DeserializeObjectResponse<T>(HttpResponseMessage responseMessage)

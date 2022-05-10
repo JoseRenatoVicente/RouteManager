@@ -35,7 +35,7 @@ public class SeederService
 
         Role roleUser = new Role
         {
-            Description = "User",
+            Description = "UserId",
             Claims = new Claim[]
             {
                 new("Relátorio Rotas")

@@ -2,7 +2,6 @@
 using Identity.Domain.Contracts.v1;
 using Identity.Domain.Entities.v1;
 using Identity.Domain.Validations.v1;
-using RouteManager.Domain.Core.Entities.Enums;
 using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.Domain.Core.Services;
 using RouteManager.Domain.Core.Services.Base;
@@ -56,7 +55,6 @@ public class UserService : BaseService, IUserService
         user.Password = passwordResult.passwordHash;
         user.PasswordSalt = passwordResult.passwordSalt;
 
-        await _gatewayService.PostLogAsync(null, user, Operation.Create);
 
         return await _userRepository.AddAsync(user);
     }
@@ -86,7 +84,6 @@ public class UserService : BaseService, IUserService
 
         user.Role = await _roleRepository.FindAsync(c => c.Id == user.Role.Id);
 
-        await _gatewayService.PostLogAsync(userBefore, user, Operation.Update);
 
         return !ExecuteValidation(new UserValidation(), user) ? user : await _userRepository.UpdateAsync(user);
     }

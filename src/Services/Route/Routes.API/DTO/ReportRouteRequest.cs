@@ -6,26 +6,26 @@ namespace Routes.API.DTO;
 
 public class ReportRouteRequest
 {
-    public string NameOS { get; set; }
-    public string NameBase { get; set; }
-    public string NameService { get; set; }
-    public string NameStreet { get; set; }
-    public string NameNumber { get; set; }
-    public string NameComplement { get; set; }
-    public string NameDistrict { get; set; }
-    public string NameCEP { get; set; }
-    public string NameCity { get; set; }
+    public string NameOS { get; init; }
+    public string NameBase { get; init; }
+    public string NameService { get; init; }
+    public string NameStreet { get; init; }
+    public string NameNumber { get; init; }
+    public string NameComplement { get; init; }
+    public string NameDistrict { get; init; }
+    public string NameCEP { get; init; }
+    public string NameCity { get; init; }
 
-    public string TypeService { get; set; }
-    public City City { get; set; }
+    public string TypeService { get; init; }
+    public City City { get; init; }
 
-    public string ExcelFileId { get; set; }
+    public string ExcelFileId { get; init; }
 
-    public IEnumerable<string> ReportColumns { get; set; }
+    public IEnumerable<string> ReportColumns { get; init; }
 
-    public IEnumerable<string> NameTeams { get; set; }
+    public IEnumerable<string> NameTeams { get; init; }
 }
-public class ReportRouteRequestValidation : AbstractValidator<ReportRouteRequest>
+public sealed class ReportRouteRequestValidation : AbstractValidator<ReportRouteRequest>
 {
     public ReportRouteRequestValidation()
     {

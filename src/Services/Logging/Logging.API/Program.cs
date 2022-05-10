@@ -1,7 +1,5 @@
-using System;
 using Logging.API.Configuration;
-using Logging.Domain.Commands.Create;
-using MediatR;
+using RouteManager.Domain.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +8,7 @@ builder.Services.ResolveDependencies(builder.Configuration);
 builder.Services.AddMvcConfiguration();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerConfiguration();
-builder.Services.AddMediatR(typeof(CreateLogCommand));
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddDomainContext();
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Logging.Domain.Entities.v1;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Logging.Domain.Entities.v1;
 
 namespace Logging.API.Services;
 

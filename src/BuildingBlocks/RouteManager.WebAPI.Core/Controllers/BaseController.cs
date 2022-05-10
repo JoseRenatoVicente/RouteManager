@@ -11,18 +11,17 @@ namespace RouteManager.WebAPI.Core.Controllers;
 [ApiController]
 public abstract class BaseController : ControllerBase
 {
+    private readonly IMediator _mediator;
 
-    protected readonly IMediator Mediator;
-
-    protected readonly ICollection<string> Errors = new List<string>();
-    protected readonly INotifier Notifier;
+    private readonly ICollection<string> _errors = new List<string>();
+    private readonly INotifier _notifier;
     protected BaseController(IMediator mediator, INotifier notifier)
     {
-        Mediator = mediator;
-        Notifier = notifier;
+        _mediator = mediator;
+        _notifier = notifier;
     }
 
-    protected async Task<ActionResult> CustomResponseAsync(object result = null)
+    protected async Task<IActionResult> CustomResponseAsync(object result = null)
     {
         if (await IsOperationValid())
         {
@@ -36,7 +35,7 @@ public abstract class BaseController : ControllerBase
         });
     }
 
-    protected async Task<ActionResult> CustomResponseAsync<TRequest>(IRequest<TRequest> request)
+    protected async Task<IActionResult> CustomResponseAsync<TRequest>(IRequest<TRequest> request)
     {
         var response = await ExecuteAsync(request);
         response.Errors = await GetErrors();
@@ -49,28 +48,28 @@ public abstract class BaseController : ControllerBase
         return BadRequest(response);
     }
 
-    protected async Task<Response> ExecuteAsync<TRequest>(IRequest<TRequest> request)
+    private async Task<Response> ExecuteAsync<TRequest>(IRequest<TRequest> request)
     {
-        return await Mediator.Send(request) as Response ?? new Response();
+        return await _mediator.Send(request) as Response ?? new Response();
     }
 
 
-    protected Task<bool> IsOperationValid()
+    private Task<bool> IsOperationValid()
     {
-        return Task.Run(() => !Notifier.IsNotified());
+        return Task.Run(() => !_notifier.IsNotified());
     }
 
-    protected async Task<IEnumerable<string>> GetErrors()
+    private async Task<IEnumerable<string>> GetErrors()
     {
-        foreach (var item in Notifier.GetNotifications())
+        foreach (var item in _notifier.GetNotifications())
         {
             await AddError(item);
         }
-        Notifier.Clear();
-        return Errors;
+        _notifier.Clear();
+        return _errors;
     }
     protected Task AddError(string error)
     {
-        return Task.Run(() => Errors.Add(error));
+        return Task.Run(() => _errors.Add(error));
     }
 }

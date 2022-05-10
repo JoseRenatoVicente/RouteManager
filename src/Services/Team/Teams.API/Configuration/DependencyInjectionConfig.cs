@@ -2,7 +2,6 @@
 using MongoDB.Driver;
 using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.Domain.Core.Services;
-using RouteManager.WebAPI.Core.Notifications;
 using System;
 using Teams.API.Services;
 using Teams.Domain.Contracts.v1;
@@ -21,20 +20,17 @@ public static class DependencyInjectionConfig
 
         //services
         services.AddHttpClient<GatewayService>();
-        services.AddSingleton<ICityService, CityService>();
-        services.AddSingleton<ITeamService, TeamService>();
-        services.AddSingleton<IPersonService, PersonService>();
+        services.AddScoped<ICityService, CityService>();
+        services.AddScoped<ITeamService, TeamService>();
+        services.AddScoped<IPersonService, PersonService>();
 
         //repositories
-        services.AddSingleton<ICityRepository, CityRepository>();
-        services.AddSingleton<ITeamRepository, TeamRepository>();
-        services.AddSingleton<IPersonRepository, PersonRepository>();
-
-        //notification
-        services.AddSingleton<INotifier, Notifier>();
-
+        services.AddScoped<ICityRepository, CityRepository>();
+        services.AddScoped<ITeamRepository, TeamRepository>();
+        services.AddScoped<IPersonRepository, PersonRepository>();
+        
         //Identity
-        services.AddSingleton<IAspNetUser, AspNetUser>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();
 
     }
