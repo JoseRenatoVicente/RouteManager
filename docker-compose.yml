@@ -5,6 +5,9 @@ services:
   nosqldata:
     image: mongo
 
+  redisdata:
+    image: redis:alpine
+
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
     build:
@@ -44,4 +47,3 @@ services:
     build:
       context: .
       dockerfile: src/Web/RouteManagerMVC/Dockerfile
-

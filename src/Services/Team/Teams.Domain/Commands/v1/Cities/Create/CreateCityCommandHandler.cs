@@ -22,6 +22,6 @@ public sealed class CreateCityCommandHandler : ICommandHandler<CreateCityCommand
         var city = _mapper.Map<City>(request);
 
         await _cityRepository.AddAsync(city);
-        return new Response { Entity = city };
+        return new Response { Content = city };
     }
 }

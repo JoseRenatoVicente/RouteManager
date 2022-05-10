@@ -48,6 +48,6 @@ public sealed class UpdatePersonCommandHandler : ICommandHandler<UpdatePersonCom
         }
 
         await _personRepository.UpdateAsync(person);
-        return new Response { Entity = person };
+        return new Response { Content = person };
     }
 }

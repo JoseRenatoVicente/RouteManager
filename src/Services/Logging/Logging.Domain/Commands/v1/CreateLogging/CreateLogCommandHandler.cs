@@ -22,6 +22,6 @@ public sealed class CreateLogCommandHandler : ICommandHandler<CreateLogCommand>
         var log = _mapper.Map<Log>(request);
 
         await _logRepository.AddAsync(log);
-        return new Response { Entity = log };
+        return new Response { Content = log };
     }
 }

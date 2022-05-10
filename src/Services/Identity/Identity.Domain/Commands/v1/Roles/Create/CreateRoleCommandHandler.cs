@@ -22,6 +22,6 @@ public sealed class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand
         var role = _mapper.Map<Role>(request);
 
         await _roleRepository.AddAsync(role);
-        return new Response { Entity = role };
+        return new Response { Content = role };
     }
 }

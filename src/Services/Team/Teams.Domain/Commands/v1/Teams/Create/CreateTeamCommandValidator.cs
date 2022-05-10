@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Teams.Domain.Commands.v1.Teams.Create
+namespace Teams.Domain.Commands.v1.Teams.Create;
+
+public sealed class CreateTeamCommandValidator : AbstractValidator<CreateTeamCommand>
 {
-    public sealed class CreateTeamCommandValidator : AbstractValidator<CreateTeamCommand>
+    public CreateTeamCommandValidator()
     {
-        public CreateTeamCommandValidator()
-        {
-            RuleFor(command => command.Name)
-                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido")
-                .Length(2, 60).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
-        }
+        RuleFor(command => command.Name)
+            .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido")
+            .Length(2, 60).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
     }
 }

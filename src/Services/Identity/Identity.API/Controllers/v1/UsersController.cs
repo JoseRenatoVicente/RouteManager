@@ -24,13 +24,13 @@ public class UsersController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUser()
+    public async Task<IActionResult> GetUser()
     {
-        return Ok(await _userService.GetUsersAsync());
+        return await CustomResponseAsync(await _userService.GetUsersAsync());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(string id)
+    public async Task<IActionResult> GetUser(string id)
     {
         var user = await _userService.GetUserByIdAsync(id);
 
@@ -39,7 +39,7 @@ public class UsersController : BaseController
             return NotFound();
         }
 
-        return user;
+        return await CustomResponseAsync(user);
     }
 
     [Authorize(Roles = "Usuários")]

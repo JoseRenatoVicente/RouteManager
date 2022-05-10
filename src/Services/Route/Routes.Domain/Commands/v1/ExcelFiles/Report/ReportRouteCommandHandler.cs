@@ -52,7 +52,7 @@ public sealed class ReportRouteCommandHandler : ICommandHandler<ReportRouteComma
 
         return new Response
         {
-            Entity = await CreateDocx(request, excelFile)
+            Content = await CreateDocx(request, excelFile)
         };
     }
 

@@ -66,6 +66,6 @@ public class UpdateTeamCommandHandler : ICommandHandler<UpdateTeamCommand>
         }
 
         await _teamRepository.UpdateAsync(team);
-        return new Response { Entity = team };
+        return new Response { Content = team };
     }
 }

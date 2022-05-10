@@ -70,6 +70,6 @@ public sealed class CreateTeamCommandHandler : ICommandHandler<CreateTeamCommand
 
         await _teamRepository.AddAsync(team);
 
-        return new Response { Entity = team };
+        return new Response { Content = team };
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace RouteManager.Domain.Core.Entities.Enums;
+﻿namespace Logging.Domain.Entities.v1.Enums;
 
 public enum Operation
 {

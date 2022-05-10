@@ -42,7 +42,7 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
         user.PasswordSalt = passwordResult.passwordSalt;
 
         await _userRepository.AddAsync(user);
-        return new Response { Entity = user };
+        return new Response { Content = user };
     }
 
     private async Task<(string passwordSalt, string passwordHash)> CreatePasswordHashAsync(string password)

@@ -8,7 +8,6 @@ using Teams.API.Services;
 using Teams.Domain.Commands.v1.People.Create;
 using Teams.Domain.Commands.v1.People.Delete;
 using Teams.Domain.Commands.v1.People.Update;
-using Teams.Domain.Entities.v1;
 
 namespace Teams.API.Controllers.v1;
 
@@ -42,9 +41,9 @@ public class PeopleController : BaseController
     }
 
     [HttpGet("list/{ids}")]
-    public async Task<ActionResult<Person>> GetPersons(string ids)
+    public async Task<IActionResult> GetPersons(string ids)
     {
-        return Ok(await _personsService.GetPersonsByIdsAsync(ids));
+        return await CustomResponseAsync(await _personsService.GetPersonsByIdsAsync(ids));
     }
 
     [Authorize(Roles = "Pessoas")]

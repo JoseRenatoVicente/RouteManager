@@ -38,6 +38,6 @@ public sealed class UpdateCityCommandHandler : ICommandHandler<UpdateCityCommand
 
         await _teamRepository.UpdateAllAsync(filterDefinition, updateDefinition);
         await _cityRepository.UpdateAsync(city);
-        return new Response { Entity = city };
+        return new Response { Content = city };
     }
 }

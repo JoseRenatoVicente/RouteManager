@@ -21,6 +21,6 @@ public sealed class CreatePersonCommandHandler : ICommandHandler<CreatePersonCom
         var person = _mapper.Map<Person>(request);
 
         await _personRepository.AddAsync(person);
-        return new Response { Entity = person };
+        return new Response { Content = person };
     }
 }

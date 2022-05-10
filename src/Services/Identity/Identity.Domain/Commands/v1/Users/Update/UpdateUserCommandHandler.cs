@@ -50,6 +50,6 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand
         user.Role = await _roleRepository.FindAsync(c => c.Id == user.Role!.Id);
 
         await _userRepository.UpdateAsync(user);
-        return new Response { Entity = user };
+        return new Response { Content = user };
     }
 }

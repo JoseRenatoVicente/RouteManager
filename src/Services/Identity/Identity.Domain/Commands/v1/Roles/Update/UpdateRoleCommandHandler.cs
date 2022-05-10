@@ -39,6 +39,6 @@ public sealed class UpdateRoleCommandHandler : ICommandHandler<UpdateRoleCommand
 
         await _userRepository.UpdateAllAsync(filterDefinition, updateDefinition);
         await _roleRepository.UpdateAsync(role);
-        return new Response { Entity = role };
+        return new Response { Content = role };
     }
 }

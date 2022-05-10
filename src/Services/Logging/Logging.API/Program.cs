@@ -8,6 +8,7 @@ builder.Services.ResolveDependencies(builder.Configuration);
 builder.Services.AddMvcConfiguration();
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerConfiguration();
+builder.Services.AddDistributedCache(builder.Configuration);
 builder.Services.AddDomainContext();
 
 var app = builder.Build();
