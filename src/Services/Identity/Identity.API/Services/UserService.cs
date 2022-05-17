@@ -3,7 +3,6 @@ using Identity.Domain.Contracts.v1;
 using Identity.Domain.Entities.v1;
 using Identity.Domain.Validations.v1;
 using RouteManager.Domain.Core.Identity.Extensions;
-using RouteManager.Domain.Core.Services;
 using RouteManager.Domain.Core.Services.Base;
 using RouteManager.WebAPI.Core.Notifications;
 using System;
@@ -170,7 +169,7 @@ public class UserService : BaseService, IUserService
     {
         using var hmac = new HMACSHA256(Convert.FromBase64String(storedSalt));
         string computedHash = Convert.ToBase64String(await hmac.ComputeHashAsync(new MemoryStream(Encoding.ASCII.GetBytes(password))));
-        
+
         return storedHash.Equals(computedHash);
     }
 }

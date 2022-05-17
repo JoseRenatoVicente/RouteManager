@@ -1,7 +1,7 @@
-﻿using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using RouteManager.Domain.Core.Handlers;
 using RouteManager.WebAPI.Core.Notifications;
+using System.Text;
 using Teams.Domain.Contracts.v1;
 using Teams.Domain.Entities.v1;
 

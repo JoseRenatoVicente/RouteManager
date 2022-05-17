@@ -72,6 +72,7 @@ services:
 
   logging.consumer:
     environment:
+      - UrlGateway=http://apigateway.ocelot
       - RabbitMqUrl=rabbitmq
 
   logging.api:

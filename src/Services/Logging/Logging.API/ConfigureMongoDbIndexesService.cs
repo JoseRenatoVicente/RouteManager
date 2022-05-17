@@ -10,12 +10,12 @@ public class ConfigureMongoDbIndexesService : IHostedService
     private readonly IMongoDatabase _database;
 
     public ConfigureMongoDbIndexesService(IMongoDatabase database)
-        => (_database) = (database);
+        => _database = database;
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var collection = _database.GetCollection<Log>(typeof(Log).Name);
-            
+        var collection = _database.GetCollection<Log>(nameof(Log));
+
         var indexKeysDefinition = Builders<Log>.IndexKeys.Ascending(log => log.EntityId);
         await collection.Indexes.CreateOneAsync(new CreateIndexModel<Log>(indexKeysDefinition), cancellationToken: cancellationToken);
     }

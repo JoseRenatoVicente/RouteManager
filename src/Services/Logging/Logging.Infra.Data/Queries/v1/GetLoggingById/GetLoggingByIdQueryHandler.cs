@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
-using AutoMapper;
+﻿using AutoMapper;
 using Logging.Domain.Contracts.v1;
 using Microsoft.Extensions.Caching.Distributed;
 using RouteManager.Domain.Core.Handlers;
 using RouteManager.WebAPI.Core.Notifications;
+using System.Text.Json;
 
 namespace Logging.Infra.Data.Queries.v1.GetLoggingById;
 
@@ -38,7 +38,7 @@ public class GetLoggingByIdQueryHandler : IQueryHandler<GetLoggingByIdQuery>
     {
         var logCached = await _distributedCache.GetStringAsync(GetCacheKey(query.Id), cancellationToken);
 
-        if (!string.IsNullOrEmpty(logCached)) 
+        if (!string.IsNullOrEmpty(logCached))
             return JsonSerializer.Deserialize<GetLoggingByIdQueryResponse>(logCached);
 
         var log = _mapper.Map<GetLoggingByIdQueryResponse>(await _logRepository.FindAsync(log => log.Id == query.Id));

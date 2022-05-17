@@ -23,7 +23,7 @@ public static class DependencyInjectionConfig
 
         //repositories
         services.AddScoped<ILogRepository, LogRepository>();
-        
+
         //Identity
         services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();

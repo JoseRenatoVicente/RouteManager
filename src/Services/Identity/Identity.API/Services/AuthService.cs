@@ -44,7 +44,7 @@ public class AuthService : BaseService
 
         var identityClaims = await GetClaimsUser(user);
         var encodedToken = EncodeToken(identityClaims);
-        
+
         return GetResponseToken(encodedToken, user);
     }
 

@@ -46,6 +46,6 @@ public class AccountController : BaseController
         changePassword.UserId = _aspNetUser.GetUserId();
         return await CustomResponseAsync(await _userService.ChangePasswordCurrentUser(changePassword));
     }
-    
+
 
 }

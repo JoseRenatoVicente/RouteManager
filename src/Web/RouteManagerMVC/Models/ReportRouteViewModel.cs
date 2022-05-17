@@ -35,22 +35,22 @@ public sealed record ReportRouteViewModel
 
 public sealed record RouteUploadRequest
 {
-    public string NameOS { get; set; } = "OS";
-    public string NameBase { get; set; } = "BASE";
-    public string NameService { get; set; } = "SERVIÇO";
-    public string NameStreet { get; set; } = "ENDEREÇO";
-    public string NameNumber { get; set; } = "NUMERO";
-    public string NameComplement { get; set; } = "COMPLEMENTO";
-    public string NameDistrict { get; set; } = "BAIRRO";
-    public string NameCEP { get; set; } = "CEP";
-    public string NameCity { get; set; } = "CIDADE";
+    public string NameOS { get; init; } = "OS";
+    public string NameBase { get; init; } = "BASE";
+    public string NameService { get; init; } = "SERVIÇO";
+    public string NameStreet { get; init; } = "ENDEREÇO";
+    public string NameNumber { get; init; } = "NUMERO";
+    public string NameComplement { get; init; } = "COMPLEMENTO";
+    public string NameDistrict { get; init; } = "BAIRRO";
+    public string NameCEP { get; init; } = "CEP";
+    public string NameCity { get; init; } = "CIDADE";
 
-    public string TypeService { get; set; }
-    public CityViewModel City { get; set; }
+    public string TypeService { get; init; }
+    public CityViewModel City { get; init; }
 
     public string ExcelFileId { get; set; }
 
-    public IEnumerable<string> ReportColumns { get; set; }
+    public IEnumerable<string> ReportColumns { get; init; }
 
-    public IEnumerable<string> NameTeams { get; set; }
+    public IEnumerable<string> NameTeams { get; init; }
 }

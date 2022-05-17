@@ -4,8 +4,8 @@ namespace Routes.Domain.Entities.v1;
 
 public sealed class Route : EntityBase
 {
-    public string? OS { get; set; }
-    public string? Base { get; set; }
-    public string? Service { get; set; }
-    public Address? Address { get; set; }
+    public string? OS { get; init; }
+    public string? Base { get; init; }
+    public string? Service { get; init; }
+    public Address? Address { get; init; }
 }

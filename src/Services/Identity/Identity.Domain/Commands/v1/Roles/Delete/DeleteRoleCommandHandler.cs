@@ -15,7 +15,7 @@ public sealed class DeleteRoleCommandHandler : ICommandHandler<DeleteRoleCommand
         _notifier = notifier;
     }
 
-    public  async Task<Response> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
     {
         var role = await _roleRepository.FindAsync(roleFilter => roleFilter.Id == request.Id);
 

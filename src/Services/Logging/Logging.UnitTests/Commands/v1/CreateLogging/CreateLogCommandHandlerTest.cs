@@ -45,7 +45,7 @@ public class CreateLogCommandHandlerTest
         var handler = new CreateLogCommandHandler(mockRepository.Object, _mapper);
 
         await handler.Handle(mockCreateLogCommand, CancellationToken.None);
-            
+
         Assert.Empty(_notifier.GetNotifications());
     }
 }

@@ -27,7 +27,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<IRouteRepository, RouteRepository>();
         services.AddScoped<IExcelFileRepository, ExcelFileRepository>();
         services.AddScoped<IExcelFileService, ExcelFileService>();
-        
+
         //Identity
         services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();

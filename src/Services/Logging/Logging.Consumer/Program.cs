@@ -1,22 +1,15 @@
-﻿using System.Text;
-using System.Text.Json;
-using Logging.Consumer;
-using Microsoft.Extensions.Configuration;
+﻿using Logging.Consumer;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Text;
+using System.Text.Json;
 
-var builder = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-var configuration = builder.Build();
-
-const string QUEUE_NAME = "messagelogs";
-var factory = new ConnectionFactory { HostName = configuration["RabbitMqUrl"] };
+const string queueName = "messagelogs";
+var factory = new ConnectionFactory { HostName = new DataBaseConfiguration().GetRabbitMqUrl() };
 
 using var connection = factory.CreateConnection();
 using var channel = connection.CreateModel();
-channel.QueueDeclare(queue: QUEUE_NAME,
+channel.QueueDeclare(queue: queueName,
     durable: false,
     exclusive: false,
     autoDelete: false,
@@ -33,7 +26,7 @@ while (true)
                     await LogClient.Add(message!);
                 };
 
-    channel.BasicConsume(queue: QUEUE_NAME,
+    channel.BasicConsume(queue: queueName,
         autoAck: true,
         consumer: consumer);
 

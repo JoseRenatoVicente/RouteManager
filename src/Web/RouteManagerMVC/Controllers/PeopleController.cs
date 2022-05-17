@@ -18,7 +18,7 @@ public class PeopleController : MvcBaseController
 
     public async Task<IActionResult> Index()
     {
-        return View(await _personService.GetPersonsAsync(false));
+        return View(await _personService.GetPersonsAsync());
     }
 
     public async Task<IActionResult> Details(string id)

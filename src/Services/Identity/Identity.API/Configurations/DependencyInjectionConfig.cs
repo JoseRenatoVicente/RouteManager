@@ -1,15 +1,14 @@
-﻿using Identity.API.Services;
+﻿using FluentValidation;
+using Identity.API.Services;
 using Identity.Domain.Contracts.v1;
 using Identity.Infra.Data.Repositories.v1;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using RouteManager.Domain.Core.Identity.Extensions;
-using RouteManager.Domain.Core.Services;
-using System;
-using FluentValidation;
-using MediatR;
 using RouteManager.Domain.Core.Pipelines;
 using RouteManager.WebAPI.Core.Notifications;
+using System;
 
 namespace Identity.API.Configurations;
 
@@ -43,7 +42,7 @@ public static class DependencyInjectionConfig
         //repositories
         services.AddSingleton<IUserRepository, UserRepository>();
         services.AddSingleton<IRoleRepository, RoleRepository>();
-        
+
         //identity
         services.AddSingleton<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();

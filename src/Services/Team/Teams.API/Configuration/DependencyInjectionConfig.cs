@@ -28,7 +28,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<ICityRepository, CityRepository>();
         services.AddScoped<ITeamRepository, TeamRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
-        
+
         //Identity
         services.AddScoped<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();
