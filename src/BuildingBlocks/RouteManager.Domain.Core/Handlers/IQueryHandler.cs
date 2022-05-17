@@ -4,7 +4,7 @@ using RouteManager.WebAPI.Core.Notifications;
 
 namespace RouteManager.Domain.Core.Handlers;
 
-public interface IQueryHandler<TQuery> : IRequestHandler<TQuery, Response>
+public interface IQueryHandler<in TQuery> : IRequestHandler<TQuery, Response>
     where TQuery : IBaseQuery
 {
 }

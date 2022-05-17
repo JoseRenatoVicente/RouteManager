@@ -1,6 +1,7 @@
 ﻿using Identity.Domain.Contracts.v1;
 using Identity.Domain.Entities.v1;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Identity.API.Services;
 
@@ -15,7 +16,7 @@ public class SeederService
         _roleRepository = roleRepository;
     }
 
-    public async void Seed()
+    public async Task Seed()
     {
 
         Role roleAdmin = new Role

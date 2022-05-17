@@ -1,65 +1,91 @@
 version: '3.9'
 
 services:
-  identity.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  logging.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  routes.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+  nosqldata:
     ports:
-      - "80"
-      - "443"
+      - "27017:27017"
     volumes:
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - routemanager-nosqldata:/data/db
 
-  teams.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+  redis:
     ports:
-      - "80"
-      - "443"
+      - "6379:6379"
     volumes:
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - routemanager-redis:/data
+
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
 
   apigateway.ocelot:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - "7114:80"
 
   routemanagermvc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - UrlGateway=http://apigateway.ocelot
     ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - "44392:80"
+
+  teams.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_HTTPS_PORT=44364
+      - UrlGateway=http://apigateway.ocelot
+      - ConnectionStrings__MongoDb=mongodb://nosqldata:27017
+    ports:
+      - "44364:80"
+
+  identity.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - UrlGateway=http://apigateway.ocelot
+      - ConnectionStrings__MongoDb=mongodb://nosqldata:27017
+    ports:
+      - "44333:80"
+
+  routes.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - UrlGateway=http://apigateway.ocelot
+      - ConnectionStrings__MongoDb=mongodb://nosqldata:27017
+    ports:
+      - "44388:80"
+
+  logging.producer:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - RabbitMqUrl=rabbitmq
+    ports:
+      - "44395:80"
+
+  logging.consumer:
+    environment:
+      - RabbitMqUrl=rabbitmq
+
+  logging.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionStrings__MongoDb=mongodb://nosqldata:27017
+      - ConnectionStrings__Cache=localhost:6379
+    ports:
+      - "44367:80"
+
+volumes:
+  routemanager-nosqldata:
+    external: false
+  routemanager-redis:
+    external: false
+

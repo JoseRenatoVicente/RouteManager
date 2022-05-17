@@ -13,12 +13,11 @@ builder.Services.AddDomainContext();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
-{
     app.UseDeveloperExceptionPage();
-    app.UseSwaggerSetup();
-}
+else
+    app.UseHttpsRedirection();
 
-app.UseHttpsRedirection();
+app.UseSwaggerSetup();
 app.UseRouting();
 app.UseAuthConfiguration();
 app.UseHealthChecksConfiguration();

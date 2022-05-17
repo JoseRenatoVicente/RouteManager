@@ -79,17 +79,7 @@ public class RolesController : MvcBaseController
 
     public async Task<IActionResult> Delete(string id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var role = await _roleService.GetRoleByIdAsync(id);
-        if (role == null)
-        {
-            return NotFound();
-        }
-        return View(role);
+        return await Details(id);
     }
 
     [HttpPost, ActionName("Delete")]

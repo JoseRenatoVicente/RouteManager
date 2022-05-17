@@ -19,7 +19,7 @@ public class PersonService : IPersonService
     {
         if (available)
         {
-            return await _personRepository.FindAllAsync(c => c.Active == true);
+            return await _personRepository.FindAllAsync(c => c.Active);
         }
         return await _personRepository.GetAllAsync();
     }

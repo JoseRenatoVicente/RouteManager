@@ -17,13 +17,12 @@ namespace Identity.API.Services;
 
 public class UserService : BaseService, IUserService
 {
-    private readonly GatewayService _gatewayService;
     private readonly IAspNetUser _aspNetUser;
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
-    public UserService(GatewayService gatewayService, IAspNetUser aspNetUser, IUserRepository userRepository, IRoleRepository roleRepository, INotifier notifier) : base(notifier)
+
+    public UserService(INotifier notifier, IAspNetUser aspNetUser, IUserRepository userRepository, IRoleRepository roleRepository) : base(notifier)
     {
-        _gatewayService = gatewayService;
         _aspNetUser = aspNetUser;
         _userRepository = userRepository;
         _roleRepository = roleRepository;
@@ -97,7 +96,7 @@ public class UserService : BaseService, IUserService
             return null;
         }
 
-        return await ChangePassword(user, changePassword.UserId, changePassword.Password);
+        return await ChangePassword(user, changePassword.Password);
     }
 
     public async Task<User> ChangePasswordCurrentUser(ChangePasswordCurrentUserViewModel changePassword)
@@ -114,10 +113,10 @@ public class UserService : BaseService, IUserService
             return user;
         }
 
-        return await ChangePassword(user, changePassword.UserId, changePassword.Password);
+        return await ChangePassword(user, changePassword.Password);
     }
 
-    private async Task<User> ChangePassword(User user, string userId, string password)
+    private async Task<User> ChangePassword(User user, string password)
     {
         user.Password = password;
 
@@ -169,11 +168,9 @@ public class UserService : BaseService, IUserService
 
     private async Task<bool> VerifyPasswordHashAsync(string password, string storedHash, string storedSalt)
     {
-        Console.WriteLine(password);
         using var hmac = new HMACSHA256(Convert.FromBase64String(storedSalt));
         string computedHash = Convert.ToBase64String(await hmac.ComputeHashAsync(new MemoryStream(Encoding.ASCII.GetBytes(password))));
-
-        if (storedHash.Equals(computedHash)) return true;
-        return false;
+        
+        return storedHash.Equals(computedHash);
     }
 }

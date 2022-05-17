@@ -3,8 +3,6 @@ using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("ocelot.Development.json");
-
 // Add services to the container.
 builder.Services.AddOcelot();
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
@@ -19,7 +17,6 @@ app.UseSwaggerForOcelotUI(opt =>
     opt.PathToSwaggerGenerator = "/swagger/docs";
 });
 
-// Configure the HTTP request pipeline
 app.UseHttpsRedirection();
 
 app.UseRouting();

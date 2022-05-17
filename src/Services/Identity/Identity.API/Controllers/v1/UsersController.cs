@@ -1,15 +1,13 @@
 ﻿using Identity.API.Services;
-using Identity.Domain.Entities.v1;
+using Identity.Domain.Commands.v1.Users.Create;
+using Identity.Domain.Commands.v1.Users.Delete;
+using Identity.Domain.Commands.v1.Users.Update;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteManager.WebAPI.Core.Controllers;
 using RouteManager.WebAPI.Core.Notifications;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Identity.Domain.Commands.v1.Users.Create;
-using Identity.Domain.Commands.v1.Users.Delete;
-using Identity.Domain.Commands.v1.Users.Update;
 
 namespace Identity.API.Controllers.v1;
 

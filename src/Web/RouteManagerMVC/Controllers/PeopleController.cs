@@ -51,18 +51,7 @@ public class PeopleController : MvcBaseController
 
     public async Task<IActionResult> Edit(string id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var person = await _personService.GetPersonByIdAsync(id);
-
-        if (person == null)
-        {
-            return NotFound();
-        }
-        return View(person);
+        return await Details(id);
     }
 
     [HttpPost]
@@ -79,18 +68,7 @@ public class PeopleController : MvcBaseController
 
     public async Task<IActionResult> Delete(string id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var person = await _personService.GetPersonByIdAsync(id);
-        if (person == null)
-        {
-            return NotFound();
-        }
-
-        return View(person);
+        return await Details(id);
     }
 
     [HttpPost, ActionName("Delete")]

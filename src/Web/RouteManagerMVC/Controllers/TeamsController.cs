@@ -127,18 +127,7 @@ public class TeamsController : MvcBaseController
 
     public async Task<IActionResult> Delete(string id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var team = await _teamService.GetTeamByIdAsync(id);
-        if (team == null)
-        {
-            return NotFound();
-        }
-
-        return View(team);
+        return await Details(id);
     }
 
     [HttpPost, ActionName("Delete")]

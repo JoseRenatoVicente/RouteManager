@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace RouteManagerMVC.Models;
 
-public record ExcelFileViewModel
+public sealed record ExcelFileViewModel
 {
     public string Id { get; set; }
 
@@ -19,7 +19,7 @@ public record ExcelFileViewModel
     public List<List<string>> Table { get; set; }
 }
 
-public record ExcelFileUpdateViewModel
+public sealed record ExcelFileUpdateViewModel
 {
     public string Id { get; set; }
 

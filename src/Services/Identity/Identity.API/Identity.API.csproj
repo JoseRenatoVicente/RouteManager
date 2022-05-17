@@ -17,4 +17,13 @@
     <ProjectReference Include="..\Identity.Infra.Data\Identity.Infra.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Keys\private_key.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Keys\public_key.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 WORKDIR /src
 COPY ["src/Services/Route/Routes.API/Routes.API.csproj", "src/Services/Route/Routes.API/"]
+COPY ["src/Services/Route/Routes.Infra.Data/Routes.Infra.Data.csproj", "src/Services/Route/Routes.Infra.Data/"]
+COPY ["src/Services/Route/Routes.Domain/Routes.Domain.csproj", "src/Services/Route/Routes.Domain/"]
 COPY ["src/BuildingBlocks/RouteManager.Domain.Core/RouteManager.Domain.Core.csproj", "src/BuildingBlocks/RouteManager.Domain.Core/"]
 COPY ["src/BuildingBlocks/RouteManager.WebAPI.Core/RouteManager.WebAPI.Core.csproj", "src/BuildingBlocks/RouteManager.WebAPI.Core/"]
 RUN dotnet restore "src/Services/Route/Routes.API/Routes.API.csproj"

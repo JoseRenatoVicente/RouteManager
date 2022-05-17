@@ -42,9 +42,9 @@ public class AuthService : BaseService, IAuthService
     {
         var claims = new List<Claim>
         {
-            new Claim("JWT", responseLogin.AccessToken),
-            new Claim("RefreshToken", responseLogin.RefreshToken.ToString()),
-            new Claim("Name", responseLogin.UserToken.Name)
+            new("JWT", responseLogin.AccessToken),
+            new("RefreshToken", responseLogin.RefreshToken.ToString()),
+            new("Name", responseLogin.UserToken.Name)
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

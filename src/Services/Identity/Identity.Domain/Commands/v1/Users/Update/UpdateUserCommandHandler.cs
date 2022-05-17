@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Identity.Domain.Contracts.v1;
 using Identity.Domain.Entities.v1;
-using Identity.Domain.Validations.v1;
 using RouteManager.Domain.Core.Handlers;
 using RouteManager.WebAPI.Core.Notifications;
 

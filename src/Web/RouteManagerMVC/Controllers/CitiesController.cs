@@ -50,17 +50,7 @@ public class CitiesController : MvcBaseController
 
     public async Task<IActionResult> Edit(string id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var city = await _cityService.GetCityByIdAsync(id);
-        if (city == null)
-        {
-            return NotFound();
-        }
-        return View(city);
+        return await Details(id);
     }
 
     [HttpPost]
@@ -76,17 +66,7 @@ public class CitiesController : MvcBaseController
 
     public async Task<IActionResult> Delete(string id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var city = await _cityService.GetCityByIdAsync(id);
-        if (city == null)
-        {
-            return NotFound();
-        }
-        return View(city);
+        return await Details(id);
     }
 
     [HttpPost, ActionName("Delete")]

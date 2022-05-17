@@ -21,7 +21,6 @@ public class GatewayService : BaseService
     {
         _httpClient = httpClient;
         _aspNetUser = aspNetUser;
-        _httpClient.BaseAddress = new Uri("https://localhost:7114");
     }
 
     public async Task<T> GetFromJsonAsync<T>(string path)
@@ -35,12 +34,12 @@ public class GatewayService : BaseService
 
             await ErrorsResponse(response);
 
-            return default(T);
+            return default;
         }
         catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException)
         {
             Notification("API Unavailable try again later");
-            return default(T);
+            return default;
         }
     }
 
@@ -118,7 +117,6 @@ public class GatewayService : BaseService
             case 400:
                 foreach (var item in (await DeserializeObjectResponse<ErrorResult>(response)).Errors)
                     Notification(item);
-
                 return;
 
             case 401:
@@ -126,8 +124,6 @@ public class GatewayService : BaseService
             case 404:
             case 500:
                 throw new CustomHttpRequestException(response.StatusCode);
-
-
         }
 
         response.EnsureSuccessStatusCode();
@@ -148,12 +144,11 @@ public class GatewayService : BaseService
         }
         catch
         {
-
             return default;
         }
     }
 
-    private class ErrorResult
+    private sealed record ErrorResult
     {
         public ErrorResult(IEnumerable<string> errors, bool success)
         {

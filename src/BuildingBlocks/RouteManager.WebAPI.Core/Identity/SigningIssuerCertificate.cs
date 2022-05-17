@@ -1,12 +1,11 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 
 namespace RouteManager.WebAPI.Core.Identity;
 
-public class SigningIssuerCertificate : IDisposable
+public class SigningIssuerCertificate
 {
     private readonly RSA _rsa;
 
@@ -21,10 +20,5 @@ public class SigningIssuerCertificate : IDisposable
         _rsa.FromXmlString(publicXmlKey);
 
         return new RsaSecurityKey(_rsa);
-    }
-
-    public void Dispose()
-    {
-        _rsa?.Dispose();
     }
 }

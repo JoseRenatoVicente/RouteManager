@@ -9,7 +9,7 @@ namespace RouteManagerMVC.Extensions;
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private static IAuthService _authService;
+    private IAuthService _authService;
 
     public ExceptionMiddleware(RequestDelegate next)
     {
@@ -26,11 +26,11 @@ public class ExceptionMiddleware
         }
         catch (CustomHttpRequestException ex)
         {
-            HandleRequestExceptionAsync(httpContext, ex);
+            await HandleRequestExceptionAsync(httpContext, ex);
         }
     }
 
-    private static async void HandleRequestExceptionAsync(HttpContext context, CustomHttpRequestException httpRequestException)
+    private async Task HandleRequestExceptionAsync(HttpContext context, CustomHttpRequestException httpRequestException)
     {
         if (httpRequestException.StatusCode == HttpStatusCode.Unauthorized)
         {

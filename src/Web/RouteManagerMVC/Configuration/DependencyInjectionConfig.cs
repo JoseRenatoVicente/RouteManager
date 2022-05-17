@@ -3,19 +3,23 @@ using RouteManager.Domain.Core.Services;
 using RouteManager.WebAPI.Core.Notifications;
 using RouteManagerMVC.Services;
 using System;
+using Microsoft.Extensions.Configuration;
 using Polly;
 
 namespace RouteManagerMVC.Configuration;
 
 public static class DependencyInjectionConfig
 {
-    public static void ResolveDependencies(this IServiceCollection services)
+    public static void ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
 
         //services
-        services.AddHttpClient<GatewayService>()
-            .AddTransientHttpErrorPolicy(policy=> policy.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds((600))));
+        services
+            .AddHttpClient<GatewayService>()
+            .ConfigureHttpClient(configure => configure.BaseAddress = new Uri(configuration["UrlGateway"]))
+            .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(600)));
+        
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICityService, CityService>();

@@ -1,6 +1,6 @@
 ﻿namespace RouteManagerMVC.Models;
 
-public class AddressViewModel
+public sealed record AddressViewModel
 {
     public override string ToString()
     {

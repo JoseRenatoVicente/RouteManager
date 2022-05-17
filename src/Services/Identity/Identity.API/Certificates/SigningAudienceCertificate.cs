@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace Identity.API.Certificates;
 
-public class SigningAudienceCertificate : IDisposable
+public sealed class SigningAudienceCertificate : IDisposable
 {
     private readonly RSA _rsa;
 

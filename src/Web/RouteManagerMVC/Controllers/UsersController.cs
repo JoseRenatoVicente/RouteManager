@@ -83,18 +83,7 @@ public class UsersController : MvcBaseController
 
     public async Task<IActionResult> Delete(string id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var user = await _userService.GetUserByIdAsync(id);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return View(user);
+        return await Details(id);
     }
 
     [HttpPost, ActionName("Delete")]

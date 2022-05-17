@@ -19,7 +19,9 @@ public static class DependencyInjectionConfig
             .GetDatabase(configuration["ConnectionStrings:DatabaseName"]));
 
         //services
-        services.AddHttpClient<GatewayService>();
+        services
+            .AddHttpClient<GatewayService>()
+            .ConfigureHttpClient(configure => configure.BaseAddress = new Uri(configuration["UrlGateway"]));
 
         //repositories
         services.AddScoped<IRouteRepository, RouteRepository>();

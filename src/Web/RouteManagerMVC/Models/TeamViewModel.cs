@@ -6,7 +6,7 @@ namespace RouteManagerMVC.Models;
 
 public class TeamViewModel
 {
-    public TeamRequest Team { get; set; } = new TeamRequest();
+    public TeamRequest Team { get; set; } = new();
     public virtual IEnumerable<string> PeopleIds { get; set; }
     public virtual IEnumerable<CityViewModel> Cities { get; set; }
     public virtual IEnumerable<PersonViewModel> People { get; set; }

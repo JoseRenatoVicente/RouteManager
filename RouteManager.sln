@@ -33,8 +33,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{4DD9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.API", "src\Services\Logging\Logging.API\Logging.API.csproj", "{CBFF420A-DC48-4C15-8FB3-66DAA1780300}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteManager.Domain.Core", "src\BuildingBlocks\RouteManager.Domain.Core\RouteManager.Domain.Core.csproj", "{B0DDE417-94F8-47C8-BD80-69D3B5D10852}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Domain", "src\Services\Identity\Identity.Domain\Identity.Domain.csproj", "{C5C95395-CE18-4EB7-88AA-EF16C0060954}"
@@ -53,9 +51,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teams.Infra.Data", "src\Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teams.Domain", "src\Services\Team\Teams.Domain\Teams.Domain.csproj", "{7CE2434D-6EF9-4CD9-B469-87E90C9F9A4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging.UnitTests", "src\Services\Logging\Logging.UnitTests\Logging.UnitTests.csproj", "{661D5457-8FC3-439A-9457-B1B8E138FCC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.UnitTests", "src\Services\Logging\Logging.UnitTests\Logging.UnitTests.csproj", "{661D5457-8FC3-439A-9457-B1B8E138FCC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teams.UnitTests", "src\Services\Team\Teams.UnitTests\Teams.UnitTests.csproj", "{B948EF3A-DFE9-4720-8196-B05B130552A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teams.UnitTests", "src\Services\Team\Teams.UnitTests\Teams.UnitTests.csproj", "{B948EF3A-DFE9-4720-8196-B05B130552A6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.Producer", "src\Services\Logging\Logging.Producer\Logging.Producer.csproj", "{6BD5EDCF-7494-4523-B688-1951B47B0AD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.Consumer", "src\Services\Logging\Logging.Consumer\Logging.Consumer.csproj", "{CDDFCFE9-240E-470F-9B70-145C128B396C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9534639E-42F3-4043-A2AF-68C6ACB30E4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,10 +95,6 @@ Global
 		{CBFF420A-DC48-4C15-8FB3-66DAA1780300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBFF420A-DC48-4C15-8FB3-66DAA1780300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBFF420A-DC48-4C15-8FB3-66DAA1780300}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8B3F1FE-D552-43FA-8B30-B217E0C804B1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B0DDE417-94F8-47C8-BD80-69D3B5D10852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B0DDE417-94F8-47C8-BD80-69D3B5D10852}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0DDE417-94F8-47C8-BD80-69D3B5D10852}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -139,6 +139,18 @@ Global
 		{B948EF3A-DFE9-4720-8196-B05B130552A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B948EF3A-DFE9-4720-8196-B05B130552A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B948EF3A-DFE9-4720-8196-B05B130552A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD5EDCF-7494-4523-B688-1951B47B0AD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD5EDCF-7494-4523-B688-1951B47B0AD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD5EDCF-7494-4523-B688-1951B47B0AD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD5EDCF-7494-4523-B688-1951B47B0AD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDDFCFE9-240E-470F-9B70-145C128B396C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDDFCFE9-240E-470F-9B70-145C128B396C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDDFCFE9-240E-470F-9B70-145C128B396C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDDFCFE9-240E-470F-9B70-145C128B396C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9534639E-42F3-4043-A2AF-68C6ACB30E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9534639E-42F3-4043-A2AF-68C6ACB30E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9534639E-42F3-4043-A2AF-68C6ACB30E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9534639E-42F3-4043-A2AF-68C6ACB30E4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +178,8 @@ Global
 		{7CE2434D-6EF9-4CD9-B469-87E90C9F9A4B} = {BD0ECF63-3448-4549-802A-B332FD972897}
 		{661D5457-8FC3-439A-9457-B1B8E138FCC7} = {4DD9161E-7DA5-4613-B047-0A2910BB1AAD}
 		{B948EF3A-DFE9-4720-8196-B05B130552A6} = {BD0ECF63-3448-4549-802A-B332FD972897}
+		{6BD5EDCF-7494-4523-B688-1951B47B0AD1} = {4DD9161E-7DA5-4613-B047-0A2910BB1AAD}
+		{CDDFCFE9-240E-470F-9B70-145C128B396C} = {4DD9161E-7DA5-4613-B047-0A2910BB1AAD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1E1A752-F80F-40C5-B11A-EC0F85CC6A6C}

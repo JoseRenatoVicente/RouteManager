@@ -5,35 +5,11 @@ services:
   nosqldata:
     image: mongo
 
-  redisdata:
+  redis:
     image: redis:alpine
 
-  identity.api:
-    image: ${DOCKER_REGISTRY-}identityapi
-    build:
-      context: .
-      dockerfile: src/Services/Identity/Identity.API/Dockerfile
-
-  logging.api:
-    image: ${DOCKER_REGISTRY-}loggingapi
-    build:
-      context: .
-      dockerfile: src/Services/Logging/Logging.API/Dockerfile
-
-
-  routes.api:
-    image: ${DOCKER_REGISTRY-}routesapi
-    build:
-      context: .
-      dockerfile: src/Services/Route/Routes.API/Dockerfile
-
-
-  teams.api:
-    image: ${DOCKER_REGISTRY-}teamsapi
-    build:
-      context: .
-      dockerfile: src/Services/Team/Teams.API/Dockerfile
-
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
 
   apigateway.ocelot:
     image: ${DOCKER_REGISTRY-}apigatewayocelot
@@ -41,9 +17,45 @@ services:
       context: .
       dockerfile: src/ApiGateway/ApiGateway.Ocelot/Dockerfile
 
-
   routemanagermvc:
     image: ${DOCKER_REGISTRY-}routemanagermvc
     build:
       context: .
       dockerfile: src/Web/RouteManagerMVC/Dockerfile
+
+  teams.api:
+    image: ${DOCKER_REGISTRY-}teamsapi
+    build:
+      context: .
+      dockerfile: src/Services/Team/Teams.API/Dockerfile
+
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: src/Services/Identity/Identity.API/Dockerfile
+
+  routes.api:
+    image: ${DOCKER_REGISTRY-}routesapi
+    build:
+      context: .
+      dockerfile: src/Services/Route/Routes.API/Dockerfile
+
+  logging.producer:
+    image: ${DOCKER_REGISTRY-}loggingproducer
+    build:
+      context: .
+      dockerfile: src/Services/Logging/Logging.Producer/Dockerfile
+
+  logging.consumer:
+    image: ${DOCKER_REGISTRY-}loggingconsumer
+    build:
+      context: .
+      dockerfile: src/Services/Logging/Logging.Consumer/Dockerfile
+
+  logging.api:
+    image: ${DOCKER_REGISTRY-}loggingapi
+    build:
+      context: .
+      dockerfile: src/Services/Logging/Logging.API/Dockerfile
+

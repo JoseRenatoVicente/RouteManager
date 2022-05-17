@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using AutoMapper;
 using RouteManager.Domain.Core.Handlers;
 using RouteManager.WebAPI.Core.Notifications;
 using Teams.Domain.Contracts.v1;
@@ -30,7 +31,7 @@ public class UpdateTeamCommandHandler : ICommandHandler<UpdateTeamCommand>
 
         var teamBefore = await _teamRepository.FindAsync(c => c.Id == team.Id);
 
-        string peopleIds = "";
+        StringBuilder peopleIds = new();
 
         if (team.People == null)
         {
@@ -40,10 +41,10 @@ public class UpdateTeamCommandHandler : ICommandHandler<UpdateTeamCommand>
 
         foreach (var item in team.People)
         {
-            peopleIds += item.Id + ",";
+            peopleIds.Append(item.Id + ",");
         }
 
-        var ids = peopleIds.TrimEnd(',').Split(',');
+        var ids = peopleIds.ToString().TrimEnd(',').Split(',');
         team.People = await _personRepository.FindAllAsync(p => ids.Contains(p.Id));
 
         if (team.People == null)

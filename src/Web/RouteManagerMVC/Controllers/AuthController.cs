@@ -17,6 +17,11 @@ public class AuthController : MvcBaseController
         _authService = authService;
     }
 
+    public IActionResult Login()
+    {
+        return View();
+    }
+
     [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Login(UserLogin userLogin)
@@ -26,10 +31,8 @@ public class AuthController : MvcBaseController
         {
             return RedirectToAction("Index", "ReportRoutes");
         }
-        else
-        {
-            return await CustomResponseAsync(userLogin, "Login");
-        }
+
+        return await CustomResponseAsync(userLogin, "Login");
     }
 
     [HttpGet]
@@ -39,8 +42,5 @@ public class AuthController : MvcBaseController
         return RedirectToAction("Login");
     }
 
-    public IActionResult Login()
-    {
-        return View();
-    }
+
 }

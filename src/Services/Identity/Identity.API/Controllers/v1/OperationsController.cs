@@ -34,11 +34,10 @@ public class OperationsController : BaseController
     }
 
     [HttpPost("EmailTest")]
-    public async Task<IActionResult> EnviarEmailTest(string nome, string email)
+    public async Task<IActionResult> SendEmailTest(string name, string email)
     {
         try
         {
-            //await _emailService.Test(email, nome);
             return await CustomResponseAsync("Email enviado com sucesso");
         }
         catch (Exception e)

@@ -11,7 +11,7 @@ public interface IPersonService
     Task<PersonViewModel> AddPersonAsync(PersonViewModel person);
     Task<PersonViewModel> GetPersonByIdAsync(string id);
     Task<IEnumerable<PersonViewModel>> GetPersonsByIdsAsync(IEnumerable<string> ids);
-    Task<IEnumerable<PersonViewModel>> GetPersonsAsync(bool available = true);
+    Task<IEnumerable<PersonViewModel>> GetPersonsAsync(bool available = false);
     Task RemovePersonAsync(string id);
     Task<PersonViewModel> UpdatePersonAsync(PersonViewModel person);
 }

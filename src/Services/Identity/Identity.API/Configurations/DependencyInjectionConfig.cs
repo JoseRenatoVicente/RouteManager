@@ -6,6 +6,10 @@ using MongoDB.Driver;
 using RouteManager.Domain.Core.Identity.Extensions;
 using RouteManager.Domain.Core.Services;
 using System;
+using FluentValidation;
+using MediatR;
+using RouteManager.Domain.Core.Pipelines;
+using RouteManager.WebAPI.Core.Notifications;
 
 namespace Identity.API.Configurations;
 
@@ -15,22 +19,37 @@ public static class DependencyInjectionConfig
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
 
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+        foreach (var assembly in assemblies)
+            AssemblyScanner
+                .FindValidatorsInAssembly(assembly)
+                .ForEach(result => services.AddScoped(result.InterfaceType, result.ValidatorType));
+
+        services
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            .AddAutoMapper(assemblies)
+            .AddMediatR(assemblies);
+
         services.AddSingleton(new MongoClient(configuration.GetConnectionString("MongoDb"))
             .GetDatabase(configuration["ConnectionStrings:DatabaseName"]));
 
         //services
-        services.AddHttpClient<GatewayService>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<AuthService>();
-        services.AddScoped<SeederService>();
+        services.AddSingleton<IUserService, UserService>();
+        services.AddSingleton<IRoleService, RoleService>();
+        services.AddSingleton<AuthService>();
+        services.AddSingleton<SeederService>();
 
         //repositories
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddSingleton<IRoleRepository, RoleRepository>();
         
         //identity
-        services.AddScoped<IAspNetUser, AspNetUser>();
+        services.AddSingleton<IAspNetUser, AspNetUser>();
         services.AddHttpContextAccessor();
+
+        //notification
+        services.AddSingleton<INotifier, Notifier>();
+
     }
 }

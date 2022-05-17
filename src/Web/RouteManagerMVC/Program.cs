@@ -14,7 +14,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Auth/Login";
     });
 
-builder.Services.ResolveDependencies();
+builder.Services.ResolveDependencies(builder.Configuration);
 
 var app = builder.Build();
 

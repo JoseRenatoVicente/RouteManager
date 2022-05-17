@@ -3,11 +3,11 @@ using System.Text;
 
 namespace RouteManagerMVC.Models;
 
-public record ReportRouteViewModel
+public sealed record ReportRouteViewModel
 {
-    public RouteUploadRequest UploadRequest { get; set; } = new RouteUploadRequest();
+    public RouteUploadRequest UploadRequest { get; set; } = new();
 
-    public StringBuilder TableHTML { get; set; } = new StringBuilder();
+    public StringBuilder TableHTML { get; set; } = new();
 
     public ExcelFileViewModel ExcelFile { get; set; }
 
@@ -33,7 +33,7 @@ public record ReportRouteViewModel
     }
 }
 
-public record RouteUploadRequest
+public sealed record RouteUploadRequest
 {
     public string NameOS { get; set; } = "OS";
     public string NameBase { get; set; } = "BASE";
